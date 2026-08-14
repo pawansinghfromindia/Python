@@ -350,6 +350,27 @@ We can inspect a type using : `type(age)`.
 
 <br/>
 
+If you want to specify a type on to a variable. This can be done with casting. 
+
+Python is an object-orientated language, and as such it uses classes to define data types, including its primitive types.
+
+Casting in python is therefore done using constructor functions.
+
+```py
+x = int(1)        # x will be 1
+y = int(2.8)      # y will be 2
+z = int("3")      # z will be 3
+-----------------------------------
+x = float(1)      # x will be 1.0
+y = float(2.8)    # y will be 2.8
+z = float("3")    # z will be 3.0
+w = float("4.2")  # w will be 4.2
+-----------------------------------
+x = str("s1")     # x will be 's1'
+y = str(2)        # y will be '2'
+z = str(3.0)      # z will be '3.0'
+```
+
 </details>
 <!------------------------------------>
 
@@ -1156,18 +1177,368 @@ print("Score processed")
 
 
 <details>
-  <summary> 9. Strings </summary>
+  <summary> 9. <b> Strings </b> </summary>
 
 <br/>
+
+<details>
+  <summary> - printing string </summary>
+
+```py
+print("Hello")                    # Hello
+print('Hello')                    # Hello
+print("It's amazing")             # It's amazing
+print("'Abc'")                    # 'Abc'
+print('"xyz"')                    # "xyz"
+--------------------------------------------------
+a = "Hello"
+print(a)             # Hello
+--------------------------------------------------
+# Multi-Line Strings
+
+b = """India is my country,
+We all are Indian,
+All Indians are my brothers and sisters."""
+print(b)    # Line breaks included as mentioned in the text.
+
+c = 'India is my country,
+We all are Indian,
+All Indians are my brothers and sisters.'
+print(c)  #  line breaks are inserted at the same position.
+```
+</details>
+
+<details>
+  <summary> - strings are arrays </summary>
+
+> Python does not have a character data type, a single character is simply a `string` with a length of 1.
+
+```py
+a = "Hello"
+print(a[0])    # H
+```
+
+Since strings are arrays, we can loop through the characters in a string, with a for loop.
+
+```py
+for i in "Hello":
+  print(i)
+
+# H, e, l, l, o
+```
+
+`len()` function returns the length of a string
+```py
+a = "Hello"
+print(len(a)) # 5
+```
+
+To check if substring is present or not in a string, we can use the keyword `in` or `not in`
+```py
+string1 = "India is my country."
+
+print("is" in string1)        # True
+print("is" not in string1)    # False
+
+```
+
+</details>
+
+
+<details>
+  <summary> - slicing string </summary>
+
+```py
+b = "Hello World"
+print(b[2:5])      # llo
+print(b[:5])       # Hello
+print(b[2:])       # llo World
+print(b[-5:-2])    # Wor
+
+#  [`H` `e` `l` `l` `o` ` ` `W` `o` `r` `l` `d`] 
+#  [ 0   1   2   3   4   5   6   7   8   9   10]
+#  [                    -6  -5  -4  -3  -2   -1]
+```
+
+</details>
+
+<details>
+  <summary> - modify strings </summary>
+
+```py
+
+# Upper Case : eturns the string in upper case
+
+a = "Hello World!"
+print(a.upper())            # HELLO WORLD!
+
+---------------------------------------------------------
+
+# Lower Case : returns the string in lower case
+
+a = "Hello World!"
+print(a.lower())            # hello world!
+
+----------------------------------------------------------
+
+# Remove Whitespace : removes any whitespace from the beginning or the end:
+
+a = " Hello World! "
+print(a.upper())            # Hello World
+
+----------------------------------------------------------
+
+# Replace String :  replaces a string with another string:
+
+a = "Hello World!"
+print(a.replace("H", "Y"))  # Yello World!
+
+------------------------------------------------------------
+
+# Split String : returns a list where the text between the specified separator becomes the list items
+
+a = "Hello, World!"
+print(a.split(","))         # ['Hello', ' World!']
+
+------------------------------------------------------------
+
+```
+
+</details>
+
+<details>
+  <summary> - string concatenation </summary>
+
+To concatenate, or combine, two strings we use the `+` operator.
+
+```py
+a = "Hello"
+b = "World"
+c = a + b
+print(c)            # HelloWorld
+
+d = a + " " + b
+print(d)            # Hello World
+```
+
+</details>
+
+<details>
+  <summary> - string : format and f-strings </summary>
+
+we can't combine strings and numbers without formatting it or typecasting it. otherwise it will throw TypeError.
+
+```py
+age = 21
+str = "My name is Ram, I am " + age
+print(str)          # TypeError
+```
+To resolve this we can either use `format()` or something called **f-strings**
+
+Using `format()`
+```py
+age = 21
+str = "My name is Ram, I am " + format(age)
+print(str)          # My name is Ram, I am 21
+```
+
+Using f-string : declare string with f"The sum of {a}, {b} is {a+b}" and use curly braces.
+```py
+age = 21
+name = "Ram"
+str = f"My name is {name}, I am {age}"
+print(str)        # My name is Ram, I am 21
+```
+
+</details>
+
+<details>
+  <summary> - Escape Characters </summary>
+
+An escape character is a backslash `\` followed by the character you want to insert.
+
+| Code	| Result          |
+|-------|-----------------|
+| `\'`  |	Single Quote	  |
+| `\\`  |	Backslash	      |
+| `\n`	| New Line	      |
+| `\r`	| Carriage Return	|
+| `\t`	| Tab	            |
+| `\b`	| Backspace	      |
+| `\f`  |	Form Feed	      |
+| `\ooo`|	Octal value	    |
+| `\xhh`|	Hex value       |
+
+```py
+str1 = 'Hello\'s World!'
+print(str1)        # Hello's World!      
+ 
+str2 = "Hello\\World!"
+print(str2)        # Hello\World!
+
+str3 = "Hello\nWorld!"
+print(str3)       # Hello
+                  # World!
+
+str4 = "Hello\rWorld!"
+print(str4)       # World!
+
+str5 = "Hello\tWorld!"
+print(str5)       # Hello  World! 
+
+str6 = "Hello \bWorld!"
+print(str6)       # HelloWorld!
+
+str7 = "\110\145\154\154\157"
+print(str7)       # Hello
+
+str8 = "\x48\x65\x6c\x6c\x6f"
+print(str8)       # Hello
+```
+
+</details>
+
+<details>
+  <summary> - string methods </summary>
+
+
+Python has a set of built-in methods that you can use on strings.
+
+> All string methods return new values. They do not change the original string.
+
+
+| Method         | Description                                                      |
+|----------------|------------------------------------------------------------------|
+| `capitalize()` | Converts the first character to upper case                       |
+| `casefold()`   | Converts string into lower case                                  | 
+| `center()`	   | Returns a centered string                                        |
+| `count()`      | Returns the number of times a specified value occurs in a string |
+| `encode()`     | Returns an encoded version of the string                         |
+| `endswith()`   | Returns true if the string ends with the specified value         |
+| `expandtabs()` | Sets the tab size of the string                                  |
+| `find()`       | Searches the string for a specified value and returns the position of where it was found |
+| `format()`     | Formats specified values in a string                             |
+| `format_map()` | Formats specified values in a string                             |
+| `index()`      | Searches the string for a specified value and returns the position of where it was found |
+| `isalnum()`    | Returns True if all characters in the string are alphanumeric    |
+| `isalpha()`    | Returns True if all characters in the string are in the alphabet |
+| `isascii()`	   | Returns True if all characters in the string are ascii characters|
+| `isdecimal()`	 | Returns True if all characters in the string are decimals        |
+| `isdigit()`    | Returns True if all characters in the string are digits          |
+| `isidentifier()`| Returns True if the string is an identifier                     |
+| `islower()`     | Returns True if all characters in the string are lower case     |
+| `isnumeric()`   | Returns True if all characters in the string are numeric        |
+| `isprintable()`	| Returns True if all characters in the string are printable      |
+| `isspace()`     |	Returns True if all characters in the string are whitespaces    |
+| `istitle()`     |	Returns True if the string follows the rules of a title         |
+| `isupper()`     |	Returns True if all characters in the string are upper case     |
+| `join()`        |	Joins the elements of an iterable to the end of the string      |
+| `ljust()`       |	Returns a left justified version of the string                  |
+| `lower()`       |	Converts a string into lower case                               |
+|  `lstrip()`     |	Returns a left trim version of the string                       |
+| `maketrans()`   |	Returns a translation table to be used in translations          |
+| `partition()`   |	Returns a tuple where the string is parted into three parts     |
+| `replace()`     |	Returns a string where a specified value is replaced with a specified value  |
+| `rfind()`       |	Searches the string for a specified value and returns the last position of where it was found |
+| `rindex()`      |	Searches the string for a specified value and returns the last position of where it was found |
+| `rjust()`       |	Returns a right justified version of the string                 |
+| `rpartition()`  |	Returns a tuple where the string is parted into three parts     |
+| `rsplit()`      |	Splits the string at the specified separator, and returns a list|
+| `rstrip()`      |	Returns a right trim version of the string                      |
+| `split()`       |	Splits the string at the specified separator, and returns a list|
+| `splitlines()`  |	Splits the string at line breaks and returns a list             |
+| `startswith()`  |	Returns true if the string starts with the specified value      |
+| `strip()`       |	Returns a trimmed version of the string                         |
+| `swapcase()`    |	Swaps cases, lower case becomes upper case and vice versa       |
+| `title()`       |	Converts the first character of each word to upper case         |
+| `translate()`   |	Returns a translated string                                     |
+| `upper()`       |	Converts a string into upper case                               |
+| `zfill()`       |	Fills the string with a specified number of 0 values at the beginning |
+
+ 
+```py
+str1 = "hello world"
+print(str1.capitalize()) # Hello world
+--------------------------------------------------
+str2 = "Hello World Welcome"
+print(str2.casefold())   # hello world welcome
+--------------------------------------------------
+str3 = "Hello"
+print(str3.center(20))        #         Hello       
+print(str3.center(20, "A"))   # SSSSSSSSHelloSSSSSSS
+---------------------------------------------------
+str4 = "World Hello World Hello Hello"
+print(str4.count("Hello"))          # 3
+print(str4.count("Hello", 7, 25))   # 2
+---------------------------------------------------
+str5 = "Hello, welcome to my world."
+print(str5.endswith("."))            # True
+print(str5.endswith(".", 10, 20))    # False
+---------------------------------------------------
+str6 = "Hello welcome Hello welcome."
+print(str6.find("welcome"))          # 7
+print(str6.find("welcome",14, 28))   # 20
+print(str6.find("happy"))            # -1
+
+# Note : The find() method is almost the same as the index() method,
+# the only difference is that the index() method raises an exception if the value is not found.
+
+str7 = "Hello world"
+print(str7.find("a"))        # -1
+print(str7.index("a"))       # ValueError
+-------------------------------------------------
+str8 = "Hello12"
+print(str8.isalnum())       # True
+
+str9 = "Hello a1 a2 "
+print(str9.isalnum())       # False
+
+str10 = "Hello 12"
+print(str10.isalnum())       # False
+
+```
+
+</details>
 
 </details>
 <!------------------------------------>
 
 
 <details>
-  <summary> 10. Lists </summary>
+  <summary> 10. <b> Lists </b> </summary>
 
 <br/>
+
+> `Lists` are used to store multiple items in a single variable.
+
+Lists are one of 4 built-in data types in Python used to store collections of data, the other 3 are `Tuple`, `Set`, and `Dictionary`, all with different qualities and usage.
+
+```py
+mylist = ["apple", "mango", "banana"]
+```
+
+List items are **ordered, changeable, and allow duplicate values**.
+
+List items are **indexed**, the first item has index `[0]`.
+
+List items can be of any data type.
+```py
+list1 = ["apple", "mango", "banana"]
+print(list1)  # apple, mango, banana
+
+list2 = [1, 2, 3, 4, 5]
+print(list2)   # 1, 2, 3, 4, 5
+
+list3 = [True, True, False]
+print(list3)   # True, True, False
+
+list4 = ["Ram", 21, True, "male"]
+print(list4)   # Ram, 21, True, male
+
+print(type(list1))  # <class 'list'>
+
+print(len(list1))   # 3
+```
 
 </details>
 <!------------------------------------>
@@ -1199,6 +1570,17 @@ print("Score processed")
 </details>
 <!------------------------------------>
 
+<details>
+  <summary> List, Tuple, Set, Dictionary </summary>
+
+| Four collection data types in the Python                                                             |
+|------------------------------------------------------------------------------------------------------|
+| **List** is a collection which is ordered and changeable. <br/> Allows duplicate members.            |
+| **Tuple** is a collection which is ordered and unchangeable. <br/> Allows duplicate members.         |
+| **Set** is a collection which is unordered, unchangeable*, and unindexed. <br/> No duplicate members.|
+| **Dictionary** is a collection which is ordered** and changeable. <br/> No duplicate members.        |
+
+</details>
 
 <details>
   <summary> 14. Mutable vs immutable </summary>
