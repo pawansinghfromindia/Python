@@ -362,7 +362,9 @@ We can inspect a type using : `type(age)`.
 
 > Operators are used to perform operations on variables(Operands) and values.
 
-### Arithmetic operators
+### Arithmetic operators : `+`,`-`,`*`,`/`,`%`,`**`,`//`
+<details>
+  <summary> Arithmetic operators </summary>
 
 > Arithmetic operators are used to perform common mathematical operations:
 
@@ -376,7 +378,11 @@ We can inspect a type using : `type(age)`.
 | `**`	   | Exponentiation	| `x ** y`   | `2 ** 5 = 32` |
 | `//`     |	Floor division|	`x // y`   | `15 // 2 = 7` |
 
-### Assignment operators
+</details>
+
+### Assignment operators : `=`,`+=`,`&=`,`>>=`
+<details>
+  <summary> Assignment operators </summary>
 
 > Assignment operators are used to assign values to variables:
 
@@ -411,8 +417,12 @@ if (count := len(numbers)) > 3:
 
 # output : List has 5 elements
 ```
+</details>
 
-### Ternary Operator
+### Ternary Operator : `a if a>b else b`
+<details>
+  <summary> Ternary Operator </summary>
+
 > The ternary operator allows you to assign one value if a condition is true, and another if it is false:
 
 ```py
@@ -431,8 +441,12 @@ x = "Sat" if num == 6 else "Sun" if num == 7  else "weekday"
 print(x)  # weekday
 
 ```
+</details>
 
-### Comparison operators
+### Comparison operators : `==`,`!=`,`>`,`<`,`>=`,`<=`
+<details>
+  <summary> Comparison operators </summary>
+
 > Comparison operators are used to compare two values.
 
 - Comparison operators return `True` or `False` based on the comparison:
@@ -466,9 +480,12 @@ x = 5
 print(1 < x < 10)        # True
 print(1 < x and x < 10)  # True
 ```
+</details>
 
+### Logical operators : `and`, `or`, `not` 
+<details>
+  <summary> Logical operators </summary>
 
-### Logical operators
 > Logical operators are used to combine conditional statements.
 
 | Operator | Description	                                           | Example	             |
@@ -483,8 +500,11 @@ print(x > 0 and x < 10)       # True
 print(x < 5 or x > 10)        # False
 print(not(x > 3 and x < 10))  # False
 ```
+</details>
 
-### Identity operators
+### Identity operators : `is`, `is not`
+<details>
+  <summary> Identity operators </summary>
 
 > Identity operators are used to compare the objects, not if they are equal,
 > but if they are actually the same object, with the same memory location.
@@ -515,9 +535,183 @@ print(x is not y)  # True bcuz both x, y are pointing two objects
 - `is` : Checks if both variables point to the same object in memory
 - `==` : Checks if the values of both variables are equal
 
-### Membership operators
+</details>
 
-### Bitwise operators
+### Membership operators : `in`, `not in`
+<details>
+  <summary> Membership operators </summary>
+
+> Membership operators are used to test if a sequence is presented in an object.
+
+| Operator	| Description	                                                                | Example |
+|-----------|-----------------------------------------------------------------------------|---------|
+| `in` 	    | Returns True if a sequence with the specified value is present in the object| x in y	|
+| `not in`	| Returns True if a sequence with the specified value is not present in the object| x not in y |
+
+```py
+fruits = ["apple", "banana", "mango"]
+print("mango" in fruits)          # True
+print("orange" in fruits)         # False
+print("apple" not in fruits)      # False
+print("pineapple" not in fruits)  # True
+```
+
+The membership operators also work with strings.
+```py
+sentence = "Hello World"
+
+print("H" in sentence)      # True
+print("hello" in sentence)  # False
+print("m" not in sentence)  # True
+```
+</details>
+
+### Bitwise operators : `&`, l, `^`, `~`, `<<`, `>>` 
+<details>
+  <summary> Bitwise operators </summary>
+
+> Bitwise operators are used to compare (binary) numbers.
+
+| Operator | Name	| Description	                        | Example |
+|----------|------|-------------------------------------|---------|
+| `&`      | AND	| Sets each bit to 1 if both bits are 1 |	x & y	|
+|  l       | OR	  | Sets each bit to 1 if one of two bits is 1 |	x l y |	
+| `^`      | XOR	| Sets each bit to 1 if only one of two bits is 1 |	x ^ y |	
+| `~`      | NOT	| Inverts all the bits |	~x  |	
+| `<<`     | Zero fill left shift	| Shift left by pushing zeros in from the right and let the leftmost bits fall off	| x << 2	|
+| `>>`     | Signed right shift	| Shift right by pushing copies of the leftmost bit in from the left, and let the rightmost bits fall off | x >> 2 |
+
+```py
+
+"""
+& operator compares each bit and set it to 1 if both are 1, otherwise it is set to 0
+ 6 =     0110
+ 3 =   & 0011
+      -----------
+         0010      ---> 2
+      -----------
+"""
+print(6 & 3) # 2
+----------------------------------------
+"""
+| operator compares each bit and set it to 1 if one or both is 1, otherwise it is set to 0
+ 6 =     0110
+ 3 =   | 0011
+      -----------
+         0111      ---> 7
+      -----------
+"""
+print(6 | 3) # 7
+----------------------------------------
+"""
+^ operator compares each bit and set it to 1 if only one is 1, otherwise it is set to 0
+ 6 =     0110
+ 3 =   ^ 0011
+      -----------
+         0101      ---> 5
+      -----------
+print(6 ^ 3)  # 5
+-----------------------------------------
+"""
+~ operator inverts each bit (0 becomes 1 and 1 becomes 0).
+
+Inverted 3 becomes -4:
+ 3 = 0000000000000011
+-4 = 1111111111111100
+
+Decimal numbers and their binary values:
+ 4 = 0000000000000100
+ 3 = 0000000000000011
+ 2 = 0000000000000010
+ 1 = 0000000000000001
+ 0 = 0000000000000000
+-1 = 1111111111111111
+-2 = 1111111111111110
+-3 = 1111111111111101
+-4 = 1111111111111100
+"""
+print(~3) # -4
+--------------------------------------------
+"""
+<< operator inserts the specified number of 0's (in this case 2) from the right and
+ let the same amount of leftmost bits fall off:
+
+If you push 00 in from the left:
+ 3 = 0000000000000011
+becomes
+12 = 0000000000001100
+
+Decimal numbers and their binary values:
+ 0 = 0000000000000000
+ 1 = 0000000000000001
+ 2 = 0000000000000010
+ 3 = 0000000000000011
+ 4 = 0000000000000100
+ 5 = 0000000000000101
+ 6 = 0000000000000110
+ 7 = 0000000000000111
+ 8 = 0000000000001000
+ 9 = 0000000000001001
+10 = 0000000000001010
+11 = 0000000000001011
+12 = 0000000000001100
+"""
+print(3 << 2)  # 12
+---------------------------------------
+"""
+>> operator moves each bit the specified number of times to the right.
+Empty holes at the left are filled with 0's.
+
+If you move each bit 2 times to the right, 8 becomes 2:
+ 8 = 0000000000001000
+becomes
+ 2 = 0000000000000010
+
+Decimal numbers and their binary values:
+ 0 = 0000000000000000
+ 1 = 0000000000000001
+ 2 = 0000000000000010
+ 3 = 0000000000000011
+ 4 = 0000000000000100
+ 5 = 0000000000000101
+ 6 = 0000000000000110
+ 7 = 0000000000000111
+ 8 = 0000000000001000
+ 9 = 0000000000001001
+10 = 0000000000001010
+11 = 0000000000001011
+12 = 0000000000001100
+"""
+print(8 >> 2)   # 2 
+```
+</details>
+
+### Operator Precedence in python
+<details>
+  <summary> Operator Precedence in python </summary>
+
+| Priority | Operator	                         | Description	                                        |
+|----------|-----------------------------------|------------------------------------------------------|
+| Top      | `()`	                             | Parentheses	                                        |
+|          | `**`	                             | Exponentiation	                                      |
+|          | `+x` `-x` `~x`                    | Unary plus, unary minus, and bitwise NOT	            |
+|          | `*` `/` `//` `%`                  | Multiplication, division, floor division, and modulus|	
+|          | `+` `-`	                         | Addition and subtraction	                            |
+|          | `<<`  `>>`                        | Bitwise left and right shifts	                      |
+|          | `&`                               | Bitwise AND	                                        |
+|          | `^`                               | Bitwise XOR	                                        |
+|	         | l                                 | Bitwise OR	                                          |
+|          | == ,!=,>,>=,<,<=,is,is not,in,not in | Comparisons, identity, and membership operators	  |
+|          | `not`	                           | Logical NOT	                                        |
+|          | `and`	                           | AND	                                                |
+| Least    | `or`                              | OR                                                   |
+
+**If two operators have the same precedence, the expression is evaluated from left to right.**
+```py
+print(5 + 4 - 7 + 3)  # 5
+```
+
+</details>
 
 </details>
 <!------------------------------------>
@@ -525,9 +719,186 @@ print(x is not y)  # True bcuz both x, y are pointing two objects
 
 
 <details>
-  <summary> 6. <code> if / elif / else </code> </summary>
+  <summary> 6. Conditionals : <code> if / elif / else </code> </summary>
 
-<br/>
+<details>
+  <summary> <code> if </code> </summary>
+
+```py
+a = 5
+b = 10
+if b > a:
+print("b is greater than a") # Indentation Error
+```
+
+**Indentation**
+- Python relies on **indentation (whitespace at the beginning of a line)** to define scope in the code. 
+- Other programming languages often use curly-brackets `{}` for this purpose.
+
+We can use **`spaces` or `tabs` for indentation**, but you must use the same amount of indentation for all statements within the same code block.
+
+```py
+a = 5
+b = 10
+if b > a:
+  print("b is greater than a") # b is greater than a
+```
+Multiple Statements in `If` Block
+```py
+age = 20
+if age >= 18:
+  print("You're an adult")             # You are an adult
+  print("You can vote")                # You can vote
+  print("You have full legal rights")  # You have full legal rights
+  print(3+7)                           # 10
+```
+
+Zero (`0`), empty strings (`""`), `None`, and empty collections are treated as `False`. Everything else is treated as `True`.
+```py
+isLogIn = True
+if isLogIn:
+  print("Welcome back!")
+```
+</details>
+
+
+
+<details>
+  <summary> <code> elif </code> </summary>
+
+> `elif` is nothing but `else if`.
+
+`elif` can't exists without `if`.
+
+```py
+a = 5
+b = 5
+if b > a:
+  print("b is greater than a")
+elif a == b:
+  print("a and b are equal")
+```
+
+**Multiple `elif`**
+```py
+score = 85
+
+if score >= 90:
+  print("Grade: A")
+elif score >= 80:
+  print("Grade: B")
+elif score >= 70:
+  print("Grade: C")
+elif score >= 60:
+  print("Grade: D")
+```
+
+**How `elif` works?** <br/>
+Only the first true condition will be executed. Even if multiple conditions are true, Python stops after executing the first matching block.
+
+**When to use `elif`?** <br/>
+`elif` is more efficient than using multiple separate `if` statements bcuz Python stops checking once it finds a true condition.
+
+</details>
+
+
+<details>
+  <summary> <code> else </code> </summary>
+
+The `else` statement is executed when the `if` condition (and any `elif` conditions) are not true.
+
+`else` can't exists without `if`.
+
+The `else` statement must come last. We can't have an `elif` or `if` after an `else`.
+
+```py
+a = 10
+b = 20
+if b > a:
+  print("b is greater than a")
+else:
+  print("b is not greater than a")
+```
+
+```py
+a = 10
+b = 10
+if b > a:
+  print("b is greater than a")
+elif a == b:
+  print("a and b are equal")
+else:
+  print("a is greater than b")
+```
+</details>
+
+
+<details>
+  <summary> Short Hand <code> if </code> </summary>
+
+> Short Hand `if` is nothing but one-liner `if` statement
+
+```py
+a = 5
+b = 2
+if a > b: print("a is greater than b")
+```
+
+```py
+a = 2
+b = 3
+print("A") if a > b else print("B")
+
+# This is called a conditional expression (sometimes known as a "ternary operator").
+```
+
+Assign a Value With `If Else`
+```py
+a = 10
+b = 20
+bigger = a if a > b else b
+print("Bigger is", bigger)
+```
+</details>
+
+
+<details>
+  <summary> Nested <code> if </code> </summary>
+
+We can have `if` inside `if` statements. This is called **nested `if`** statements.
+
+```py
+age = 25
+has_license = True
+
+if age >= 18:
+  if has_license:
+    print("You can drive")
+  else:
+    print("You need a license")
+else:
+  print("You are too young to drive")
+```
+
+Sometimes nested `if` statements can be simplified using logical operators `and` depends on logic.
+```py
+temp = 25
+is_sunny = True
+
+if temp > 20:
+  if is_sunny:
+    print("Perfect beach weather!")
+
+-----------------------------------------
+
+temp = 25
+is_sunny = True
+
+if temp > 20 and is_sunny:
+  print("Perfect beach weather!")
+```
+</details>
+
 
 </details>
 <!------------------------------------>
@@ -536,9 +907,137 @@ print(x is not y)  # True bcuz both x, y are pointing two objects
 
 
 <details>
-  <summary> 7. <code> for </code> and <code> while </code> </summary>
+  <summary> 7. Loops : <code> for </code> and <code> while </code> </summary>
 
 <br/>
+
+Python has two primitive loops :
+1. `while` loop
+2. `for` loop
+
+<details>
+  <summary> <code> while </code> </summary>
+
+With the `while` loop we can execute a set of statements as long as a condition is true.
+```py
+i = 1
+while i < 5:
+  print(i)
+  i += 1
+```
+
+Remember to increment i(updation), or else the loop will continue forever.
+
+</details>
+
+<details>
+  <summary> <code>while() + else{}</code> </summary>
+
+With the `else` statement we can run a block of code once when the condition no longer is true.
+```py
+i = 1
+while i < 5:
+  print(i)
+  i += 1
+else:
+  print("i is no longer less than 6")
+```
+</details>
+
+
+
+<details>
+  <summary> <code> for </code> </summary>
+
+A `for` loop is used for iterating over a sequence ( `list`, `tuple`, `dictionary`, `set`, `string`).
+
+```py
+fruits = ["apple", "banana", "orange"]
+for i in fruits:
+  print(i)
+
+for ch in "Apple":
+  print(ch)
+```
+
+</details>
+
+<details>
+  <summary> <code> range() </code> Function </summary>
+
+
+`range()` function returns a sequence of numbers, starting from 0 by default, and increments by 1 (by default), and ends at a specified number.
+
+```py
+for i in range(5):
+  print(i)
+
+# Output : 0, 1, 2, 3, 4
+-------------------------------
+
+for i in range(2, 5):
+  print(i)
+
+#  Output : 2, 3, 4
+--------------------------------
+
+for i in range(1, 10, 2):
+  print(i)
+
+# Output : 1, 3, 5, 7, 9
+```
+</details>
+
+<details>
+  <summary> <code> for() + else{} </code> </summary>
+
+```py
+for x in range(5):
+  print(x)
+else:
+  print("Loop Ended!")
+
+# Output : 0, 1, 2, 3, 4 and then Loop Ended
+```
+
+</details>
+
+<details>
+  <summary> Nested Loop </summary>
+
+
+**A nested loop is a loop inside a loop**.
+
+**inner loop** will be executed one time for each iteration of the **outer loop**.
+
+```py
+i = 1;
+while(i < 6):
+  j = 0;
+  while(j < i):
+    print(j+1, end=" ")
+    j += 1;
+    
+  i += 1;
+  print();
+--------------------------
+for i in range(1,6):
+  for j in range(i):
+    print(j+1, end=" ")
+    
+  print();
+
+# Output :
+1 
+1 2 
+1 2 3 
+1 2 3 4 
+1 2 3 4 5 
+```
+</details>
+
+
+
 
 </details>
 <!------------------------------------>
@@ -548,7 +1047,105 @@ print(x is not y)  # True bcuz both x, y are pointing two objects
 <details>
   <summary> 8. <code> break </code>, <code> continue </code>, <code> pass </code> </summary>
 
-<br/>
+
+### `break`
+
+With the `break` statement we can stop the loop even if the while condition is true.
+
+```py
+i = 1
+while i < 5:
+  print(i)
+  if i == 3:
+    break
+  i += 1
+```
+
+### `continue` 
+
+With the `continue` statement we can stop the current iteration, and continue with the next.
+
+```py
+i = 0
+while i < 5:
+  i += 1
+  if i == 3:
+    continue
+  print(i)
+```
+
+### `pass`
+
+`if` statements can't be empty, but if you for some reason have an `if` statement with no content, put in the `pass` statement to avoid getting an error.
+
+ `pass` statement is a null operation - nothing happens when it executes. It serves as a placeholder.
+
+```py
+a = 100
+b = 200
+
+if b > a:
+  pass
+```
+
+During development, you might want to sketch out your program structure before implementing the details. The pass statement allows you to do this without syntax errors.
+
+```py
+age = 20
+
+if age < 18:
+  pass # TODO: Add underage logic later
+else:
+  print("Access granted")
+```
+
+**`pass` in `while` and `for` loop**
+
+Loops can't be empty, but if you for some reason then use `pass` otherwise it will throw an error.
+
+```py
+i = 1
+while i < 5:
+  # can't be empty
+```
+
+```py
+i = 1
+while i < 5:
+  pass
+
+for x in [1, 2, 3, 4, 5]:
+  pass
+```
+
+
+<details>
+  <summary> <code> pass </code> vs comments </summary>
+
+A comment is ignored by python, but `pass` is an actual statement that gets executed (though it does nothing). 
+
+You need `pass` where Python expects a statement, not just a comment.
+
+Error :
+```py
+score = 85
+
+if score > 90:
+  # This is excellent   ### IndentationError
+
+print("Score processed")
+```
+Success :
+```py
+score = 85
+
+if score > 90:
+  pass # This is excellent
+
+print("Score processed")
+```
+</details>
+
 
 </details>
 <!------------------------------------>
