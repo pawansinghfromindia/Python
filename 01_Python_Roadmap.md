@@ -1517,6 +1517,9 @@ Lists are one of 4 built-in data types in Python used to store collections of da
 mylist = ["apple", "mango", "banana"]
 ```
 
+<details>
+  <summary> - List Intro </summary>
+
 List items are **ordered, changeable, and allow duplicate values**.
 
 List items are **indexed**, the first item has index `[0]`.
@@ -1539,15 +1542,460 @@ print(type(list1))  # <class 'list'>
 
 print(len(list1))   # 3
 ```
+</details>
+
+<details>
+  <summary> - Operations on List Items </summary>
+
+```py
+list1 = [10, 20, 30, 40, 50]
+
+print(list1[1])     # 20
+print(list1[-1])    # 50
+print(list1[2:5])   # [30, 40, 50]
+print(list1[:4])    # [10, 20, 30, 40]
+print(list1[2:])    # [30, 40, 50]
+print(list1[-4:-1]) # [20, 30, 40]
+
+list2 = ["apple", "mango", "banana"]
+
+if "mango" in list2:
+  print(" mango is in the list")
+```
+
+</details>
+
+<details>
+  <summary> - modifying List Items </summary>
+
+```py
+list1 = [10, 20, 30, 40, 50]
+       #  0   1   2   3   4
+
+list1[1] = 21
+print(list1)              # [10, 21, 30, 40, 50]
+
+list1[1:3] = [22, 32]
+print(list1)              # [10, 22, 32, 40, 50]
+
+list1[1:2] = [23, 24]
+print(list1)              # [10, [23,24], 32, 40, 50]
+
+list1[1:3] = [2]
+print(list1)              # [10, 2, 32, 40, 50]
+```
+
+</details>
+
+<details>
+  <summary> - list methods </summary>
+
+`insert()` insert element at any position
+```py
+list1 = ["apple", "mango", "banana"]
+list1.insert(2, "orange")
+print(list1)           # ['apple', 'mango', 'orange', 'banana']
+```
+
+`append()` : add elements at the end
+```py
+list2 = ["apple", "mango", "banana"]
+list2.append("orange")
+print(list2)          # ['apple', 'mango', 'banana', 'orange']
+```
+
+`extend()` add list elements or any other tuple, set into list
+```py
+list1 = [1, 2, 3, 4, 5]
+list2 = [6, 7, 8, 9, 10]
+
+list1.extend(list2)    
+print(list1)         #  [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+
+----------------------------------------------------------
+
+list1 = ["apple", "mango", "banana"]
+tuple1 = ("kiwi", "orange")
+
+list1.extend(tuple1)
+
+print(list1)         # ['apple', 'mango', 'banana', 'kiwi', 'orange']
+```
+
+`remove()` remove the specified element and if many only first occurence
+```py
+list1 = ["apple", "mango", "banana"]
+list1.remove("mango")
+
+print(list1)         # ['apple', 'banana']
+-------------------------------------------------
+
+list2 = ["apple", "mango", "banana", "mango"]
+list2.remove("mango")
+
+print(list2)         # ['apple', 'banana', 'mango']
+```
+
+`pop()` method removes the last item and also return it.
+```py
+list3 = ["apple", "mango", "banana"]
+list3.pop()
+print(list3)         # ['apple', 'mango']
+-----------------------------------------------------
+x = list3.pop() 
+print(x)             # 'mango'
+print(list3)         # ['apple']
+```
+`del` delete the specified index element and it can also delete the list completely.
+```py
+list4 = ["apple", "banana", "mango"]
+del list4[0]
+print(list4)         # ['banana', 'mango']
+-------------------------------------------------------
+list5 = ["apple", "banana", "mango"]
+del list5            # delete list completely, it de
+print(list5)         # Error : NameError
+```
+
+`clear()` method empties the list.The list still remains, but it has no content.
+```py
+list6 = ["apple", "banana", "mango"]
+list6.clear()
+print(list6)         # []
+```
+
+</details>
+
+
+<details>
+  <summary> - loop through a List </summary>
+
+`for()` loop
+```py
+mylist = ["apple", "banana", "mango"]
+
+for i in range(len(mylist)):
+  print(mylist[i])
+--------------------------------
+for e in mylist:
+  print(e)
+
+# Output :
+#  apple
+#  banana
+#  mango
+```
+
+`while()` loop
+```py
+mylist = ["apple", "banana", "mango"]
+
+i = 0
+while i < len(mylist):
+  print(mylist[i])
+  i = i + 1
+```
+
+ A short hand for loop that will print all items in a list i.e. List Comprehension
+```py
+mylist = ["apple", "banana", "mango"]
+[print(x) for x in mylist]
+```
+
+</details>
+
+<details>
+  <summary> - list Comprehension </summary>
+
+List comprehension offers a shorter syntax when you want to create a new list based on the values of an existing list.
+
+Syntax :
+```py
+newlist = [expression for item in iterable if condition == True]
+```
+
+```py
+fruits = ["apple", "banana", "litchi", "kiwi", "mango"]
+newlist = []
+
+for x in fruits:
+  if "a" in x:
+    newlist.append(x)
+
+print(newlist)
+---------------------------------------------------------
+# Using List Comprehension, we can do this in one line
+----------------------------------------------------------
+fruits = ["apple", "banana", "litchi", "kiwi", "mango"]
+
+newlist = [x for x in fruits if "a" in x]
+
+print(newlist)
+```
+
+</details>
+
+<details>
+  <summary> - sort Lists </summary>
+
+List objects have a `sort()` method that will sort the list alphanumerically, ascending, by default:
+
+```py
+mylist = ["orange", "mango", "cherry", "apple", "banana"]
+mylist.sort()
+print(mylist)     # [apple, banana, cherry, mango, orange]
+mylist.sort(reverse = True)
+print(mylist)     # [orange, mango, cherry, banana, apple]
+
+# Note : sort() method is case sensitive, resulting in all capital letters being sorted before lower case letters.
+----------------------------------------------------------
+
+mylist = [50, 20, 45, 10, 35]
+mylist.sort()
+print(mylist)   # [10, 20, 35, 45, 50]
+mylist.sort(reverse = True)
+print(mylist)   # [50, 45, 35, 20, 10]
+
+-----------------------------------------------------------
+## Sort the list based on how close the number is to 50.
+
+def myfunc(n):
+  return abs(n - 50)
+
+mylist = [50, 20, 45, 10, 35]
+mylist.sort(key = myfunc)
+print(mylist)     # [50, 45, 35, 20, 10]
+```
+
+`reverse()` method reverses the current sorting order of the elements.
+```py
+mylist = ["orange", "mango", "cherry", "apple", "banana"]
+mylist.reverse()
+print(mylist)   # [banana, apple, cherry, mango, orange]
+```
+
+</details>
+
+<details>
+  <summary> - copy a List </summary>
+
+We can't copy a list simply by typing `list2 = list1`. <br/>
+bcuz `list2` will only be a reference to `list1`, and <br/>
+changes made in `list1 will` automatically also be made in `list2`.
+
+```py
+list1 = [1, 2, 3, 4, 5]
+list2 = list1
+
+list2[0] = 20
+
+print(list2);  # [20, 2, 3, 4, 5]
+print(list1);  # [20, 2, 3, 4, 5]
+
+```
+So, We can have to use the built-in List method `copy()` to copy a list.
+```py
+list1 = [1, 2, 3, 4, 5]
+list2 = list1.copy()
+
+list2[0] = 20
+
+print(list2)     # [20, 2, 3, 4, 5]
+print(list1)     # [1, 2, 3, 4, 5]
+``` 
+
+Another way to make a copy is to use the built-in method `list()`.
+```py
+list1 = [1, 2, 3, 4, 5]
+list2 = list(list1)
+
+list2[1] = 20
+
+print(list2)    # [1, 20, 3, 4, 5]
+print(list1)    # [1, 2, 3, 4, 5]
+```
+
+We can also make a copy of a list by using the `: `(slice) operator.
+
+```py
+list1 = [1, 2, 3, 4, 5]
+list2 = list1[:]
+
+list2[0] = 10
+
+print(list2)   # [10, 2, 3, 4, 5]
+print(list1)   # [1, 2, 3, 4, 5]
+```
+
+</details>
+
+<details>
+  <summary> - join two lists </summary>
+
+There are several ways to join, or concatenate, two or more lists in python.
+
+Concatenate `+`
+```py
+list1 = ["a", "b", "c"]
+list2 = [1, 2, 3]
+
+list3 = list1 + list2
+print(list3)             #  ['a', 'b', 'c', 1, 2, 3]
+```
+
+Appending list items `append()`
+```py
+list1 = ["a", "b" , "c"]
+list2 = [1, 2, 3]
+
+for x in list2:
+  list1.append(x)
+
+print(list1)             #  ['a', 'b', 'c', 1, 2, 3]
+```
+
+`extend()` to add list2 at the end of list1.
+```py
+list1 = ["a", "b" , "c"]
+list2 = [1, 2, 3]
+
+list1.extend(list2)
+print(list1)              #   ['a', 'b', 'c', 1, 2, 3]
+```
+
+</details>
+
+<details>
+  <summary> - list methods  </summary>
+
+Python has a set of built-in methods that we can use on lists.
+
+| Method	    |                Description                                                   |
+|-------------|------------------------------------------------------------------------------|
+| `append()`  | Adds an element at the end of the list                                       |
+| `clear()` 	| Removes all the elements from the list                                       |
+| `copy()`  	| Returns a copy of the list                                                   |
+| `count()` 	| Returns the number of elements with the specified value                      |
+|  `extend()`	| Add the elements of a list (or any iterable), to the end of the current list |
+| `index()`  	| Returns the index of the first element with the specified value              |
+| `insert()` 	| Adds an element at the specified position                                    |
+| `pop()`   	| Removes the element at the specified position                                |
+| `remove()` 	| Removes the item with the specified value                                    |
+| `reverse()` | Reverses the order of the list                                               |
+| `sort()`    | Sorts the list                                                               |
+
+</details>
 
 </details>
 <!------------------------------------>
 
 
 <details>
-  <summary> 11. Tuples </summary>
+  <summary> 11. <b> Tuples </b> </summary>
 
 <br/>
+
+**Tuples** are used to store multiple items in a single variable.
+
+A tuple is a collection which is **_ordered and unchangeable_**.
+
+Tuples are written with round brackets `()`.
+
+```py
+tuple1 = ("abc", "pqr", "xyz")
+```
+
+<details>
+  <summary> - tuple intro </summary>
+
+
+> Tuples are unchangeable, meaning that we cannot change, add or remove items after the tuple has been created.
+
+```py
+mytuple = ("apple", "banana", "mango")
+print(mytuple)         # ('apple', 'banana', 'mango')
+
+print(mytuple[0])      # 'apple'
+
+mytuple2 = ("apple", "banana", "apple", "mango")
+print(mytuple2)         # ('apple', 'banana', 'apple', 'mango')
+
+print(len(mytuple2))    #  4
+
+mytuple3 = ()
+print(type(mytuple3))   # <class 'tuple'>
+
+tuple1 = ("abc", "pqr", "xyz")
+tuple2 = (1, 5, 7, 9, 3)
+tuple3 = (True, False, False)
+tuple4 = ("Ram", 21, True, "male")
+
+# tuple() constructor to create a tuple
+tuple5 = tuple(("abc", "pqr", "xyz"))
+print(tuple5)          # ('abc', 'pqr', 'xyz')
+
+tuple6 = tuple(("apple"))
+print(tuple6)          #  ('a', 'p', 'p', 'l', 'e')
+```
+
+To create a tuple with only one item, you have to add a comma after the item, otherwise python will not recognize it as a tuple rather it will be string.
+```py
+mytuple1 = ("apple",)
+print(type(mytuple1))   # <class 'tuple'> 
+
+
+mytuple2 = ("apple")    # NOT a tuple
+print(type(mytuple2))   # <class 'str'>
+```
+
+</details>
+
+<details>
+  <summary> - access tuple items </summary>
+
+```py
+tuple1 = ("apple", "banana", "cherry", "mango", "orange")
+
+print(tuple1[1])        # banana
+print(tuple1[-1])       # orange
+print(tuple1[2:5])      # ('cherry', 'mango', 'orange')
+print(tuple1[:4])       # ('apple', 'banana', 'cherry', 'mango')
+print(tuple1[2:])       # ('cherry', 'mango', 'orange')
+print(tuple1[-4:-1])    # ('banana', 'cherry', 'mango')
+
+if "apple" in tuple1:
+  print("'apple' is present")
+```
+
+</details>
+
+<details>
+  <summary> - update tuple even though it is immutable </summary>
+
+Since tuples are immutable, they do not have a built-in `append()` method, but there are other ways to add items to a tuple. So workaround  are :
+
+Convert into a list, add item into list and convert this list back to tuple.
+```py
+tuple1 = ("apple", "banana", "mango")
+list1 = list(tuple1)
+list1.append("orange")
+
+tuple2 = tuple(list1)   # ('apple', 'banana', 'mango')
+```
+
+Add tuple to a tuple
+```py
+tuple1 = ("apple", "banana", "mango")
+tuple2 = ("orange",)
+tuple1 += tuple2
+
+print(tuple1)        # ('apple', 'banana', 'mango', 'orange')
+```
+
+Similar way we can remove items from tuple by converting it into list delete items and convert it back to tuple.
+
+</details>
+
 
 </details>
 <!------------------------------------>
