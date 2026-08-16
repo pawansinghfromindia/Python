@@ -1996,24 +1996,769 @@ Similar way we can remove items from tuple by converting it into list delete ite
 
 </details>
 
+<details>
+  <summary> - packing and unpacking a tuple </summary>
+
+
+When we create a tuple, we normally assign values to it. This is called **packing a tuple**.
+```py
+fruits = ("apple", "banana", "mango")
+```
+
+But, in Python, we are also allowed to extract the values back into variables. This is called **unpacking a tuple**.
+```py
+fruits = ("apple", "banana", "mango")
+
+(red, yellow, green) = fruits
+
+print(red)        # apple
+print(yellow)     # banana
+print(green)      # mango
+```
+The number of variables must match the number of values in the tuple, if not, you must use an **asterisk `*`** to collect the remaining values as a list.
+```py
+fruits = ("apple", "banana", "mango", "papaya")
+
+(red, yellow, *green) = fruits
+
+print(red)       # apple
+print(yellow)    # banana 
+print(green)     # ['mango', 'papaya']
+```
+
+</details>
+
+<details>
+  <summary> - loop through a tuple </summary>
+
+`for` and `while` loop
+```py
+tuple1 = ("apple", "banana", "mango")
+
+for i in tuple1:
+  print(i)                    # apple, banana, mango
+
+for i in range(len(tuple1)):
+  print(tuple1[i])            # apple, banana, mango
+
+
+i = 0
+while i < len(tuple1):
+  print(tuple1[i])            # apple, banana, mango
+  i = i + 1
+```
+
+</details>
+
+<details>
+  <summary> - join two tuples </summary>
+
+To join two or more tuples, we use the `+` operator.
+
+```py
+tuple1 = ("a", "b" , "c")
+tuple2 = (1, 2, 3)
+
+tuple3 = tuple1 + tuple2
+print(tuple3)              # ('a', 'b', 'c', 1, 2, 3)
+
+------------------------------------------------------
+
+fruits = ("apple", "banana", "mango")
+newtuple = fruits * 2
+
+print(newtuple)           # ('apple', 'banana', 'mango', 'apple', 'banana', 'mango')
+
+number = (1, 2, 3)
+newtuple1 = number * 2
+
+print(newtuple1)         # (1, 2, 3, 1, 2, 3)
+```
+
+</details>
+
+<details>
+  <summary> - tuple methods</summary>
+
+Python has two built-in methods that we can use on tuples.
+
+| Method	   |                   Description                                                           |
+|------------|-----------------------------------------------------------------------------------------|
+| `count()`  | Returns the number of times a specified value occurs in a tuple                         |
+| `index()`	 | Searches the tuple for a specified value and returns the position of where it was found |
+
+```py
+
+tuple1 = (1, 3, 4, 4, 5)
+
+print(tuple1.count(4))    # 2
+print(tuple1.index(5))    # 4
+print(tuple1.index(4))    # 2
+```
+
+
+</details>
 
 </details>
 <!------------------------------------>
 
 
 <details>
-  <summary> 12. Sets </summary>
+  <summary> 12. <b> Sets </b> </summary>
 
 <br/>
+
+A set is a collection which is unordered, unchangeable*, and unindexed.
+
+Set items are unchangeable, but you can remove items and add new items.
+
+Sets are written with curly brackets`{}`.
+
+Set items are unordered, unchangeable, and do not allow duplicate values.
+
+```py
+myset = {"apple", "banana", "mango"}
+print(myset)          # {'mango', 'apple', 'banana'}
+
+# Note: set is unordered, meaning: the items will appear in a random order.
+
+set2 = {1, 2, 3, 1, 4}
+print(set2)           # {1, 4, 2, 3}
+
+```
+
+> Once a set is created, you cannot change its items, but you can remove items and add new items.
+
+<details>
+  <summary> - set intro </summary>
+
+The values **False and 0** and **True and 1** are considered the same value in sets, and are treated as duplicates.
+```py
+set1 = {0, 1, 2, False, True}
+
+print(set1)          # {0, 1, 2}
+print(len(set1))     # 3
+
+set1 = {"abc", "pqr", "xyz"}
+set2 = {1, 3, 5, 7, 9}
+set3 = {True, False, False}
+set4 = ("abc", 21, True, "male"}
+
+set5 = set(("a", "b", "c")) 
+print(set5)           # {'a', 'b', 'c'}
+
+print(type(set5))     #  <class 'set'>
+```
+</details>
+
+<details>
+  <summary> - access set items </summary>
+
+```py
+set1 = {10, 20, 30, 40, 50}
+
+for i in set1:
+  print(i)             # 10 20 30 40 50
+
+print(10 in set1)      # True
+print(5 not in set1)   # True
+```
+
+</details>
+
+<details>
+  <summary> - add and remove set items </summary>
+
+Once a set is created, you cannot change its items, but you can add new items.
+
+```py
+set1 = {"apple", "banana", "mango"}
+
+set1.add("orange")
+print(set1)          # {'apple', 'banana', 'mango', 'orange'}
+
+---------------------------------------------------------------
+
+set1 = {"apple", "banana", "mango"}
+set2 = {1, 2, 3}
+
+set1.update(set2)
+
+print(set1)         # {'apple', 'banana', 'mango', 1, 2, 3}
+
+--------------------------------------------------------------
+object in the update() method does not have to be a set, it can be
+any iterable object (tuples, lists, dictionaries etc.)
+
+set1 = {1, 2, 3}
+list1 = ["a", "b"]
+
+set1.update(list1)
+
+print(set1)       # {1, 2, 3, 'a', 'b'}
+```
+
+To remove an item in a set, use the `remove()`, or the `discard()` method.
+
+```py
+set1 = {"apple", "banana", "mango"}
+
+set1.remove("banana")
+print(set1)
+
+set1.remove("orange")  # Error
+
+set1.discard("banana")
+print(set1)
+
+set1.discard("orange")  # No Error
+
+```
+
+- If the item to remove does not exist, `remove()` will raise an error. 
+
+- If the item to remove does not exist, `discard()` will NOT raise an error.
+
+You can also use the `pop()` method to remove an item, but this method will remove a random item, so you cannot be sure what item that gets removed. The return value of the `pop()` method is the removed item.
+
+```py
+set1 = {1, 2, 3, 4, 5}
+
+x = set1.pop()
+print(x)
+
+print(set1)
+```
+
+**`clear()` and `del`**
+- The `clear()` method empties the set.
+- The `del` keyword will delete the set completely.
+```py
+set1 = {"apple", "banana", "mango"}
+set1.clear()
+print(set1)    # set()
+
+del set1
+print(set1)    # NameError : set1 even doesn't exists
+```
+
+</details>
+
+<details>
+  <summary> - loop </summary>
+
+```py
+set1 = {"apple", "banana", "mango"}
+
+for i in set1:
+  print(i)
+
+```
+
+</details>
+
+<details>
+  <summary> - Join Sets </summary>
+
+There are several ways to join two or more sets in python.
+- The `union()` and `update()` methods joins all items from both sets.
+- The `intersection()` method keeps ONLY the common items between sets.
+- The `difference()` method keeps the items from the first set that are not in the other set(s).
+- The `symmetric_difference()` method keeps all items EXCEPT the duplicates.
+
+#### UNION 
+```py
+set1 = {"a", "b", "c"}
+set2 = {1, 2, 3}
+
+set3 = set1.union(set2)
+print(set3)      # {'a', 'b', 'c', 1, 2, 3}
+
+# You can use the | operator instead of the union() method, and you will get the same result.
+
+set1 = {"a", "b", "c"}
+set2 = {1, 2, 3}
+
+set3 = set1 | set2
+print(set3)         # {'a', 'b', 'c', 1, 2, 3}
+
+-------------------------------------------------------------
+
+set1 = {"a", "b", "c"}
+set2 = {1, 2, 3}
+set3 = {"abc", "xyz"}
+
+myset1 = set1.union(set2, set3)
+myset2 = set1 | set2 | set3
+
+print(myset1)     # {'a', 'b', 'c', 1, 2, 3, 'abc', 'xyz'}
+print(myset2)     # {'a', 'b', 'c', 1, 2, 3, 'abc', 'xyz'}
+
+-------------------------------------------------------------
+
+#  update() method inserts the items in set2 into set1:
+
+set1 = {"a", "b" , "c"}
+set2 = {1, 2, 3}
+
+set1.update(set2)
+print(set1)         # {'a', 'b', 'c', 1, 2, 3}
+
+``` 
+
+#### INTERSECTION 
+
+```py
+set1 = {1, 2, 3}
+set2 = {3, 4, 5}
+
+set3 = set1.intersection(set2)
+print(set3)           #   {3}
+
+----------------------------------------------
+
+# NOTE : We can use the & operator instead of the intersection()
+
+set3 = set1 & set2
+print(set3)          #  {3}
+
+-----------------------------------------------
+set1 = {"a", "b", "c"}
+set2 = {"d", "e", "a"}
+
+set1.intersection_update(set2)
+print(set1)         #   {a}
+                    # but it will change the original set instead of returning a new set.
+```
+
+#### DIFFERENCE
+
+```py
+set1 = {1, 2, 3}
+set2 = {3, 4, 5}
+
+set3 = set1.difference(set2)
+print(set3)      #  {1, 2}
+
+set4 = set2.difference(set1)
+print(set4)      #  {4, 5}
+
+#----------------------------------------
+
+# Note : - operator instead of the difference()
+set3 = set1 - set2
+print(set3)       #  {1, 2}
+
+set4 = set2 - set1
+print(set4)       #  {4, 5}
+
+#-----------------------------------------
+set1 = {"a", "b", "c"}
+set2 = {"d", "e", "a"}
+
+set1.difference_update(set2)
+
+print(set1)     # {'b', 'c'}
+                # but it will change the original set instead of returning a new set
+```
+
+#### Symmetric Differences
+
+```py
+set1 = {1, 2, 3}
+set2 = {4, 5, 1}
+
+set3 = set1.symmetric_difference(set2)
+
+print(set3)    # {2, 3, 4, 5}
+#---------------------------------------
+
+# We can use the ^ operator instead of the symmetric_difference()
+
+set3 = set1 ^ set2
+print(set3)    # {2, 3, 4, 5}
+
+#---------------------------------------
+
+set1 = {1, 2, 3}
+set2 = {4, 5, 1}
+
+set1.symmetric_difference_update(set2)
+
+print(set1)    # {2, 3, 4, 5}
+```
+
+</details>
+
+<details>
+  <summary> - frozenset </summary>
+
+`frozenset` is an immutable version of a set.
+
+Like sets, it contains unique, unordered, unchangeable elements. <br/>
+Unlike sets, elements cannot be added or removed from a frozenset.
+
+```py
+x = frozenset({"a", "b", "c"})
+
+print(x)             #  frozenset({'banana', 'apple', 'cherry'})
+print(type(x))       #  <class 'frozenset'>
+```
+
+Being immutable means you cannot add or remove elements. However, frozensets support all non-mutating operations of sets.
+
+
+</details>
+
+<details>
+  <summary> - set methods </summary>
+
+Python has a set of built-in methods that you can use on sets.
+
+| Method	                  | Shortcut	       |    Description                             |
+|-----------------|------------------|------------------------------------------------------|
+| `add()`	 	      | Adds an element to the set                 |
+| `clear()`	      | Removes all the elements from the set      |
+| `copy()`	 	    | Returns a copy of the set                  |
+| `difference()`	| `-`	 |Returns a set containing the difference between two or more sets |
+| `difference_update()` |	`-=` | Removes the items in this set that are also included in another, specified set |
+| `discard()`	    | Remove the specified item                  |
+| `intersection()`|	`&`	| Returns a set, that is the intersection of two other sets  |
+| `intersection_update()` |	`&=` | Removes the items in this set that are not present in other, specified set(s)  |
+| `isdisjoint()`	| Returns True if NO items of this set is present in another set                  |
+| `issubset()`	  | `<=`	| Returns True if all items of this set is present in another set         |
+|            	    | `<`	  | Returns True if all items of this set is present in another, larger set |
+| `issuperset()`	| `>=`	| Returns True if all items of another set is present in this set         |
+|  	              | `>`	  | Returns True if all items of another, smaller set is present in this set|
+| `pop()`	 	      |       | Removes an element from the set                                         |
+| `remove()`	 	  |       | Removes the specified element                                           |
+| `symmetric_difference()` |	`^`	| Returns a set with the symmetric differences of two sets        |
+| `symmetric_difference_update()` | `^=` | Inserts the symmetric differences from this set and another |
+| `union()` 	| l	 | Return a set containing the union of sets             |
+| `update()`  | l= |	Update the set with the union of this set and others |
+
+</details>
 
 </details>
 <!------------------------------------>
 
 
 <details>
-  <summary> 13. Dictionaries </summary>
+  <summary> 13. <b> Dictionaries </b> </summary>
 
 <br/>
+
+Dictionaries are used to store data values in `key:value` pairs.
+
+A dictionary is a collection which is ordered*, changeable and do not allow duplicates.
+
+Dictionaries are written with curly brackets `{}`, and have `keys and values`.
+
+```py
+person = {
+    "name": "Ram",
+    "age": 21,
+    "city": "Delhi"
+}
+```
+
+The values in dictionary items can be of any data type.
+
+<details>
+  <summary> - dictionary intro </summary>
+
+```py
+person = {
+    "name": "Ram",
+    "age": 21,
+    "city": "Delhi"
+}
+
+#---------------------------------------------------------------------------
+
+print(person)              #  {'name' : 'Ram', 'age' : 21, 'city' : 'Delhi'}
+
+print(person["name"])      #  Ram
+
+#---------------------------------------------------------------------------
+
+person["age"] = 22      
+print(person["age"])       #  22
+
+person["gender"] = "Male"
+print(person["gender"])    #  Male
+
+print(person)              #  {'name' : 'Ram', 'age' : 21, 'city' : 'Delhi', 'gender' : 'Male'}
+
+#--------------------------------------------------------------------------
+
+print(len(person))         #  4
+
+#--------------------------------------------------------------------------
+
+dict1 = dict(name = "Shiva", age = 24, country = "India")
+print(dict1)               #  {'name':'Shiva', 'age':21, 'country':'India'}
+
+#--------------------------------------------------------------------------
+
+dict2 = {1: "Amit", 2:"Arun", 3:"Anushka", 3:"Anmol"}
+print(dict2)               # {1: 'Amit', 2: 'Arun', 3: 'Anmol'}
+                           # It doesn't throw error rather it will update the last entered value
+```
+
+Example : **Count Frequency**
+
+```py
+numbers = [1, 2, 2, 3, 3, 3, 3, 3]
+
+frequency = {}
+
+for i in numbers:
+    if i in frequency:
+        frequency[i] += 1
+    else:
+        frequency[i] = 1
+
+print(frequency)
+```
+
+</details>
+
+
+<details>
+  <summary> - access dictionary items </summary>
+
+```py
+dict1 = {
+    "name": "Ram",
+    "age": 21,
+    "city": "Delhi"
+}
+
+print(dict1["name"])       # Ram
+
+#--------------get()------------------
+
+print(dict1.get("name"))   # Ram
+
+#-------------keys()-------------------
+
+# keys() method will return a list of all the keys in the dictionary.
+
+print(dict1.keys())       # dict_keys(['name', 'age', 'city'])
+
+#------------values()-----------------
+
+# values() method will return a list of all the values in the dictionary.
+
+print(dict1.values())       # dict_values(['Ram', 21, 'Delhi'])
+
+#-----------items()----------------------
+
+# items() method will return each item in a dictionary, as tuples in a list
+
+print(dict1.items())       # dict_items([('name', 'Ram'), ('age', 21), ('city', 'Delhi')])
+
+#-------------in----------------------------
+
+# To determine if a specified key is present in a dictionary use the in
+
+if "name" in dict1:
+  print("Yes, 'name' is one of the keys in the dictionary")
+
+```
+
+</details>
+
+<details>
+  <summary> - change dictionary items </summary>
+
+We can change the value of a specific item by referring to its key name.
+
+```py
+dict1 = {
+    "name": "Ram",
+    "age": 21,
+    "city": "Delhi"
+}
+
+dict1["name"] = "Shiva"      
+print(dict1["name"])             #  Shiva
+
+dict1.update({"age": 20})
+print(dict1["age"])              # 20
+
+#  update() method will update the dictionary with the items from a given argument.
+#  If the item does not exist, the item will be added.
+
+dict1.update({"gender": "male"})
+print(dict1)                    # {'name':Shiva, 'age':20, 'city':'Delhi', 'gender':'male'}
+```
+
+</details>
+
+<details>
+  <summary> - removing dictionary items </summary>
+
+`pop()` method removes the item with the specified key name:
+```py
+dict1 = {
+    "name": "Shiva",
+    "age": 20,
+    "city": "Delhi",
+    "gender": "Male"
+}
+
+#------------------pop()-----------------------
+dict1.pop("gender")
+print(dict1)           # {'name':Shiva, 'age':20, 'city':'Delhi'}
+
+#------------------popitem()-----------------------
+
+# popitem() method removes the last inserted item 
+
+dict1.popitem()
+print(dict1)           # {'name':Shiva, 'age':20}
+
+#------------------del()--------------------------
+
+# del removes the item with the specified key name
+# if not specifies it will delete the dictionary as a whole
+
+del dict1["age"]
+print(dict1)          # {'name':Shiva}
+
+
+del dict1
+#print(dict1)          # NameError : Dictionary dict1 not even exists
+
+#----------------clear()--------------------------
+
+# clear() method empties the dictionary
+
+dict1 = {
+    "name": "Ram",
+    "age": 21,
+    "city": "Delhi",
+    "gender": "Male"
+}
+
+dict1.clear()
+print(dict1)      # {}
+```
+
+</details>
+
+<details>
+  <summary> - loops on dictionary </summary>
+
+```py
+dict1 = {
+    "name": "Ram",
+    "age": 21,
+    "city": "Delhi",
+    "gender": "Male"
+}
+
+#------------for loop-----------------------------
+for i in dict1:
+  print(i)              # Print all keys of dict1
+
+for i in dict1:
+  print(dict1[i])       # Print all values of respective keys of dict1
+
+#------------------------------------------------
+for i in dict1.keys():
+  print(i)              # Print all keys of dict1
+
+for i in dict1.values():
+  print(i)              # Print all values of dict1
+
+#--------------------------------------------------
+
+for x, y in dict1.items():
+  print(x, y)           # Print both keys and values of dict1
+```
+
+</details>
+
+<details>
+  <summary> - copy dictionary </summary>
+
+We can't copy a dictionary simply by typing dict2 = dict1, bcuz dict2 will only be a reference to dict1, and changes made in dict1 will automatically also be made in dict2.
+
+
+```py
+dict1 = {
+    "name": "Ram",
+    "age": 21,
+    "city": "Delhi",
+    "gender": "Male"
+}
+
+dict2 = dict1.copy()
+print(dict2)  # {'name': 'Ram', 'age': 21, 'city': 'Delhi', 'gender': 'Male'}
+
+dict3 = dict(dict1)
+print(dict3)  # {'name': 'Ram', 'age': 21, 'city': 'Delhi', 'gender': 'Male'}
+```
+
+</details>
+
+<details>
+  <summary> - nested dictionary  </summary>
+
+A dictionary can contain dictionaries, this is called nested dictionaries.
+
+```py
+dict1 = {
+  "dict1_1" : {
+    "name" : "Ram",
+    "age" : 21
+  },
+  "dict1_2" : {
+    "name" : "Shyam", 
+    "age" : 22
+  },
+  "dict1_3" : {
+    "name" : "Mohan",
+    "age" : 23
+  }
+}
+
+print(dict1)
+# {'dict1_1': {'name': 'Ram', 'age': 21}, 'dict1_2': {'name': 'Shyam', 'age': 22}, 'dict1_3': {'name': 'Mohan', 'age': 23}} 
+
+
+print(dict1["dict1_1"]["name"]) # abc
+
+for x, obj in dict1.items():
+  print(x)
+
+  for y in obj:
+    print(y + ':', obj[y])
+```
+
+</details>
+
+<details>
+  <summary> - dictionary methods </summary>
+
+| Method	      | Description                                                |
+|---------------|------------------------------------------------------------|
+| `clear()`	    | Removes all the elements from the dictionary               |
+| `copy()`	    | Returns a copy of the dictionary                           |
+| `fromkeys()`	| Returns a dictionary with the specified keys and value     |
+| `get()`	      | Returns the value of the specified key                     |
+| `items()`	    | Returns a list containing a tuple for each key value pair  |
+| `keys()`	    | Returns a list containing the dictionary's keys            |
+| `pop()`	      | Removes the element with the specified key                 |
+| `popitem()`	  | Removes the last inserted key-value pair                   |
+| `setdefault()`| Returns the value of the specified key. If the key does not exist: insert the key, with the specified value |
+| `update()`	  | Updates the dictionary with the specified key-value pairs  |
+| `values()`	  | Returns a list of all the values in the dictionary         |
+
+</details>
 
 </details>
 <!------------------------------------>
@@ -2023,10 +2768,17 @@ Similar way we can remove items from tuple by converting it into list delete ite
 
 | Four collection data types in the Python                                                             |
 |------------------------------------------------------------------------------------------------------|
-| **List** is a collection which is ordered and changeable. <br/> Allows duplicate members.            |
-| **Tuple** is a collection which is ordered and unchangeable. <br/> Allows duplicate members.         |
-| **Set** is a collection which is unordered, unchangeable*, and unindexed. <br/> No duplicate members.|
-| **Dictionary** is a collection which is ordered** and changeable. <br/> No duplicate members.        |
+| **`List`** is a collection which is ordered and changeable. <br/> Allows duplicate members.          |
+| **`Tuple`** is a collection which is ordered and unchangeable. <br/> Allows duplicate members.       |
+| **`Set`** is a collection which is unordered, unchangeable*, and unindexed. <br/> No duplicate members.|
+| **`Dictionary`** is a collection which is ordered** and changeable. <br/> No duplicate members.    |
+
+Que : **When would you use List vs Tuple vs Set vs Dictionary?** <br/>
+Ans : 
+- **_`List`_** : when we need an ordered, mutable collection and duplicates are allowed.
+- **_`Tuple`_** : when we need an ordered collection that should not be modified.
+- **_`Set`_** : when we need unique values and fast membership testing.
+- **_`Dictionary`_** : when we need to associate keys with values or perform fast key-based lookups.
 
 </details>
 
@@ -2071,6 +2823,14 @@ numbers.append(4)
   <summary> 15. Shallow vs deep copy </summary>
 
 <br/>
+
+### **Shallow Copy**
+> Shallow copying creates a new object but references the same nested objects, leading to shared changes.
+
+
+### **Deep Copy**
+> Deep copying recursively duplicates all objects, ensuring full independence from the original.
+
 
 </details>
 <!------------------------------------>
