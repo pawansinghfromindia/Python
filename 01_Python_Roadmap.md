@@ -2832,6 +2832,9 @@ numbers.append(4)
 > Deep copying recursively duplicates all objects, ensuring full independence from the original.
 
 
+<img width="600" height="400" alt="image" src="https://github.com/user-attachments/assets/9fe3deac-8b69-4d14-bdcd-72e7de8a4f93" />
+
+
 </details>
 <!------------------------------------>
 
@@ -2849,9 +2852,77 @@ numbers.append(4)
 
 
 <details>
-  <summary> 17. Functions </summary>
+  <summary> 17. <b> Functions </b> </summary>
 
 <br/>
+
+A function is a block of code to avoid code repetition which only runs when it is called.
+
+A function can return data as a result.
+
+### Creating a Function
+
+```py
+def greeting():
+  print("Hello")
+```
+
+The code inside the function must be indented. <br/>
+Python uses indentation to define code blocks.
+
+### Calling a Function
+
+To call a function, write its name followed by parentheses`()`.
+
+```py
+def greeting():
+  print("Hello")
+
+greeting()        #  Hello
+
+# We can call the same function multiple times.
+greeting()        #  Hello
+greeting()        #  Hello
+greeting()        #  Hello
+```
+
+It's good practice to use descriptive names that explain what the function does.
+
+Que : **Why functions**? <br/>
+Ans : With functions, you write the code once and reuse it.
+
+### Return Values
+
+```py
+def sumOfTwo(a, b):
+  result = a + b;
+  return result;
+
+num1 = 10
+num2 = 20
+
+print(sumOfTwo(num1,num2)); # 30
+
+num = sumOfTwo(num1,num2)
+print(num)
+```
+
+If a function doesn't have a return statement, it returns `None` by default.
+
+```py
+def greeting():
+  print("Hello")
+
+print(greeting())  # None
+```
+
+
+Function definitions can't be empty. If you need to create a function placeholder without any code, use the `pass` statement.
+```py
+def greeting:
+  pass
+```
+The pass statement is often used when developing, allowing you to define the structure first and implement details later.
 
 </details>
 <!------------------------------------>
@@ -2859,9 +2930,208 @@ numbers.append(4)
 
 
 <details>
-  <summary> 18. Arguments and parameters </summary>
+  <summary> 18. <b> Arguments and parameters </b> </summary>
 
-<br/>
+### Parameters vs Arguments
+
+The terms parameter and argument can be used for the same thing: information that are passed into a function.
+
+**From a function's perspective** <br/>
+> A **parameter** is the variable listed inside the parentheses in the function definition.
+
+> An **argument** is the actual value that is sent to the function when it is called.
+
+```py
+# function with one argument:
+
+def greetings(name):       # name is a parameter
+  print("Hello " + name)
+
+greetings("Ram")           # "Ram" is an argument
+grettings("Shiva")         # "Shiva" is an argument
+
+```
+
+> **Default Parameter Values**
+
+We can assign default values to parameters. If the function is called without an argument, it uses the default value.
+
+```py
+def greetings(name="default"):       
+  print("Hello " + name)
+
+greetings();       # Hello default
+greetings("Ram");  # Hello Ram
+```
+
+
+### Keyword Arguments
+We can send arguments with the key = value syntax.
+
+Using this the order of arguments doesn't matter.
+
+```py
+def petStatus(animal, name):
+  print("I have a", animal)
+  print("My", animal + "'s name is", name)
+
+petStatus(animal = "dog", name = "Leo")
+petStatus(name = "Leo", animal = "dog")
+# I have a dog
+# My dog's name is Leo
+```
+**The phrase Keyword Arguments is often shortened to kwargs in pythin doc.**
+
+When you call a function with arguments without using keywords, they are called **positional arguments**.
+<br/> Positional arguments must be in the correct order.
+```py
+def petStatus(animal, name):
+  print("I have a", animal)
+  print("My", animal + "'s name is", name)
+
+petStatus("dog", "Leo")
+# I have a dog
+# My dog's name is Leo
+```
+
+### Mixing Positional and Keyword Arguments
+
+We can mix positional and keyword arguments in a function call. <br/>
+However, positional arguments must come before keyword arguments.
+```py
+def person(name, age, gender):
+  print("My name is", name, "I'm", age, "and", gender)
+
+person("Ram", age = 21, gender = "Male")
+# My name is Ram I'm 21 and Male
+```
+
+### Passing Different Data Types
+We can send any data type as an argument to a function (string, number, list, dictionary, etc.).
+```py
+def printList(fruits):
+  for fruit in fruits:
+    print(fruit)
+
+fruits = ["apple", "banana", "mango"]
+printList(fruits)
+
+#-----------------------------------------
+
+def printDict(person):
+  print("Name:", person["name"])
+  print("Age:", person["age"])
+
+person = {"name": "Ram", "age": 21}
+printDict(person)
+
+#-----------------------------------------
+
+def printStr(name):
+  for ch in name:
+    print(ch)
+
+name = "Ram"
+printStr(name)
+```
+
+### Return Values
+
+Functions can return values using the `return` statement.
+
+```py
+def sumOfTwo(x, y):
+  return x + y
+
+result = sumOfTwo(5, 3)
+print(result)    # 8
+```
+
+Functions can return any data type, including lists, tuples, dictionaries, and more.
+```py
+def my_func():
+  return ["apple", "banana", "mango"]
+
+fruits = my_func()
+print(fruits)       #	['apple', 'banana', 'mango']
+print(fruits[0])    #	apple
+print(fruits[1])    # 	banana
+print(fruits[2])    # 	mango
+
+#--------------------------------------
+
+def my_func2():
+  return (10, 20)
+
+nums = my_func2()
+print(nums)       # (10, 20)
+#-----------------
+x, y = my_func2()
+print("x:", x)    # 10
+print("y:", y)    # 10
+
+```
+
+### Positional-Only Arguments
+
+We can specify that a function can have ONLY positional arguments. <br/>
+To specify positional-only arguments, add `, /` after the arguments.
+
+```py
+def greeting(name):
+  print("Hello", name)
+
+greeting("Ram")          #  Hello Ram
+greeting(name="Ram")     #  Hello Ram
+
+#-------------------------------------
+
+def greeting(name, /):
+  print("Hello", name)
+
+greeting("Ram")          #  Hello Ram
+greeting(name="Ram")     #  TypeError bcuz only positional argument allowed not keyword
+```
+
+### Keyword-Only Arguments
+
+To specify that a function can have only keyword arguments, add `*,` before the arguments.
+
+```py
+def greeting(name):
+  print("Hello", name)
+
+greeting(name="Ram")     #  Hello Ram
+greeting("Ram")          #  Hello Ram
+
+#-------------------------------------
+
+def greeting(*, name):
+  print("Hello", name)
+
+greeting(name="Ram")     #  Hello Ram
+greeting("Ram")          #  TypeError bcuz only keyword argument allowed, not positional arg
+```
+
+### Combining Positional-Only and Keyword-Only
+
+We can combine both argument types in the same function. <br/>
+Arguments before `/` are positional-only, and arguments after `*` are keyword-only:
+
+```py
+def sumOfNum(a, b, /, *, c, d):
+  return a + b + c + d
+
+result = sumOfNum(5, 10, c=15, d=20)
+print(result)      # 50
+
+#---------------------------------------
+
+result2 = sumOfNum(a=5, b=10, 15, 20)  # ValueError
+# bcuz of 1st two args are keywords args which must be positional
+# and alst two args are positional args which must be keywords
+
+```
 
 </details>
 <!------------------------------------>
@@ -2873,6 +3143,205 @@ numbers.append(4)
 
 <br/>
 
+By default, a function must be called with the correct number of arguments. <br/>
+However, sometimes you may not know how many arguments that will be passed into your function.
+
+*args and **kwargs allow functions to accept a unknown number of arguments.
+
+### Arbitrary Arguments - *args
+If you do not know how many arguments will be passed into your function, add a `*` before the parameter name.
+
+This way, the function will receive a tuple of arguments and can access the items accordingly.
+
+Arbitrary Arguments are often shortened to `*args` in python doc.
+```py
+# Using *args to accept any number of arguments.
+
+def youngestKid(*kids):
+  print("The youngest child is " + kids[2])
+
+youngestKid("Golu", "Molu", "Chhotu")                # Chhotu
+youngestKid("Golu", "Molu", "Chhotu", "Kullu")       # Chhotu
+```
+
+### What is *args?
+
+The `*args` parameter allows a function to accept any number of positional arguments. <br/>
+Inside the function, `args` becomes a tuple containing all the passed arguments
+
+```py
+# Accessing individual arguments from *args
+
+def my_function(*args):
+  print("Type:", type(args))           # <class 'tuple'>
+  print("First argument:", args[0])    # Rohan
+  print("Second argument:", args[1])   # Mohan
+  print("All arguments:", args)        # ('Rohan', 'Mohan', 'Sohan')
+
+my_function("Rohan", "Mohan", "Sohan")
+
+```
+
+### Using *args with Regular Arguments
+
+We can combine regular parameters with `*args`. <br/>
+Regular parameters must come before `*args`.
+
+```py
+def greet(greeting, *names):
+  for name in names:
+    print(greeting, name)
+
+greet("Hello", "Rohan")                     # Hello Rohan
+greet("Hello", "Rohan", "Mohan")            # Hello Rohan
+                                            # hello Mohan
+greet("Hello", "Rohan", "Mohan", "Sohan")   # Hello Rohan
+                                            # Hello Mohan
+                                            # Hello Sohan
+
+```
+
+`*args` is useful when you want to create flexible functions.
+```py
+# A function that calculates the sum of any number of values
+
+def sum_n_numbers(*numbers):
+  total = 0
+  for num in numbers:
+    total += num
+  return total
+
+print(sum_n_numbers(1))               # 1
+print(sum_n_numbers(1, 2))            # 3
+print(sum_n_numbers(1, 2, 3))         # 6
+print(sum_n_numbers(10, 20, 30, 40))  # 100
+```
+
+```py
+# Finding the maximum value
+
+def my_function(*numbers):
+  print(numbers)
+  if len(numbers) == 0:
+    return None
+  max_num = numbers[0]
+  for num in numbers:
+    if num > max_num:
+      max_num = num
+  return max_num
+
+print(my_function(3, 7, 2, 5, 1))
+```
+
+### Arbitrary Keyword Arguments - `**kwargs`
+
+If we do not know how many keyword arguments will be passed into your function, add two asterisks `**` before the parameter name.
+
+This way, the function will receive a dictionary of arguments and can access the items accordingly
+
+Arbitrary Keyword Arguments are often shortened to **kwargs in Python doc
+
+```py
+# Using **kwargs to accept any number of keyword arguments
+
+def my_function(**kid):
+  print("The first name is " + kid["first_name"]) # The first name is Rohit
+  print("and last name is " + kid["last_name"])   # and last name is Kumar
+
+my_function(first_name = "Rohit", last_name = "Kumar")
+```
+
+### What is **kwargs?
+
+The `**kwargs` parameter allows a function to accept any number of keyword arguments. <br/>
+Inside the function, `kwargs` becomes a dictionary containing all the keyword arguments.
+
+```py
+# Accessing values from **kwargs
+
+def my_function(**myvar):
+  print("Type:", type(myvar))      # <type ='dict'>
+  print("Name:", myvar["name"])    # Ram
+  print("Age:", myvar["age"])      # 21
+  print("All data:", myvar)        # {'name': 'Ram', 'age': 21, 'city': 'Delhi'}
+
+my_function(name = "Ram", age = 21, city = "Delhi")
+
+```
+
+### Using **kwargs with Regular Arguments
+
+We can combine regular parameters with `**kwargs`. <br/>
+Regular parameters must come before `**kwargs`.
+
+```py
+def my_function(username, **details):
+  print("Username:", username)          # ram01
+  print("Additional details:")          # Additional details:
+  for key, value in details.items():
+    print(" ", key + ":", value)        # name : Ram
+                                        # age  : 21
+                                        # city : Delhi
+                                        # hobby: Coding
+my_function("ram01", name='Ram', age=21, city="Delhi", hobby="coding")
+```
+
+### Combining *args and **kwargs
+
+We can use both *args and **kwargs in the same function.
+
+The order must be:
+1. regular parameters
+2. *args
+3. **kwargs
+
+```py
+def my_function(title, *args, **kwargs):
+  print("Title:", title)                  # Title: User Info
+  print("Positional arguments:", args)    # Positional arguments: (Mohan, Rohan)
+  print("Keyword arguments:", kwargs)     # Keyword arguments : {'age': 25, 'city': 'Mumbai'}
+
+my_function("User Info", "Mohan", "Rohan", age = 25, city = "Mumbai")
+```
+
+
+### Unpacking Arguments
+
+The `*` and `**` operators can also be used when calling functions to unpack (expand) a list or dictionary into separate arguments.
+
+**Unpacking Lists with `*`** <br/>
+If we have values stored in a list, you can use `*` to unpack them into individual arguments.
+
+```py
+# Using * to unpack a list into arguments
+
+def my_function(a, b, c):
+  return a + b + c
+
+numbers = [1, 2, 3]
+result = my_function(*numbers)
+# Same as:
+print(my_function(1, 2, 3))    # 6
+print(result)                  # 6
+```
+
+**Unpacking Dictionaries with `**`** <br/>
+If we have keyword arguments stored in a dictionary, you can use `**` to unpack them:
+
+```py
+# Using ** to unpack a dictionary into keyword arguments
+
+def my_function(fname, lname):
+  print("Hello", fname, lname)       # Hello Ram Kumar
+
+person = {"fname": "Ram", "lname": "Kumar"}
+my_function(**person)
+# Same as:
+my_function(fname="Ram", lname="Kumar")
+```
+
+> Use `*` and `**` in function definitions to collect arguments, and use them in function calls to unpack arguments.
+
 </details>
 <!------------------------------------>
 
@@ -2881,7 +3350,17 @@ numbers.append(4)
 <details>
   <summary> 20. Default arguments </summary>
 
-<br/>
+> In python, functions can have default arguments, which are parameters with predefined values.
+
+We can assign default values to parameters. If the function is called without an argument, it uses the default value.
+
+```py
+def greetings(name="default"):       
+  print("Hello " + name)
+
+greetings();       # Hello default
+greetings("Ram");  # Hello Ram
+```
 
 </details>
 <!------------------------------------>
@@ -2889,19 +3368,544 @@ numbers.append(4)
 
 
 <details>
-  <summary> 21. Scope: local/global/nonlocal </summary>
+  <summary> 21. <b> Scope: local/global/nonlocal </b> </summary>
 
 <br/>
 
+
+> A variable is only available from inside the region it is created. This is called **Scope**.
+
+### Local Scope
+
+A variable created inside a function belongs to the local scope of that function, and can only be used inside that function.
+
+```py
+# A variable created inside a function is available inside that function
+
+def myfunc():
+  x = 100
+  print(x)
+
+myfunc()   # 100
+print(x)   # NameError
+
+#----------------------------------------
+
+def myfunc():
+  x = 100
+  def myinnerfunc():
+    y = 200
+    print(x)      # 100 
+    print(y)      # 200
+  myinnerfunc()   
+  print(x)        # 100
+  print(y)        # NameError
+
+myfunc()
+z = 300
+print(z)         # 300
+print(x)         # NameError
+print(y)         # NameError
+```
+
+### Global Scope
+
+> A variable created in the main body of the Python code is a global variable and belongs to the global scope.
+
+Global variables are available from within any scope, global and local.
+
+```py
+x = 100
+def myfunc():
+  print(x)   # 100
+
+myfunc()
+print(x)    #  100
+
+#----------------------
+
+x = 100
+def myfunc():
+  x = 200
+  print(x)   # 200
+
+myfunc()
+print(x)    #  100
+
+#--------------------
+
+def myfunc():
+  global x
+  x = 200
+  print(x)   # 200
+
+myfunc()
+print(x)    #  200
+
+#---------------------
+
+x = 100
+def myfunc():
+  # global x = 300   Syntax Error in python
+  global x
+  x = 300
+  print(x)   # 300
+
+myfunc()
+print(x)    #  300
+```
+
+### Nonlocal Keyword
+
+> The `nonlocal` keyword is used to work with variables inside nested functions.
+
+The `nonlocal` keyword makes the variable belong to the outer function.
+
+```py
+def myfunc1():
+  x = 10
+  print(x)         # 10
+  def myfunc2():
+    nonlocal x
+    x = 20
+  myfunc2()
+  return x
+
+print(myfunc1())    # 20
+print(x)            # NameError
+
+#-------------------------------
+
+def myfunc1():
+  x = 10
+  print(x)          # 10
+  def myfunc2():
+    nonlocal x
+    x = 20
+    def myfunc3():
+      nonlocal x
+      x = 30
+    myfunc3()
+    print(x)        # 30
+  myfunc2()
+  return x
+
+print(myfunc1())    # 30
+#print(x)           # NameError
+```
+
+<details>
+  <summary> Local, Enclosing, Global, Built-in </summary>
+
+
+**Local** - Inside the current function <br/>
+**Enclosing** - Inside enclosing functions (from inner to outer) <br/>
+**Global** - At the top level of the module <br/>
+**Built-in** - In Python's built-in namespace <br/>
+
+```py
+x = "global"
+
+def outer():
+  x = "enclosing"
+  def inner():
+    x = "local"
+    print("Inner:", x)  # Inner: local
+  inner()
+  print("Outer:", x)    # Outer: enclosing
+
+outer()                 # Inner: local
+                        # Outer: enclosing
+
+print("Global:", x)     # Global: global
+```
+
 </details>
+
+</details>
+<!------------------------------------>
+
+<details>
+  <summary>  <b> Python Decorators </b> </summary>
+
+> Decorators let us add extra behavior to a function, without changing the function's code.
+
+A decorator is a function that takes another function as input and returns a new function.
+
+
+### Basic Decorator
+
+Define the decorator first, then apply it with `@decorator_name` above the function
+
+```py
+def sub(a, b):
+  return a-b
+
+def divide(a, b):
+  return a/b
+
+print(sub(2,4))     # -2 
+print(divide(2,4))  # 0.5
+
+#---------------------------------
+
+def sub(a, b):
+  if b>a:
+    a,b = b,a
+  return a-b
+
+def divide(a, b):
+  if b>a:
+    a,b = b,a
+  return a/b
+
+print(sub(2,4))     # 2
+print(divide(2,4))  # 2.0
+
+#-------------------------------
+
+# Here by using decorators, we can reduce the common code
+# between multiple functions
+
+# decorator takes the function as parameter and return same function
+# with modification
+
+def decorator(func):
+  def wrap(a,b):
+    if a<b:
+      a,b = b,a
+    return func(a,b)
+  return wrap
+
+@decorator
+def sub(a, b):
+  return a-b
+
+@decorator
+def divide(a, b):
+  return a/b
+
+print(sub(2,4))     # 2
+print(divide(2,4))  # 2.0
+
+#-----------------------------
+
+# How decorators works?
+# sub = decorator(sub)
+# divide = decorator(divide)
+
+#-----------------------------
+
+def log_dec(func):
+  def wrap(a,b):
+    print("Values ", a, " ",b)
+    result = func(a,b)
+    print("Result", result)
+    return result
+  return wrap
+
+def decorator(func):
+  def wrap(a,b):
+    if a<b:
+      a,b = b,a
+    return func(a,b)
+  return wrap
+
+@log_dec
+def add(a,b):
+  return a+b
+
+@log_dec
+@decorator
+def sub(a, b):
+  return a-b
+
+
+@log_dec
+@decorator
+def divide(a, b):
+  return a/b
+
+result1 = sub(2,4)
+print(result1)          # 2
+
+result2 = divide(5,20)
+print(result2)          # 4.0
+
+result3 = add(3,4)
+print(result3)          # 7
+```
+
+Decorators are very useful while you work with frameworks.
+
+### Arguments in the Decorated Function
+
+Functions that require arguments can also be decorated, just make sure you pass the arguments to the wrapper function.
+
+**`*args` and `**kwargs`** <br/>
+Sometimes the decorator function has no control over the arguments passed from decorated function, to solve this problem, `add (*args, **kwargs)` to the wrapper function, this way the wrapper function can accept any number, and any type of arguments, and pass them to the decorated function.
+
+```py
+
+def log_dec(func):
+  def wrap(*args, **kwargs):
+    print("Values ", args)
+    result = func(*args)
+    print("Result", result)
+    return result
+  return wrap
+
+def decorator(func):
+  def wrap(a,b):
+    if a<b:
+      a,b = b,a
+    return func(a,b)
+  return wrap
+
+@log_dec
+def add(*args):
+  sum = 0;
+  for i in args:
+    sum += i;
+  return sum;
+
+@log_dec
+@decorator
+def sub(a, b):
+  return a-b
+
+
+@log_dec
+@decorator
+def divide(a, b):
+  return a/b
+
+result1 = sub(2,4)
+print(result1)          # 2
+
+result2 = divide(5,20)
+print(result2)          # 4.0
+
+result3 = add(3,4,7)
+print(result3)          # 14
+```
+
+
+</details>
+
+<!------------------------------------>
+
+<details>
+  <summary> Preserving Function Metadata </summary>
+
+Functions in python has metadata that can be accessed using the `__name__` and `__doc__` attributes.
+
+Normally, a function's name can be returned with the `__name__` attribute.
+```py
+def myfunction():
+  return "Have a great day!"
+
+print(myfunction.__name__)   # myfunction
+```
+
+But, when a function is decorated, the metadata of the original function is lost.
+```
+def decorator(func):
+  def wrap():
+    return func().upper()
+  return wrap
+
+@decorator
+def myfunction():
+  return "Have a great day!"
+
+
+print(myfunction.__name__)   # wrap
+print(myfunction())          # HAVE A GREAT DAY!
+```
+
+To fix this, python has a built-in function called `functools.wraps` that can be used to preserve the original function's name and docstring.
+
+```py
+def decorator(func):
+  def wrap():
+    return func().upper()
+  return wrap
+  
+
+@decorator
+def myfunction():
+  return "Hello"
+
+
+print(myfunction.__name__)       # wrap
+print(myfunction())              # HELLO
+
+#------------------------------
+import functools
+
+def decorator(func):
+  @functools.wraps(func)
+  def wrap():
+    return func().upper()
+  return wrap
+
+
+@decorator
+def myfunction():
+  return "Hello"
+
+print(myfunction.__name__)       # myfunction
+print(myfunction())              # HELLO
+```
+
+
+</details>
+
+
 <!------------------------------------>
 
 
 
 <details>
-  <summary> 22. Lambda </summary>
+  <summary> 22. <b> Lambda </b> </summary>
 
-<br/>
+### Lambda Functions
+
+A lambda function is a small anonymous function.
+
+A lambda function can take any number of arguments, but can only have one expression.
+
+Syntax:
+```
+lambda arguments : expression
+```
+
+```py
+# Add 10 to argument a, and return the result
+
+def x(a):
+  return a+10
+
+print(x(5))   # 15
+
+#-------------------------
+
+x = lambda a : a + 10
+
+print(x(5))   # 15
+```
+
+
+**Lambda functions can take any number of arguments**
+```py
+# Multiply argument a with argument b and return the result
+
+def x(a,b):
+  return a*b
+
+print(x(5,6))        # 30
+
+#--------------------------------
+
+x = lambda a,b : a*b
+
+print(x(5,6))        # 30
+
+
+y = lambda a, b, c : a + b + c
+print(y(5, 6, 7))    # 18 
+```
+
+### Why Use Lambda Functions?
+
+The power of lambda is better shown when you use them as an anonymous function inside another function.
+
+Suppose, we have a function definition that takes one argument, and that argument will be multiplied with an unknown number.
+
+```py
+def myfunc(n):
+  return lambda a : a * n
+
+# Use that function definition to make a function that doubles the number
+
+mydoubler = myfunc(2)
+
+print(mydoubler(10))    # 20
+print(mydoubler(15))    # 30
+
+# using same function definition to make a function that triples the number
+
+mytripler = myfunc(3)
+
+print(mytripler(10))   # 30
+print(mytripler(15))   # 45
+```
+
+```py
+# use the same function definition to make both functions, in the same program
+
+def fun(n):
+  return lambda a : a * n;
+
+doubler = fun(2)
+tripler = fun(3)
+quadler = fun(4)
+
+print(doubler(10))    # 20
+print(tripler(10))    # 30
+print(quadler(10))    # 40
+```
+
+> **Use lambda functions when an anonymous function is required for a short period of time**.
+
+
+### Lambda with Built-in Functions
+
+Lambda functions are commonly used with built-in functions like `map()`, `filter()`, and `sorted()`.
+
+**Using Lambda with `map()`** <br/>
+> The `map()` function applies a function to every item in an iterable.
+
+```py
+# Double all numbers in a list
+
+numbers = [1, 2, 3, 4, 5]
+doubled = list(map(lambda x: x * 2, numbers))
+print(doubled)
+```
+
+
+**Using Lambda with `filter()`** <br/>
+> The `filter()` function creates a list of items for which a function returns `True`.
+
+```py
+# Filter out odd numbers from a list
+
+numbers = [1, 2, 3, 4, 5]
+odd_numbers = list(filter(lambda x: x % 2 != 0, numbers))
+print(odd_numbers)     # [1, 3, 5]
+```
+
+**Using Lambda with `sorted()`** <br/>
+> The `sorted()` function can use a lambda as a key for custom sorting.
+
+```py
+# Sort strings by length
+
+words = ["on", "the", "right", "left"]
+sorted_words = sorted(words, key=lambda x: len(x))
+print(sorted_words)     # ['on', 'the', 'left', 'right']
+
+#---------------------------------------------------------
+
+# Sort a list of tuples by the second element
+
+students = [("Mohan", 25), ("Rohan", 22), ("Sohan", 28)]
+sorted_students = sorted(students, key=lambda x: x[1])
+print(sorted_students)  # [('Rohan', 22), ('Mohan', 25), ('Sohan', 28)]
+```
+
 
 </details>
 <!------------------------------------>
@@ -2913,13 +3917,64 @@ numbers.append(4)
 
 <br/>
 
+`map()` function applies a function to every item in an iterable.
+```py
+list1 = ['abc', 'pqr', 'stu', 'xyz']
+uppered_list1 = []
+
+for i in list1:
+    x = i.upper()
+    uppered_list1.append(x)
+
+print(uppered_list1)
+
+#---------------------------------------
+
+list1 = ['abc', 'pqr', 'stu', 'xyz']
+
+uppered_list1 = list(map(str.upper, list1))
+
+print(uppered_list1)
+```
+
+`filter()`
+```py
+scores = [66, 90, 68, 59, 76, 60, 88, 74, 81, 65]
+
+def is_A_student(score):
+    return score > 75
+
+over_75 = list(filter(is_A_student, scores))
+
+print(over_75)   # [90, 76, 88, 81]
+```
+
+`reduce()`
+```py
+from functools import reduce
+
+numbers = [3, 4, 6, 9, 34, 12]
+
+def custom_sum(first, second):
+    return first + second
+
+result = reduce(custom_sum, numbers)
+print(result)
+```
+
+| Function	  | Purpose	   |   Input	    | Output                          |                          |
+|-------------|------------|--------------|---------------------------------|--------------------------|
+| `map()`     |	Transform	 | Many values	| Iterator of transformed values  | "Change every item"      |
+| `filter()`	| Select	   | Many values	| Iterator of selected values     | "Keep some items"        |
+| `reduce()`	| Combine	   | Many values	| Single accumulated value        | "Turn many items into one" |
+
 </details>
 <!------------------------------------>
 
 
 
 <details>
-  <summary> 24. Recursion </summary>
+  <summary> 24. <b> Recursion </b> </summary>
 
 <br/>
 
