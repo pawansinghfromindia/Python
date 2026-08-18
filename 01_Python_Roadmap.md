@@ -1139,6 +1139,12 @@ for x in [1, 2, 3, 4, 5]:
   pass
 ```
 
+class definitions cannot be empty, but if you for some reason have a class definition with no content, put in the pass statement to avoid getting an error.
+
+```py
+class Person:
+  pass
+```
 
 <details>
   <summary> <code> pass </code> vs comments </summary>
@@ -3978,18 +3984,523 @@ print(result)
 
 <br/>
 
+Recursion is a common mathematical and programming concept. <br/>
+**Recursion means that a function calls itself**. <br/>
+This has the benefit of meaning that you can loop through data to reach a result.
+
+```py
+# A simple recursive function that counts down from 5
+
+def countdown(n):
+  if n <= 0:
+    print("Done!")
+  else:
+    print(n)
+    countdown(n - 1)
+
+countdown(5)     # 5 4 3 2 1 Done!
+```
+
+### Base Case and Recursive Case
+
+Every recursive function must have two parts:
+
+1. A **base case*** - A condition that stops the recursion
+2. A **recursive case** - The function calling itself with a modified argument
+
+Without a base case, the function would call itself forever, causing a stack overflow error.
+
+The base case is crucial. Always make sure your recursive function has a condition that will eventually be met.
+
+```py
+# Identify base case and recursive case
+
+def factorial(n):
+  if n == 0 or n == 1:          # Base case
+    return 1
+  else:                 
+    return n * factorial(n - 1) # Recursive case
+
+print(factorial(5))             # 120
+```
+
+```py
+# Find the 7th number in the Fibonacci sequence
+
+def fibonacci(n):
+  if n <= 1:
+    return n
+  else:
+    return fibonacci(n - 1) + fibonacci(n - 2)
+
+print(fibonacci(7))
+```
+
+```py
+# Calculate the sum of all elements in a list
+
+def sum_list(numbers):
+  if len(numbers) == 0:
+    return 0
+  else:
+    return numbers[0] + sum_list(numbers[1:])
+
+
+# Find the maximum value in a list
+
+def find_max(numbers):
+  if len(numbers) == 1:
+    return numbers[0]
+  else:
+    max_of_rest = find_max(numbers[1:])
+    return numbers[0] if numbers[0] > max_of_rest else max_of_rest
+
+my_list = [3, 7, 2, 9, 1]
+print(find_max(my_list))   # 9
+print(sum_list(my_list))   # 22
+```
+
+### Recursion Depth Limit
+
+Python has a limit on how deep recursion can go. <br/>
+The default limit is usually around 1000 recursive calls.
+
+```py
+# Check the recursion limit
+
+import sys
+print(sys.getrecursionlimit())
+
+#-----------------------------------------------------------
+
+# If you need deeper recursion, you can increase the limit,
+# but be careful as this can cause crashes
+
+import sys
+sys.setrecursionlimit(2000)
+print(sys.getrecursionlimit())
+```
+
+Increasing the recursion limit should be done with caution. For very deep recursion, consider using iteration instead.
+
 </details>
+<!------------------------------------>
+
+<details>
+  <summary> Python Generator </summary>
+
+> **Generators are functions that can pause and resume their execution**.
+
+When a generator function is called, it returns a generator object, which is an iterator.
+
+Generators allow you to iterate over data without storing the entire dataset in memory.
+
+Instead of using `return`, generators use the `yield` keyword.
+
+
+```py
+def topTen():
+  return 5;
+
+def topTenGen():
+  yield 5;
+
+value1 = topTen()
+print(value1)             # 5
+
+value2 = topTenGen()      # Generator Obj which is an iterator 
+print(value2)
+print(value2.__next__())  # 5
+```
+
+```py
+# A simple generator function
+
+def my_generator():
+  yield 1
+  yield 2
+  yield 3
+
+for value in my_generator():
+  print(value)
+```
+
+```py
+def squareUpto1toN(n):
+  i=1
+  while(i<=n):
+    sq = i*i
+    yield sq
+    i+=1
+
+values = squareUpto1toN(10);
+print(values.__next__())        # 1
+print(values.__next__())        # 4
+print(values.__next__())        # 9
+print(values.__next__())        # 16
+print(values.__next__())        # 25
+for i in values: 
+  print(i)                      # 36 49 64 81 100
+
+#---------or--------------------------------------
+values2 = squareUpto1toN(5);
+for i in values2:
+  print(i)                      # 1 4 9 16 25
+```
+
+The code inside the function is not executed yet, it is only compiled. The function only executes when you iterate over the generator.
+
+
+### The `yield` Keyword
+
+The `yield` keyword is what makes a function a generator.
+
+When `yield` is encountered, the function's state is saved, and the value is returned. <br/>
+The next time the generator is called, it continues from where it left off.
+
+```py
+def count_up_to(n):
+  count = 1
+  while count <= n:
+    yield count
+    count += 1
+
+for num in count_up_to(5):
+  print(num)
+
+# Unlike return, which terminates the function, yield pauses it and can be called multiple times.
+```
+> Generators are memory-efficient because they generate values on-the-fly instead of storing everything in memory.
+
+We can manually iterate through a generator using the `next()` function:
+```py
+def simple_gen():
+  yield "Rohan"
+  yield "Mohan"
+  yield "Sohan"
+
+gen = simple_gen()
+print(next(gen))         # Rohan
+print(gen.__next__())    # Rohan
+print(next(gen))         # Mohan
+print(gen.__next__())    # Mohan
+print(next(gen))         # Sohan
+print(gen.__next__())    # Sohan
+
+#---------------------------------------------------
+
+print(next(gen))    # This will raise StopIteration
+
+# When there are no more values to yield,
+# the generator raises a StopIteration exception
+
+```
+
+### List Comprehension and Generator Expressions
+
+Similar to list comprehensions, we can create generators using generator expressions with parentheses instead of square brackets.
+
+```py
+# List comprehension vs generator expression
+
+# List comprehension - creates a list
+list_comp = [x * x for x in range(5)]  
+print(list_comp)                    # [0, 1, 4, 9, 16]
+   
+# Generator expression - creates a generator
+gen_exp = (x * x for x in range(5))
+print(gen_exp)                      # generator object 
+print(list(gen_exp))                # [0, 1, 4, 9, 16]
+```
+
+```py
+# Calculate sum of squares without creating a list
+# Using a generator expression with sum
+
+total = sum(x * x for x in range(10))
+print(total)          # 285
+```
+
+### Generator Methods
+
+Generators have special methods for advanced control.
+
+`send()` method allows you to send a value to the generator:
+```py
+def echo_generator():
+  while True:
+    received = yield
+    print("Received:", received)
+
+gen = echo_generator()
+next(gen) # Prime the generator
+gen.send("Hello")     # Received: Hello
+gen.send("World")     # Recieved: World
+```
+
+`close()` method stops the generator
+```py
+def my_gen():
+  try:
+    yield 1
+    yield 2
+    yield 3
+  finally:
+    print("Generator closed")
+
+gen = my_gen()
+print(next(gen))          # 1
+print(gen.__next__())     # 2
+gen.close()               # Generator closed
+
+```
+
+</details>
+<!------------------------------------>
+
+<details>
+  <summary> Iterators </summary>
+
+> **An iterator is an object that contains a countable number of values**.
+
+An iterator is an object that can be iterated upon, meaning that you can traverse through all the values.
+
+Technically, in python, an iterator is an object which implements the iterator protocol, which consist of the methods `__iter__()` and `__next__()`.
+
+Iterator will not give you all the value at a time. It gives us one value at a time.
+```py
+nums = [1, 3, 5, 7, 9]
+
+print(nums[0])         # 1
+print(nums[4])         # 9
+print(nums[4])         # IndexOut of Bound error
+
+for x in nums:
+  print(x)             # 1 3 5 7 9
+
+#----- Iterator-----------------------
+itr = iter(nums)
+print(itr)             # <iterator object>
+print(itr._next_())    # 1
+print(itr._next_())    # 3
+# bcuz when we call it knows the last value means it preserve the state of last value.
+
+print(next(itr))       # 7 
+```
+
+```py
+class Top10:
+  def __init__(self):
+    self.num = 1
+  def __iter__(self):
+    return self
+  def __next__(self):
+    if(self.num <= 10):
+      val = self.num
+      self.num += 1
+
+      return val
+    else:
+      raise StopIteration
+
+values = Top10()
+
+print(next(values))  # 1
+for i in values:
+  print i;           # 2 3 4 5 6 7 8 9 10
+
+#---------------------
+print(next(values))
+
+
+
+print(next(value))
+```
+
+### Iterator vs Iterable
+
+Lists, tuples, dictionaries, and sets are all iterable objects. <br/>
+They are iterable containers which you can get an iterator from.
+
+All these objects have a `iter()` method which is used to get an iterator.
+
+```py
+# Return an iterator from a tuple, and print each value
+
+mytuple = ("apple", "banana", "mango")
+myit = iter(mytuple)
+
+print(next(myit))       # apple
+print(next(myit))       # banana
+print(next(myit))       # mango
+
+
+# Even strings are iterable objects, and can return an iterator
+
+mystr = "apple"
+myit = iter(mystr)
+
+print(next(myit))       # a
+print(next(myit))       # p
+print(next(myit))       # p
+print(next(myit))       # l
+print(next(myit))       # e
+
+# Looping through a iterator
+
+mytuple = ("apple", "banana", "mango")
+
+for i in mytuple:
+  print(i)              # apple  banana mango
+
+```
+
+### Create an Iterator
+
+To create an object/class as an iterator we have to implement the methods `__iter__()` and `__next__()` to your object.
+
+In python all classes have a function called `__init__()`, which allows us to do some initializing when the object is being created.
+
+`__iter__()` method acts similar, you can do operations (initializing etc.), but must always return the iterator object itself.
+
+`__next__()` method also allows you to do operations, and must return the next item in the sequence.
+
+
+```py
+# Create an iterator that returns numbers, starting with 1,
+# and each sequence will increase by one (returning 1,2,3,4,5 etc.)
+
+class MyNumbers:
+  def __iter__(self):
+    self.a = 1
+    return self
+
+  def __next__(self):
+    x = self.a
+    self.a += 1
+    return x
+
+n1 = MyNumbers()
+myiter = iter(n1)
+
+print(next(myiter))  # 1
+print(next(myiter))  # 2
+print(next(myiter))  # 3
+print(next(myiter))  # 4
+print(next(myiter))  # 5
+```
+
+### StopIteration
+
+To prevent the iteration from going on forever, we can use the StopIteration statement
+
+In the `__next__()` method, we can add a terminating condition to raise an error if the iteration is done a specified number of times.
+
+```py
+# Stop after 20 iterations
+
+class MyNumbers:
+  def __iter__(self):
+    self.a = 1
+    return self
+
+  def __next__(self):
+    if self.a <= 20:
+      x = self.a
+      self.a += 1
+      return x
+    else:
+      raise StopIteration
+
+myclass = MyNumbers()
+myiter = iter(myclass)
+
+for x in myiter:
+  print(x)
+```
+
+</details>
+
 <!------------------------------------>
 
 
 
 ## Level 4 - OOP
 
+<details>
+  <summary> Intro </summary>
+
+Python is an **object-oriented programming language**, allows us to structure our code using **classes and objects** for better organization and reusability.
+
+**OOP Advanatages**
+1. Provides a clear structure to programs
+2. Makes code easier to maintain, reuse, and debug
+3. Helps keep our code **DRY (Don't Repeat Yourself)**
+4. Allows us to build reusable applications with less code
+
+**DRY** principle means you should avoid writing the same code more than once. Move repeated code into functions or classes and reuse it.
+
+</details>
+<!--------------------------------->
 
 <details>
   <summary> 25. Class and object </summary>
 
 <br/>
+
+**Classes and objects** are the two core concepts in object-oriented programming.
+
+> **Class : class is a Blueprint(template) for creating an object**.
+
+> **Object : Object is an instance of a class with data members and member functions**.
+
+| Class	   | Objects                      |
+|----------|------------------------------|
+| Fruit	   | Apple, Banana, Mango, orange |
+| Car	     | Maruti, Volvo, Audi, Toyota  |
+
+
+When we create an object from a class, it inherits all the variables and functions defined inside that class.
+
+Almost everything in python is an object, with its properties and methods.
+
+Each object is independent and has its own copy of the class properties.
+
+```py
+# Create a Class : To create a class, use the keyword class
+
+class MyClass:
+  x = 5
+
+p1 = MyClass()
+print(p1.x)        # 5
+
+p1 = MyClass()
+p2 = MyClass()
+p3 = MyClass()
+print(p1.x)        # 5 
+print(p2.x)        # 5
+print(p3.x)        # 5
+
+#-----------------------------------------
+class Person:
+  def __init__(self, name, age):
+    self.name = name
+    self.age = age
+
+  def myfunc(self):
+    print("Hello my name is " + self.name)
+
+# Create Object
+p1 = Person("Ram", 21)
+print(p1)                 # <class='Person'>
+print(p1.name, p1.age)    #  Ram 21
+
+# Delete Objects
+del p1
+
+print(p1)                 # NameError
+```
 
 </details>
 <!------------------------------------>
@@ -4001,9 +4512,312 @@ print(result)
 
 <br/>
 
+Constructors are special methods used to initialize objects when they are created from a class. 
+
+Object creation and initialization are handled through the `__new__()` and `__init__()` methods. 
+
+Constructors help assign initial values to object attributes and prepare objects for use.
+
+| When an object is created:                                          |
+|---------------------------------------------------------------------|
+| `__new__()` method creates and returns a new instance of the class. |
+| `__init__()` method initializes the newly created object.           |
+| **The object becomes ready for use.**                               |
+
+### why `__init__()`?
+```py
+# Create a class without __init__()
+class Person:
+  pass
+
+p1 = Person()
+p1.name = "Ram"
+p1.age = 21
+
+print(p1.name)   # Ram
+print(p1.age)    # 21
+
+# Without the `__init__()` method, we would need to set properties manually for each object.
+#-------------------------------------------
+
+# Create a class named Person, use the __init__() method to assign values for name and age
+
+class Person:
+  def __init__(self, name, age):
+    self.name = name
+    self.age = age
+
+p1 = Person("Ram", 21)
+
+print(p1.name)     # Ram
+print(p1.age)      # 21
+
+# Using __init__() makes it easier to create objects with initial values
+```
+
+> Note : `__init__()` method is called automatically every time the class is being used to create a new object.
+
+### Default Values in `__init__()`
+
+We can also set default values for parameters in the __init__() method:
+```py
+class Person:
+  def __init__(self, name, age=18):
+    self.name = name
+    self.age = age
+
+p1 = Person("Rohan")
+p2 = Person("Mohan", 25)
+
+print(p1.name, p1.age)    # Rohan 18
+print(p2.name, p2.age)    # Mohan 25
+```
+
+### `self` parameter
+
+- `self` parameter is a reference to the current instance of the class.
+- It is used to access properties and methods that belong to the class.
+
+```py
+class Person:
+  def __init__(self, name, age):
+    self.name = name
+    self.age = age
+
+  def greetings(self):
+    print("Hello, " + self.name)
+    print("I'm " + str(self.age))
+
+p1 = Person("Ram", 21)  
+p1.greetings()            # Hello Ram
+                          # I'm 21
+```
+
+> **Note: The `self` parameter must be the first parameter of any method in the class.**
+
+```py
+# self parameter links the method to the specific object
+
+class Person:
+  def __init__(self, name):
+    self.name = name
+
+  def printName(self):
+    print(self.name)
+
+p1 = Person("Rohan")
+p2 = Person("Mohan")
+
+p1.printName()     # Rohan
+p2.printName()     # Mohan
+```
+
+**self Does Not Have to Be Named "self"** <br/>
+- We can call it whatever you like, but it has to be the first parameter of any method in the class.
+```py
+class Person:
+  def __init__(myobj, name, age):
+    myobj.name = name
+    myobj.age = age
+
+  def getName(abc):
+    print("Hello, I'm " + abc.name)
+
+  def getAge(self):
+    print("I'm ", self.name)
+
+p1 = Person("Ram", 21)
+p1.getName()              # Hello, I'm Ram
+p1.getAge()               # I'm 21
+```
+
+> Note: **While we can use a different name, it is strongly recommended to use self as it is the convention in python and makes our code more readable to others.**
+
+**Accessing Properties with self** <br/>
+We can access any property of the class using `self`:
+```py
+class Car:
+  def __init__(self, brand, model, year):
+    self.brand = brand
+    self.model = model
+    self.year = year
+
+  def display_info(self):
+    print(f"{self.year} {self.brand} {self.model}")
+
+car1 = Car("Toyota", "Corolla", 2020)
+car1.display_info()
+```
+
+**Calling Methods with self** <br/>
+We can also call other methods within the class using `self`;
+```py
+class Person:
+  def __init__(self, name):
+    self.name = name
+
+  def greet(self):
+    return "Hello, " + self.name
+
+  def welcome(self):
+    message = self.greet()
+    print(message + "! Welcome to universe.")
+
+p1 = Person("Veer")
+p1.welcome()         # Hello, Veer! Welcome to universe.
+```
+
 </details>
 <!------------------------------------>
 
+<details>
+  <summary> Class Properties vs Object Properties </summary>
+
+Properties defined inside `__init__()` belong to each object (instance properties).
+
+Properties defined outside methods belong to the class itself (class properties) and are shared by all objects;
+
+```py
+class Person:
+  species = "Human"    # Class property
+
+  def __init__(self, name, age):
+    self.name = name   # Instance property
+    self.age  = age    # Instance property
+
+p1 = Person("Surya", 18)
+p2 = Person("Aditya", 19)
+
+print(p1.name)         # Surya
+print(p2.age)          # 19
+print(p1.species)      # Human
+print(p2.species)      # Human
+```
+
+### Modifying Class Properties
+
+When we modify a class property, it affects all objects;
+
+```py
+class Person:
+  lastname = ""
+
+  def __init__(self, name):
+    self.name = name
+
+p1 = Person("Shreya")
+p2 = Person("Anjali")
+
+Person.lastname = "Kumari"
+
+print(p1.lastname)        # Kumari
+print(p2.lastname)        # Kumari
+```
+
+### Add New Properties
+
+We can add new properties to existing objects;
+
+```py
+class Person:
+  def __init__(self, name):
+    self.name = name
+
+p1 = Person("Rocky")
+
+# Adding properties to object
+
+p1.age = 25
+p1.city = "Chandigarh"
+
+# Adding properties this way only adds them to that specific object,
+# not to all objects of the class.
+
+print(p1.name)      # Rocky
+print(p1.age)       # 25
+print(p1.city)      # Chandigarh
+```
+
+### Class Methods
+
+Methods are functions that belong to a class. <br/>
+They define the behavior of objects created from the class.
+
+```py
+class Person:
+  def __init__(self, name):
+    self.name = name
+
+  # Create a method in a class
+  def greet(self):
+    print("Hello, " + self.name)
+
+  # Note: All methods must have self as the first parameter.
+
+p1 = Person("Arjun")
+p1.greet()
+```
+
+>  All methods must have self as the first parameter.
+
+**Methods with Parameters**
+```py
+class Calculator:
+  def add(self, a, b):
+    return a + b
+
+  def multiply(self, a, b):
+    return a * b
+
+calc = Calculator()
+print(calc.add(5, 3))        #  8
+print(calc.multiply(4, 7))   #  11 
+```
+
+**Methods Modifying Properties** <br/>
+Methods can modify the properties of an object;
+```py
+class Person:
+  def __init__(self, name, age):
+    self.name = name
+    self.age = age
+
+  def celebrate_birthday(self):
+    self.age += 1
+    print(f"Happy birthday! You're now {self.age}")
+
+p1 = Person("Leo", 20)
+p1.celebrate_birthday()  # Happy birthday! You're now 21
+p1.celebrate_birthday()  # Happy birthday! You're now 22
+```
+
+**__str__() Method** <br/>
+`__str__()` method is a special method that controls what is returned when the object is printed.
+```py
+class Person:
+  def __init__(self, name, age):
+    self.name = name
+    self.age = age
+
+p1 = Person("Ram", 20)
+print(p1)               #  <Person object>
+
+#------------------------------------
+class Person:
+  def __init__(self, name, age):
+    self.name = name
+    self.age = age
+
+  def __str__(self):
+    return f"{self.name} {self.age}"    
+
+p1 = Person("Ram", 20)
+
+print(p1)         # Ram 21
+```
+
+</details>
+<!------------------------------------>
 
 
 <details>
@@ -4017,7 +4831,7 @@ print(result)
 
 
 <details>
-  <summary> 28. Encapsulation </summary>
+  <summary> 28. <b> Encapsulation </b> </summary>
 
 <br/>
 
@@ -4027,9 +4841,114 @@ print(result)
 
 
 <details>
-  <summary> 29. Inheritance </summary>
+  <summary> 29. <b> Inheritance </b> </summary>
 
-<br/>
+Click here [Inheritance](https://github.com/pawansinghfromindia/OOP)
+
+
+**Inheritance** allows us to define a class that inherits all the methods and properties from another class.
+- **Parent class** is the class being inherited from, also called base class.
+- **Child class** is the class that inherits from another class, also called derived class.
+
+```py
+# Parent Class
+class Person:
+  def __init__(self, fname, lname):
+    self.firstname = fname
+    self.lastname = lname
+
+  def printname(self):
+    print(self.firstname, self.lastname)
+
+#Use the Person class to create an object, and then execute the printname method:
+
+x = Person("Vaibhav", "Singh")
+x.printname()       #  Vaibhav Singh
+
+#-------------------------------------------------------
+
+# Child Class
+class Student(Person):
+  pass
+
+x = Student("Gaurav", "Kumar")
+x.printname()      #  Gaurav Kumar
+#------------------------------------------------------
+
+class Student(Person):
+  def __init__(self, fname, lname):
+    #add properties etc.
+
+# When you add the __init__() function, the child class
+# will no longer inherit the parent's __init__() function.
+
+#--------------------------------------------------------
+
+# To keep the inheritance of the parent's __init__() function,
+# add a call to the parent's __init__() function:
+
+class Person:
+  def __init__(self, fname, lname):
+    self.firstname = fname
+    self.lastname = lname
+
+  def printname(self):
+    print(self.firstname, self.lastname)
+
+class Student(Person):
+  def __init__(self, fname, lname):
+    Person.__init__(self, fname, lname)
+
+x = Student("Anant", "Singh")
+x.printname()       #  Anant Singh
+
+```
+
+**Note: The child's `__init__()` function overrides the inheritance of the parent's `__init__()` function.**
+
+### Use the `super()` Function
+
+Python also has a `super()` function that will make the child class inherit all the methods and properties from its parent;
+```py
+class Person:
+  def __init__(self, fname, lname):
+    self.firstname = fname
+    self.lastname = lname
+
+  def printname(self):
+    print(self.firstname, self.lastname)
+
+class Student(Person):
+  def __init__(self, fname, lname):
+    super().__init__(fname, lname)
+
+x = Student("Bharat", "Ram")
+x.printname()
+```
+By using the `super()` function, you do not have to use the name of the parent element, it will automatically inherit the methods and properties from its parent.
+
+```py
+class Person:
+  def __init__(self, fname, lname):
+    self.firstname = fname
+    self.lastname = lname
+
+  def printname(self):
+    print(self.firstname, self.lastname)
+
+class Student(Person):
+  def __init__(self, fname, lname, year):
+    super().__init__(fname, lname)
+    self.graduationyear = year
+
+  def welcome(self):
+    print("Welcome", self.firstname, self.lastname, "to the class of", self.graduationyear)
+
+x = Student("Ram", "Kumar", 2026)
+x.welcome()  # Welcome Ram Kumar to the class of 2026
+```
+
+If we add a method in the child class with the same name as a function in the parent class, the inheritance of the parent method will be overridden.
 
 </details>
 <!------------------------------------>
@@ -4037,9 +4956,113 @@ print(result)
 
 
 <details>
-  <summary> 30. Polymorphism </summary>
+  <summary> 30. <b> Polymorphism </b> </summary>
 
 <br/>
+
+The word "polymorphism" means "many forms", and in programming it refers to methods/functions/operators with the same name that can be executed on many objects or classes.
+
+### Function Polymorphism
+Python function that can be used on different objects is the `len()` function.
+```py
+x = "Hello World!"
+print(len(x))         # 12
+#--------------------------
+mytuple = ("apple", "banana", "mango")
+print(len(mytuple))   # 3
+#---------------------------
+mylist = []
+print(len(mylist))    # 0
+#---------------------------
+thisdict = {
+  "name": "Ram",
+  "age": 20,
+  "city": "Mumbai"
+}
+print(len(thisdict))   # 3
+#------------------------------
+```
+
+### Class Polymorphism
+
+Polymorphism is often used in Class methods, where we can have multiple classes with the same method name.
+
+e.g. 3 classes: Car, Boat, and Plane, and they all have a method called `move()`:
+
+```py
+# Different classes with same method
+
+class Car:
+  def __init__(self, brand, model):
+    self.brand = brand
+    self.model = model
+
+  def move(self):
+    print(self.brand, "Drive!")
+
+class Boat:
+  def __init__(self, brand, model):
+    self.brand = brand
+    self.model = model
+
+  def move(self):
+    print(self.brand, "Sail!")
+
+class Plane:
+  def __init__(self, brand, model):
+    self.brand = brand
+    self.model = model
+
+  def move(self):
+    print(self.brand, "Fly!")
+
+car1 = Car("Ford", "Mustang")       # Create a Car object
+boat1 = Boat("Ibiza", "Touring 20") # Create a Boat object
+plane1 = Plane("Boeing", "747")     # Create a Plane object
+
+for x in (car1, boat1, plane1):
+  x.move()                          # Drive!  Sail!  Fly!
+
+# Because of polymorphism we can execute the same method for all three classes.
+```
+
+### Inheritance Class Polymorphism
+
+Que : What about classes with child classes with the same name? <br/>
+Que : Can we use polymorphism there? <br/>
+Ans : Yes. e.g. make a parent class called Vehicle, and make Car, Boat, Plane child classes of Vehicle, the child classes inherits the Vehicle methods, but can override them.
+
+```py
+class Vehicle:
+  def __init__(self, brand, model):
+    self.brand = brand
+    self.model = model
+
+  def move(self):
+    print("Move!")
+
+class Car(Vehicle):
+  pass
+
+class Boat(Vehicle):
+  def move(self):
+    print("Sail!")
+
+class Plane(Vehicle):
+  def move(self):
+    print("Fly!")
+
+car1 = Car("Ford", "Mustang")       # Create a Car object
+boat1 = Boat("Ibiza", "Touring 20") # Create a Boat object
+plane1 = Plane("Boeing", "747")     # Create a Plane object
+
+for x in (car1, boat1, plane1):
+  print(x.brand)
+  print(x.model)
+  x.move()
+```
+
+> Child classes inherits the properties and methods from the parent class.
 
 </details>
 <!------------------------------------>
@@ -4047,9 +5070,141 @@ print(result)
 
 
 <details>
-  <summary> 31. Abstraction </summary>
+  <summary> 31. <b> Abstraction </b> </summary>
 
 <br/>
+
+> Encapsulation is about protecting data inside a class.
+
+It means keeping data (properties) and methods together in a class, while controlling how the data can be accessed from outside the class.
+
+This prevents accidental changes to your data and hides the internal details of how your class works.
+
+### Private Properties
+
+In python, we can make properties private by using a double underscore `__` prefix;
+
+```py
+# Create a private class property named __age
+
+class Person:
+  def __init__(self, name, age):
+    self.name = name
+    self.__age = age      # Private property
+
+p1 = Person("Ram", 25)
+print(p1.name)            # Ram
+print(p1.__age)           # AttributeError
+```
+
+> Note: **Private properties cannot be accessed directly from outside the class.**
+
+### Get Private Property Value
+
+To access a private property, we can create a getter method;
+
+```py
+class Person:
+  def __init__(self, name, age):
+    self.name = name
+    self.__age = age        # Private property
+    
+  # Getter Method
+  def get_age(self):
+    return self.__age
+
+p1 = Person("Ram", 25)
+print(p1.name)              # Ram
+# print(p1.__age)           # AttributeError
+print(p1.get_age())         # 25
+```
+
+### Set Private Property Value
+
+To modify a private property, you can create a setter method.
+
+The setter method can also validate the value before setting it:
+
+```py
+class Person:
+  def __init__(self, name, age):
+    self.name = name
+    self.__age = age        # Private property
+    
+  # Getter Method
+  def get_age(self):
+    return self.__age
+
+  # Setter Method
+  def set_age(self, age):
+    if age > 0:
+      self.__age = age
+    else:
+      print("Age must be +ve")
+
+p1 = Person("Ram", 25)
+print(p1.name)              # Ram
+# print(p1.__age)           # AttributeError
+print(p1.get_age())         # 25
+
+
+p1.__age = 20               # This create a new attribute
+print(p1.__age)             # 20 as it is a new attribute
+print(p1.get_age())         # 25
+"""
+p1
+│
+├── name          → "Ram"
+├── _Person__age  → 25    ← original private variable
+└── __age         → 20    ← NEW attribute
+"""
+
+p1.set_age(26)
+print(p1.get_age())         # 26
+```
+
+### Why Use Encapsulation?
+
+Encapsulation provides several benefits:
+- **Data Protection**: Prevents accidental modification of data
+- **Validation**: We can validate data before setting it
+- **Flexibility**: Internal implementation can change without affecting external code
+- **Control**: We have full control over how data is accessed and modified
+
+It is achieved through getter and setter methods.
+
+```py
+# Use of encapsulation to protect and validate data
+
+class Student:
+  def __init__(self, name):
+    self.name = name
+    self.__grade = 0
+
+  def set_grade(self, grade):
+    if 0 <= grade <= 100:
+      self.__grade = grade
+    else:
+      print("Grade must be between 0 and 100")
+
+  def get_grade(self):
+    return self.__grade
+
+  def get_status(self):
+    if self.__grade >= 60:
+      return "Passed"
+    else:
+      return "Failed"
+
+student = Student("Vivek")
+student.set_grade(85)
+print(student.get_grade())
+print(student.get_status())
+```
+
+### Protected Properties
+
+Python also has a convention for protected properties using a single underscore `_` prefix;
 
 </details>
 <!------------------------------------>
