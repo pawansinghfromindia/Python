@@ -5984,9 +5984,276 @@ e.g : `__add__()` lets us define what `+` means for our own class.
 
 
 <details>
-  <summary> 35. Exception handling </summary>
+  <summary> <code> try </code> <code> except </code> <code> else </code> <code> finally </code> </summary>
 
 <br/>
+
+The `try` block lets us try risky code (can cause errors).
+
+The `except` block lets us handle the error.
+
+The `else` block lets us execute code when there is no error means run only if successful.
+
+The `finally` block lets us execute code, regardless of the result of the try and except blocks.
+
+The `raise` block lets us create/throw an exception
+
+```py
+try:
+  print("Hello")
+except:
+  print("Something went wrong")
+else:
+  print("Nothing went wrong")
+finally:
+  print("The 'try except' is finished")
+```
+
+```py
+try:
+    # code
+except ValueError as e:
+    print(f"Invalid value: {e}")
+```
+
+</details>
+<!------------------------------------>
+
+<details>
+  <summary> 35. <b> Exception handling </b> </summary>
+
+Exception handling is a mechanism used to handle runtime errors gracefully so that the program doesn't terminate unexpectedly.
+
+```py
+a = 10
+b = 0
+result = a / b          # ZeroDivisionError: division by zero
+print(result)
+```
+Instead of letting the program crash, we can handle the exception.
+
+### `try` and `except`
+
+```py
+try:
+    a = 10
+    b = 0
+    result = a / b
+except ZeroDivisionError:
+    print("Cannot divide by zero")    # Cannot divide by zero
+#--------------------------------------------------------
+try
+ ↓
+Exception occurs?
+ ↓
+YES → except
+ ↓
+Continue program
+```
+
+**Handling Multiple Exceptions**
+
+We can have multiple except blocks; <br/>
+Different exceptions can be handled differently.
+
+```py
+try:
+    number = int(input("Enter number: "))
+    result = 10 / number
+
+except ValueError:
+    print("Please enter a valid number")
+
+except ZeroDivisionError:
+    print("Number cannot be zero")
+```
+
+Sometimes we want to capture the actual error message. 
+```py
+try:
+    result = 10 / 0
+
+except Exception as e:
+    print("Error:", e)     # Error: division by zero
+```
+
+### `else`
+
+`else` block executes only when no exception occurs.
+```py
+try:
+    a = 10
+    b = 2
+    result = a / b
+
+except ZeroDivisionError:
+    print("Cannot divide by zero")
+
+else:
+    print("Result:", result)
+#-------------------------------------
+"""
+try
+ ↓
+Exception?
+ ├── YES → except
+ │
+ └── NO  → else
+"""
+```
+
+### `finally`
+
+`finally` block always executes, whether an exception occurs or not.
+```py
+try:
+    result = 10 / 2
+
+except ZeroDivisionError:
+    print("Error")
+
+finally:
+    print("This will always execute")
+
+#----------------------------------------
+try:
+    result = 10 / 0
+
+except ZeroDivisionError:
+    print("Error occurred")
+
+finally:
+    print("Cleanup completed")
+```
+
+`finally` is commonly used for cleanup operations, such as closing resources.
+```py
+try:
+    file = open("data.txt")
+    # process file
+
+finally:
+    file.close()
+```
+
+### `try-except-else-finally`
+
+```py
+try:
+    number = int(input("Enter number: "))
+    result = 100 / number
+
+except ValueError:
+    print("Invalid input")
+
+except ZeroDivisionError:
+    print("Cannot divide by zero")
+
+else:
+    print("Result:", result)
+
+finally:
+    print("Execution completed")
+
+#----------------------------------------
+"""
+try
+ ↓
+Exception?
+ ├── Yes → except
+ │
+ └── No  → else
+              ↓
+           finally
+"""
+```
+
+### `raise` - Manually Raise an Exception
+
+Python allows us to deliberately generate an exception using `raise`
+
+```py
+age = 15
+if age < 18:
+    raise ValueError("Age must be 18 or above")
+```
+
+### `assert`
+
+`assert` is mainly used to check whether a condition is true, especially for debugging and development-time checks.
+
+```py
+
+age = 15
+assert age >= 18, "Age must be 18 or above"   # Print this mentioned error
+
+age = 19
+assert age >= 18, "Age must be 18 or above"   # Nothing happens
+#---------------------------------------------
+def calculate_discount(price):
+    assert price >= 0, "Price should never be negative"
+    return price * 0.9
+```
+
+Generally we shouldn't use assert for validating user input or business rules
+
+### Custom Exceptions
+
+We can create your own exception classes.
+```py
+# Creating an exception class
+
+class InsufficientBalanceError(Exception):
+    pass
+
+#---------------------------------------------
+def withdraw(balance, amount):
+    if amount > balance:
+        raise InsufficientBalanceError("Insufficient balance")
+    return balance - amount
+
+#--------------------------------------------
+try:
+    withdraw(1000, 1500)
+
+except InsufficientBalanceError as e:
+    print(e)
+```
+
+### Common Exception in python
+
+| Exception             | Example                       |
+| --------------------- | ----------------------------- |
+| `ValueError`          | Invalid value                 |
+| `TypeError`           | Wrong data type               |
+| `ZeroDivisionError`   | Division by zero              |
+| `IndexError`          | Invalid list index            |
+| `KeyError`            | Missing dictionary key        |
+| `FileNotFoundError`   | File doesn't exist            |
+| `AttributeError`      | Object doesn't have attribute |
+| `NameError`           | Variable doesn't exist        |
+| `ImportError`         | Import failure                |
+| `ModuleNotFoundError` | Module not found              |
+
+### Exception Hierarchy
+
+Python exceptions are organized into a hierarchy.
+
+```
+BaseException
+    │
+    ├── SystemExit
+    ├── KeyboardInterrupt
+    │
+    └── Exception
+          │
+          ├── ValueError
+          ├── TypeError
+          ├── IndexError
+          ├── KeyError
+          ├── FileNotFoundError
+          └── ZeroDivisionError
+```
 
 </details>
 <!------------------------------------>
