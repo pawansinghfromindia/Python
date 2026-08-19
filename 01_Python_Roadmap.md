@@ -3374,7 +3374,7 @@ greetings("Ram");  # Hello Ram
 
 
 <details>
-  <summary> 21. <b> Scope: local/global/nonlocal </b> </summary>
+  <summary> 21. <b> Scope: local, global, nonlocal </b> </summary>
 
 <br/>
 
@@ -4821,9 +4821,154 @@ print(p1)         # Ram 21
 
 
 <details>
-  <summary> 27. Instance/class/static methods </summary>
+  <summary> 27. Instance methods, class methods, static methods </summary>
 
 <br/>
+
+### 1. Instance Method
+
+An instance method works with the data belonging to a particular object.
+
+It takes self as its first parameter.
+
+```py
+class Student:
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+
+    def display(self):
+        print(self.name, self.age)
+
+student1 = Student("Rahul", 20)
+student2 = Student("Amit", 22)
+
+student1.display()          # Rahul 20
+student2.display()          # Amit 22
+Student.display(student1)   # Rahul 20
+```
+
+Basically `student1.display()` is nothing but Python internally passes `student1` as `self`. <br/>
+So, conceptually it is `Student.display(student1)`.
+
+
+### 2. Class Method
+
+A class method works with class-level data rather than a particular object's data.
+
+We use the `@classmethod` decorator.
+
+It takes `cls` as the first parameter.
+
+```py
+class Student:
+    school = "ABC School"
+
+    @classmethod
+    def change_school(cls, new_school):
+        cls.school = new_school
+
+print(Student.school)                # ABC School
+Student.change_school("XYZ School")
+print(Student.school)                # XYZ School
+```
+`cls` refers to the class itself. So `cls.school` means `student.school`
+
+**Use a class method when you want to work with class-level variables or class-level behavior.**
+
+### Class Method as an Alternative Constructor
+
+Suppose, maybe we receive employee information as a string. <br/>
+So in that case, We can create a class method to construct the object. <br/>
+This is called an **alternative constructor**.
+```py
+class Employee:
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+
+    @classmethod
+    def from_string(cls, data):
+        name, age = data.split(",")
+        return cls(name, int(age))
+
+emp = Employee.from_string("Rahul,25")
+print(emp.name)      # Rahul
+print(emp.age)       # 25
+#--------------------------------------
+emp2 = Employee("Tridev", 21)
+print(emp2.name)    # Tridev
+print(emp2.age)     # 21
+```
+
+### 3. Static Method
+
+A static method doesn't receive `self` or `cls` automatically.
+
+We use the `@staticmethod` decorator.
+
+```py
+class Calculator:
+
+    @staticmethod
+    def add(a, b):
+        return a + b
+        
+    @staticmethod
+    def is_even(number):
+        return number % 2 == 0
+
+print(Calculator.add(10, 20))    # 30
+print(Calculator.is_even(10))    # True
+```
+
+We use a static method when the function is logically related to the class but doesn't need instance or class data.
+
+### Summary of instance method, class method and static method
+
+```py
+class Employee:
+
+    company = "ABC Ltd"
+
+    def __init__(self, name, salary):
+        self.name = name
+        self.salary = salary
+
+    def display(self):                    # Instance method
+        print(self.name, self.salary)
+
+    
+    @classmethod
+    def change_company(cls, new_company):  # Class method
+        cls.company = new_company
+
+    @staticmethod
+    def is_valid_salary(salary):           # Static method
+        return salary > 0
+
+employee = Employee("Rahul", 50000)
+employee.display()                        # instance method, require object   
+
+Employee.change_company("XYZ Ltd")
+print(Employee.company)                   # class method, doesn't require obj but class
+
+print(Employee.is_valid_salary(50000))    # static method, doesn't require obj or class
+```
+
+| Feature                    | Instance Method           | Class Method             | Static Method     |
+| -------------------------- | ------------------------- | ------------------------ | ----------------- |
+| Decorator                  | None                      | `@classmethod`           | `@staticmethod`   |
+| First parameter            | `self`                    | `cls`                    | None              |
+| Access instance variables  | Yes                       | Not directly             | No                |
+| Access class variables     | Yes                       | Yes                      | Not automatically |
+| Can modify instance state  | Yes                       | Not directly             | No                |
+| Can modify class state     | Yes                       | Yes                      | No                |
+| Can be called using object | Yes                       | Yes                      | Yes               |
+| Can be called using class  | Generally requires object | Yes                      | Yes               |
+| Typical use                | Object behavior           | Class behavior / factory | Utility function  |
+
+
 
 </details>
 <!------------------------------------>
@@ -4834,6 +4979,212 @@ print(p1)         # Ram 21
   <summary> 28. <b> Encapsulation </b> </summary>
 
 <br/>
+
+> Encapsulation is about protecting data inside a class.
+
+It means keeping data (properties) and methods together in a class, while controlling how the data can be accessed from outside the class.
+
+This prevents accidental changes to your data and hides the internal details of how your class works.
+
+
+### Why Use Encapsulation?
+
+Encapsulation provides several benefits:
+- **Data Protection**: Prevents accidental modification of data
+- **Validation**: We can validate data before setting it
+- **Flexibility**: Internal implementation can change without affecting external code
+- **Control**: We have full control over how data is accessed and modified
+
+It is achieved through getter and setter methods.
+
+```py
+# Use of encapsulation to protect and validate data
+
+class Student:
+  def __init__(self, name):
+    self.name = name
+    self.__grade = 0
+
+  def set_grade(self, grade):
+    if 0 <= grade <= 100:
+      self.__grade = grade
+    else:
+      print("Grade must be between 0 and 100")
+
+  def get_grade(self):
+    return self.__grade
+
+  def get_status(self):
+    if self.__grade >= 60:
+      return "Passed"
+    else:
+      return "Failed"
+
+student = Student("Vivek")
+student.set_grade(85)
+print(student.get_grade())
+print(student.get_status())
+```
+
+### Private Properties
+
+In python, we can make properties private by using a double underscore `__` prefix;
+
+```py
+# Create a private class property named __age
+
+class Person:
+  def __init__(self, name, age):
+    self.name = name
+    self.__age = age      # Private property
+
+p1 = Person("Ram", 25)
+print(p1.name)            # Ram
+print(p1.__age)           # AttributeError
+```
+
+> Note: **Private properties cannot be accessed directly from outside the class.**
+
+### Get Private Property Value
+
+To access a private property, we can create a getter method;
+
+```py
+class Person:
+  def __init__(self, name, age):
+    self.name = name
+    self.__age = age        # Private property
+    
+  # Getter Method
+  def get_age(self):
+    return self.__age
+
+p1 = Person("Ram", 25)
+print(p1.name)              # Ram
+# print(p1.__age)           # AttributeError
+print(p1.get_age())         # 25
+```
+
+### Set Private Property Value
+
+To modify a private property, you can create a setter method.
+
+The setter method can also validate the value before setting it:
+
+```py
+class Person:
+  def __init__(self, name, age):
+    self.name = name
+    self.__age = age        # Private property
+    
+  # Getter Method
+  def get_age(self):
+    return self.__age
+
+  # Setter Method
+  def set_age(self, age):
+    if age > 0:
+      self.__age = age
+    else:
+      print("Age must be +ve")
+
+p1 = Person("Ram", 25)
+print(p1.name)              # Ram
+# print(p1.__age)           # AttributeError
+print(p1.get_age())         # 25
+
+
+p1.__age = 20               # This create a new attribute
+print(p1.__age)             # 20 as it is a new attribute
+print(p1.get_age())         # 25
+"""
+p1
+│
+├── name          → "Ram"
+├── _Person__age  → 25    ← original private variable
+└── __age         → 20    ← NEW attribute
+"""
+
+p1.set_age(26)
+print(p1.get_age())         # 26
+```
+
+
+### Protected Properties
+
+Python also has a convention for protected properties using a single underscore `_` prefix;
+
+```py
+# Creating protected property
+
+class Person:
+  def __init__(self, name, salary):
+    self.name = name
+    self._salary = salary # Protected property
+
+p1 = Person("Saurabh", 50000)
+print(p1.name)            # Saurabh
+print(p1._salary)         # 500000 | Can access, but shouldn't
+```
+
+> Note: A single underscore `_`is just a convention. It tells other programmers that the property is intended for internal use, but Python doesn't enforce this restriction.
+
+### Private Methods
+
+We can also make methods private using the double underscore `__` prefix;
+
+```py
+# Creating private method
+
+class Calculator:
+  def __init__(self):
+    self.result = 0
+
+  # Private method
+  def __validate(self, num):
+    if not isinstance(num, (int, float)):
+      return False
+    return True
+
+  def add(self, num):
+    if self.__validate(num):
+      self.result += num
+    else:
+      print("Invalid number")
+
+calc = Calculator()
+calc.add(10)       
+calc.add(5)         
+print(calc.result)            #  15
+# calc.__validate(5)          # This would cause an error
+
+# The __validate method can only be used by other methods inside the class.
+```
+
+> Note: Just like private properties with double underscores, private methods cannot be called directly from outside the class. 
+
+
+### Name Mangling
+
+> **Name mangling** is how Python implements private properties and methods.
+
+When We use double underscores `__`, Python automatically renames it internally by adding `_ClassName` in front. <br/>
+e.g.  `__age` becomes `_Person__age`.
+
+```py
+class Person:
+  def __init__(self, name, age):
+    self.name = name
+    self.__age = age
+
+p1 = Person("Ram", 20)
+
+# This is how Python mangles the name:
+print(p1._Person__age)    # 20 Not recommended!
+print(p1.getAge())        # AttributeError, So create getAge method inside class
+```
+
+> While you can access private properties using the mangled name, it's not recommended. It defeats the purpose of encapsulation.
 
 </details>
 <!------------------------------------>
@@ -5074,137 +5425,174 @@ for x in (car1, boat1, plane1):
 
 <br/>
 
-> Encapsulation is about protecting data inside a class.
+> Abstraction means **hiding the implementation details and showing only the essential features** of an object. This allows users to interact with an object without needing to know how it works internally.
 
-It means keeping data (properties) and methods together in a class, while controlling how the data can be accessed from outside the class.
+- **Hides unnecessary implementation details**.
+- **Exposes only the required functionality**.
+- Improves code **security, maintainability, and reusability**.
+- Achieved using **Abstract Classes and Abstract Methods** in Python.
 
-This prevents accidental changes to your data and hides the internal details of how your class works.
 
-### Private Properties
+**Abstract Class** <br/>
 
-In python, we can make properties private by using a double underscore `__` prefix;
+An abstract class is a class that cannot be instantiated directly. It serves as a blueprint for other classes.
+
+Python provides the ABC (Abstract Base Class) module to create abstract classes.
 
 ```py
-# Create a private class property named __age
+from abc import ABC, abstractmethod
 
-class Person:
-  def __init__(self, name, age):
-    self.name = name
-    self.__age = age      # Private property
+# Abstract class
+class Animal(ABC):
 
-p1 = Person("Ram", 25)
-print(p1.name)            # Ram
-print(p1.__age)           # AttributeError
+    @abstractmethod
+    def sound(self):
+        pass
+
+# Child class
+class Dog(Animal):
+    def sound(self):
+        return "Bark"
+
+# Child class
+class Cat(Animal):
+    def sound(self):
+        return "Meow"
+
+dog = Dog()
+cat = Cat()
+
+print(dog.sound())  # Bark
+print(cat.sound())  # Meow
+```
+If a subclass does not implement all abstract methods, Python raises an error when you try to create an object of that subclass.
+
+```
+Think of a car:
+- You use the steering wheel, accelerator, and brakes to drive.
+- You don't need to know how the engine or transmission works internally.
+- The controls are the interface, while the engine's implementation is hidden.
+```
+This is exactly what abstraction does in programming. <br/>
+It provides a simple interface while hiding the underlying complexity.
+
+</details>
+<!------------------------------------>
+
+
+<details>
+  <summary> Inner Classes </summary>
+
+### Python Inner Classes
+
+An inner class is a class defined inside another class. <br/>
+The inner class can access the properties and methods of the outer class.
+
+Inner classes are useful for grouping classes that are only used in one place, making your code more organized.
+
+```py
+class Outer:
+  def __init__(self):
+    self.name = "Outer Class"
+
+  class Inner:
+    def __init__(self):
+      self.name = "Inner Class"
+
+    def display(self):
+      print("This is the inner class")
+
+otc = Outer()
+print(otc.name)       # Outer Class
+
+inc = otc.Inner()
+print(inc.name)       # Inner Class
+inc.display()         # This is the inner class
 ```
 
-> Note: **Private properties cannot be accessed directly from outside the class.**
+### Accessing Outer Class from Inner Class
 
-### Get Private Property Value
+Inner classes in python do not automatically have access to the outer class instance.
 
-To access a private property, we can create a getter method;
-
+If we want the inner class to access the outer class, we need to pass the outer class instance as a parameter;
 ```py
-class Person:
-  def __init__(self, name, age):
-    self.name = name
-    self.__age = age        # Private property
-    
-  # Getter Method
-  def get_age(self):
-    return self.__age
+class Outer:
+  def __init__(self):
+    self.name = "Ram1"
 
-p1 = Person("Ram", 25)
-print(p1.name)              # Ram
-# print(p1.__age)           # AttributeError
-print(p1.get_age())         # 25
+  class Inner:
+    def __init__(self, outer):
+      self.outer = outer
+      self.name = "Ram2"
+
+    def display(self):
+      print(f"Outer class name: {self.outer.name}")
+      print(f"Inner class name: {self.name}")
+
+oc = Outer()
+ic = oc.Inner(oc)
+
+ic.display()
+# Outer class name: Ram1
+# Inner class name: Ram2
 ```
 
-### Set Private Property Value
+### Why Inner class?
 
-To modify a private property, you can create a setter method.
-
-The setter method can also validate the value before setting it:
+Inner classes are useful for creating helper classes that are only used within the context of the outer class.
 
 ```py
-class Person:
-  def __init__(self, name, age):
-    self.name = name
-    self.__age = age        # Private property
-    
-  # Getter Method
-  def get_age(self):
-    return self.__age
+class Car:
+  def __init__(self, brand, model):
+    self.brand = brand
+    self.model = model
+    self.engine = self.Engine()
 
-  # Setter Method
-  def set_age(self, age):
-    if age > 0:
-      self.__age = age
+  class Engine:
+    def __init__(self):
+      self.status = "Off"
+
+    def start(self):
+      self.status = "Running"
+      print("Engine started")
+
+    def stop(self):
+      self.status = "Off"
+      print("Engine stopped")
+
+  def drive(self):
+    if self.engine.status == "Running":
+      print(f"Driving the {self.brand} {self.model}")
     else:
-      print("Age must be +ve")
+      print("Start the engine first!")
 
-p1 = Person("Ram", 25)
-print(p1.name)              # Ram
-# print(p1.__age)           # AttributeError
-print(p1.get_age())         # 25
-
-
-p1.__age = 20               # This create a new attribute
-print(p1.__age)             # 20 as it is a new attribute
-print(p1.get_age())         # 25
-"""
-p1
-│
-├── name          → "Ram"
-├── _Person__age  → 25    ← original private variable
-└── __age         → 20    ← NEW attribute
-"""
-
-p1.set_age(26)
-print(p1.get_age())         # 26
+car = Car("Toyota", "Tata")
+car.drive()
+car.engine.start()
+car.drive()
 ```
 
-### Why Use Encapsulation?
-
-Encapsulation provides several benefits:
-- **Data Protection**: Prevents accidental modification of data
-- **Validation**: We can validate data before setting it
-- **Flexibility**: Internal implementation can change without affecting external code
-- **Control**: We have full control over how data is accessed and modified
-
-It is achieved through getter and setter methods.
+### Multiple Inner Classes
+A class can have multiple inner classes;
 
 ```py
-# Use of encapsulation to protect and validate data
+class Computer:
+  def __init__(self):
+    self.cpu = self.CPU()
+    self.ram = self.RAM()
 
-class Student:
-  def __init__(self, name):
-    self.name = name
-    self.__grade = 0
+  class CPU:
+    def process(self):
+      print("Processing data...")
 
-  def set_grade(self, grade):
-    if 0 <= grade <= 100:
-      self.__grade = grade
-    else:
-      print("Grade must be between 0 and 100")
+  class RAM:
+    def store(self):
+      print("Storing data...")
 
-  def get_grade(self):
-    return self.__grade
-
-  def get_status(self):
-    if self.__grade >= 60:
-      return "Passed"
-    else:
-      return "Failed"
-
-student = Student("Vivek")
-student.set_grade(85)
-print(student.get_grade())
-print(student.get_status())
+computer = Computer()
+computer.cpu.process()
+computer.ram.store()
 ```
-
-### Protected Properties
-
-Python also has a convention for protected properties using a single underscore `_` prefix;
 
 </details>
 <!------------------------------------>
@@ -5216,6 +5604,142 @@ Python also has a convention for protected properties using a single underscore 
 
 <br/>
 
+1. Dynamic/Runtime Polymorphism
+2. Static/Compile time Polymorphism
+
+| Overloading	          | Overriding                   |
+|-----------------------|------------------------------|
+| Same class usually	  | Parent-child relationship    |
+| Same method name	    | Same method signature        |
+| Different parameters  | Same parameters              |
+| Compile-time	        | Runtime                      |
+| Increases flexibility	| Enables runtime polymorphism |
+
+```py
+void print(int x)
+void print(String x)
+```
+
+```py
+class Parent {
+    void show() {}
+}
+
+class Child extends Parent {
+    void show() {}
+}
+```
+
+### 1. Method Overloading
+
+> Method overloading means having the same method name but different parameters.
+
+In languages like Java/C++, you can directly define multiple methods with the same name:
+
+```java
+add(int a, int b)
+add(int a, int b, int c)
+```
+
+**But Python does NOT support traditional method overloading** <br/>
+If we define the same method twice, the latest definition replaces the previous one.
+
+Instead, Python commonly achieves similar behavior using **default arguments or `*args`**.
+
+Example 
+```py
+# using default arguments
+
+class Calculator:
+
+    def add(self, a, b, c=0):
+        return a + b + c
+
+
+calc = Calculator()
+
+print(calc.add(10, 20))       # 30
+print(calc.add(10, 20, 30))   # 60
+# Here, the same add() method can work with either 2 or 3 arguments.
+
+#------------------------------------------
+
+# using *args
+
+class Calculator:
+
+    def add(self, *numbers):
+        return sum(numbers)
+
+
+calc = Calculator()
+
+print(calc.add(10, 20))
+print(calc.add(10, 20, 30))
+print(calc.add(10, 20, 30, 40))
+```
+
+> **Python doesn't support traditional compile-time method overloading. We can achieve similar behavior using default arguments, `*args`, or conditional logic.**
+
+### 2. Method Overriding
+
+> Method overriding occurs when a child class provides its own implementation of a method that already exists in the parent class.
+
+```py
+class Animal:
+    def sound(self):
+        print("Animal makes a sound")
+
+class Dog(Animal):
+    def sound(self):
+        print("Dog barks")
+
+animal = Animal()
+dog = Dog()
+
+animal.sound()   # Animal makes a sound
+dog.sound()      # Dog barks
+```
+
+Sometimes we want the child to use the parent's implementation as well. <br/>
+**Using `super()` with overriding**
+```py
+class Animal:
+    def sound(self):
+        print("Animal makes a sound")
+
+
+class Dog(Animal):
+    def sound(self):
+        super().sound()
+        print("Dog barks")
+
+
+dog = Dog()
+dog.sound()  # Animal makes a sound
+             # Dog barks
+```
+> `super()` allows the child class to access the parent's method.
+
+
+**Overloading = Same class, same name, different inputs**
+```py
+Calculator
+    ↓
+add(10, 20)
+add(10, 20, 30)
+```
+**Overriding = Child changes parent's behavior**
+```py
+Animal
+   ↓
+sound()
+
+Dog
+   ↓
+sound()  ← different implementation
+```
+
 </details>
 <!------------------------------------>
 
@@ -5226,6 +5750,98 @@ Python also has a convention for protected properties using a single underscore 
 
 <br/>
 
+> `@property` in python is a decorator that allows us to access a method like an attribute, without calling it with `()`.
+
+It is mainly used for **encapsulation and controlled access to class attributes**.
+
+```py
+# without @property
+
+class Student:
+    def __init__(self, name):
+        self._name = name  # private property
+
+    def get_name(self):    # getter method
+        return self._name
+
+
+student = Student("Radha")
+
+print(student.get_name())  # Radha
+
+#------------------------------------------------
+
+# With @property
+
+class Student:
+    def __init__(self, name, age):
+        self._name = name   # private property
+        self._age = age     # private property
+
+    @property
+    def name(self):
+        return self._name
+    
+    @property
+    def age(self):
+        return self._age
+
+student = Student("Radha", 10)
+
+print(student.name)   # Radha
+print(student.age)    # 10
+
+student.get_name()   # Method call
+student.name         # Looks like an attribute
+```
+
+`@property` decorator makes `name()` behave like a read-only attribute.
+
+
+### @property with setter
+
+| Python provides           |
+|---------------------------|
+| `@property` → getter      |
+| `@name.setter` → setter   |
+| `@name.deleter` → deleter |
+
+```py
+class Employee:
+    def __init__(self, salary):
+        self._salary = salary   # private property
+
+    @property
+    def salary(self):
+        return self._salary
+
+    @salary.setter
+    def salary(self, value):
+        if value < 0:
+            raise ValueError("Salary can't be -ve")
+
+        self._salary = value
+    
+    # Normal setter
+    def setter(self, value):
+       if value < 0:
+           raise ValueError("Salary can't be -ve")
+            
+       self.salary = value
+
+
+emp1 = Employee(50000)
+print(emp1.salary)       # 50000
+
+emp1.salary = 60000
+print(emp1.salary)       # 60000
+
+emp1.setter(70000)
+print(emp1.salary)       # 70000
+```
+
+Basically `emp1.salary` ilooks like what it is but internally Python is calling the getter/setter methods.
+
 </details>
 <!------------------------------------>
 
@@ -5235,6 +5851,129 @@ Python also has a convention for protected properties using a single underscore 
   <summary> 34. Magic/dunder methods </summary>
 
 <br/>
+**Dunder means double underscore `__`.**
+
+> **Dunder methods are special methods in python whose names start and end with double underscores**. <br/>
+> They allow us to define how objects behave with built-in operations such as object creation, printing, comparison, addition, iteration, and length calculation.
+
+e.g. :
+```
+__init__
+__str__
+__len__
+__add__
+__sub__
+__next__
+```
+They are called **magic methods** or special methods because python automatically calls them in response to certain operations.
+
+### `__init__()` — Constructor
+
+It is called automatically when an object is created.
+
+```py
+class Student:
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+
+s1= Student("Rahul", 20)
+# When student obj is created Python automatically calls __init()_
+```
+
+### `__str__()` - String representation
+
+```py
+class Student:
+    def __init__(self, name):
+        self.name = name
+
+s1 = Student("Rahul")
+print(s1)            # <__main__.Student object at 0x14a1736f9070>
+
+#-----------------------------------
+
+class Student:
+    def __init__(self, name):
+        self.name = name
+
+    def __str__(self):
+        return f"Student: {self.name}"
+
+s1 = Student("Rahul")
+print(s1)            # Student: Rahul 
+```
+Without `__str__()`, Python gives a default object representation.
+
+When Python sees `print(student)` it internally uses `student.__str__()`. <br/>
+Similarly when it sees `a + b` internally it is `a.__add__(b)`. and so on for others function as well.
+
+### Some important dunder(double underscore `__`) methods
+
+| Dunder method    | Used for                          |
+| ---------------- | --------------------------------- |
+| `__init__()`     | Object initialization             |
+| `__str__()`      | `print()` / readable string       |
+| `__repr__()`     | Developer-oriented representation |
+| `__len__()`      | `len()`                           |
+| `__add__()`      | `+`                               |
+| `__sub__()`      | `-`                               |
+| `__mul__()`      | `*`                               |
+| `__eq__()`       | `==`                              |
+| `__lt__()`       | `<`                               |
+| `__gt__()`       | `>`                               |
+| `__getitem__()`  | `obj[index]`                      |
+| `__setitem__()`  | `obj[index] = value`              |
+| `__iter__()`     | Iteration                         |
+| `__next__()`     | Next item during iteration        |
+| `__contains__()` | `in`                              |
+| `__call__()`     | Make object callable              |
+
+
+
+### `__call__()`
+
+Normally a function can be called using `()`. But we can make an object callable using `__call__()`
+
+```py
+def greet():
+    print("Hello")
+
+greet()     # Hello
+```
+
+```py
+class Greeting:
+    def __call__(self, name):
+        print(f"Hello {name}")
+
+g = Greeting()
+g("Rahul")    #  Hello Rahul
+
+# Here, greet("Rahul") actually invokes g._call_("Rahul")
+```
+
+### Dunder Takeaway
+
+We can think of dunder methods as a bridge between Python's built-in syntax and our custom classes.
+
+| Our code          |      Python calls   |
+|-------------------|---------------------|
+| `Employee(...)`   |     `__init__()`    |
+| `print(employee)` |     `__str__()`     |   
+| `len(employee)`   |    `__len__()`      |
+| `a + b`           |     `__add__()`     |
+| `a == b`          |     `__eq__()`      |
+| `a < b`           |     `__lt__()`      |
+| `obj[0]`          |     `__getitem__()` |
+| `for x in obj`    |     `__iter__()`    |
+| `x in obj`        |    `__contains__()` |
+| `obj()`           |     `__call__()`    |
+
+> **Dunder methods don't usually get called directly by us. Python invokes them automatically when we perform specific operations on objects.**
+
+**Dunder methods → Operator Overloading → Polymorphism** <br/>
+e.g : `__add__()` lets us define what `+` means for our own class.
 
 </details>
 <!------------------------------------>
