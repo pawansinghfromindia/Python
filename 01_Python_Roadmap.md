@@ -6295,9 +6295,50 @@ BaseException
 
 <br/>
 
+> **A context manager is a mechanism for managing resources and ensuring proper setup and cleanup**. <br/>
+
+It is commonly used with the `with` statement.
+
+A class-based context manager implements `__enter__()` and `__exit__(). __enter__()` runs when entering the context, and `__exit__()` handles cleanup when leaving it, even if an exception occurs.
+ 
+Python also provides `contextlib`, including the `@contextmanager` decorator, to create context managers more easily.
+
+A context manager generally provides two special methods:
+1. `_enter_()`
+2. `__exit__()`
+```py
+class MyContext:
+
+    def __enter__(self):
+        print("Entering context")
+        return self
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        print("Exiting context")
+
+
+with MyContext():
+    print("Inside context")
+
+#------------------------------------------
+"""
+Entering context
+Inside context
+Exiting context
+
+Concetually
+with MyContext()
+       ↓
+   __enter__()
+       ↓
+  Execute block
+       ↓
+   __exit__()
+"""
+```
+
 </details>
 <!------------------------------------>
-
 
 
 <details>
@@ -6358,6 +6399,233 @@ BaseException
 </details>
 <!------------------------------------>
 
+## File Handling
+
+<details>
+  <summary> <b> File handling </b> </summary>
+
+File handling is an important part of any web application. <br/>
+Python has several functions for **creating, reading, updating, and deleting files**.
+
+**File Open**
+
+The key function for working with files in python is the `open()` function.
+
+`open()` function takes two parameters; `filename`, and `mode`.
+
+There are four different methods (modes) for opening a file:
+| `"r"` | Read   | Default value. Opens a file for reading, error if the file does not exist |
+|-------|--------|---------------------------------------------------------------------------|
+| `"a"` | Append | Opens a file for appending, creates the file if it does not exist         |
+| `"w"` | Write  | Opens a file for writing, creates the file if it does not exist           |
+| `"x"` | Create | Creates the specified file, returns an error if the file exists           |
+
+In addition we can specify if the file should be handled as binary or text mode
+| `"t"` | Text   | Default value. Text mode   |
+|-------|--------|----------------------------|
+| `"b"` | Binary | Binary mode (e.g. images)  |
+
+Syntax :
+```py
+# To open a file for reading it is enough to specify the name of the file:
+
+f = open("demofile.txt")
+#---------or----------------------
+f = open("demofile.txt", "rt")
+
+# Both are same bcuz
+# "r" for read, and "t" for text are the default values, We don't need to specify them.
+```
+
+> Note: **Make sure the file exists, or else we will get an error**.
+
+</details>
+<!------------------------------------->
+
+<details>
+  <summary> Open and reading file  </summary>
+
+Suppose we have a text file, located in the same folder as python.
+
+demo.txt
+```.txt
+Hello! Welcome to demo text file
+This file is for testing purposes.
+Good Luck!
+```
+To open the file, use the built-in `open()` function.
+The `open()` function returns a file object, which has a `read()` method for reading the content of the file:
+```py
+f = open("demo.txt")
+print(f.read())
+```
+
+If the file is located in a different location, we will have to specify the file path.
+```py
+f = open("D:\\myfiles\demo.txt")
+print(f.read())
+```
+
+### Using the `with` statement
+
+We can also use the with statement when opening a file; <br/>
+Then we do not have to worry about closing our files, the `with` statement takes care of that.
+```py
+with open("demo.txt") as f:
+  print(f.read())
+```
+
+**Close file** <br/>
+It is a good practice to always close the file when we are done with it.
+
+If we are not using the `with` statement, we must write a `close` statement in order to close the file.
+
+```py
+f = open("demo.txt")
+print(f.readline())
+f.close()
+```
+
+> We should always close your files. In some cases, due to buffering, changes made to a file may not show until we close the file.
+
+### Read Only Parts of the File
+
+By default the `read()` method returns the whole text, but we can also specify how many characters we want to return.
+
+```py
+# Return the 5 first characters of the file
+
+with open("demo.txt") as f:
+  print(f.read(5))
+```
+
+### Read Lines
+
+We can return one line by using the `readline()` method.
+
+```py
+# Reading one line of the file
+
+with open("demo.txt") as f:
+  print(f.readline())
+#--------------------------------
+
+# By calling readline() two times, we can read the two first lines
+
+with open("demofile.txt") as f:
+  print(f.readline())
+  print(f.readline())
+#--------------------------------
+
+# By looping through the lines of the file, we can read the whole file, line by line
+
+with open("demo.txt") as f:
+  for x in f:
+    print(x)
+```
+
+
+</details>
+<!------------------------------------->
+
+<details>
+  <summary> Write/Create files </summary>
+
+### Write to an Existing File
+
+To write to an existing file, we must add a parameter to the `open()` function.
+
+| `"a"` | Append | will append to the end of the file  |
+|-------|--------|-------------------------------------|
+| `"w"` | Write  | will overwrite any existing content |
+
+```py
+# Open the file "demo.txt" and append content to the file:
+
+with open("demo.txt", "a") as f:
+  f.write("Now the file has more content!")
+
+# Open and read the file after the appending:
+with open("demo.txt") as f:
+  print(f.read())
+```
+
+### Overwrite Existing Content
+
+To overwrite the existing content to the file, use the `w` parameter.
+
+```py
+# Open the file "demo.txt" and overwrite the content:
+
+with open("demo.txt", "w") as f:
+  f.write("Woops! I have deleted the content!")
+
+# open and read the file after the overwriting:
+with open("demo.txt") as f:
+  print(f.read())
+```
+> Note: **The "w" method will overwrite the entire file**.
+
+### Create a New File
+
+To create a new file in python, use the `open()` method, with one of the following parameters.
+
+| `"x"` | Create | will create a file, returns an error if the file exists  |
+|-------|--------|----------------------------------------------------------|
+| `"a"` | Append | will create a file if the specified file does not exists |
+| `"w"` | Write  | will create a file if the specified file does not exists |
+
+```py
+# Create a new file called "myfile.txt":
+
+f = open("myfile.txt", "x")
+# a new empty file is created
+```
+> Note: If the file already exists, an error will be raised.
+
+
+</details>
+<!------------------------------------->
+
+<details>
+  <summary> delete files </summary>
+
+### Delete a File
+
+To delete a file, we must import the **OS module**, and run its `os.remove()` function.
+
+```py
+# Remove the file "demo.txt":
+
+import os
+os.remove("demo.txt")
+```
+
+To avoid getting an error, we might want to check if the file exists before we try to delete it.
+```py
+# Check if file exists, then delete it:
+
+import os
+if os.path.exists("demo.txt"):
+  os.remove("demo.txt")
+else:
+  print("The file does not exist")
+```
+
+### Delete Folder
+
+To delete an entire folder, use the `os.rmdir()` method.
+
+```py
+# Remove the folder "myfolder":
+
+import os
+os.rmdir("myfolder")
+```
+> Note: **We can only remove empty folders**.
+
+</details>
+<!------------------------------------->
 
 ## Level 6 - Real Interview
 
