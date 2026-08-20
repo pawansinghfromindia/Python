@@ -2841,6 +2841,16 @@ numbers.append(4)
 <img width="600" height="400" alt="image" src="https://github.com/user-attachments/assets/9fe3deac-8b69-4d14-bdcd-72e7de8a4f93" />
 
 
+**Shallow Copy**
+> A Shallow Copy creates a new object but copies the references of nested objects instead of creating new copies of them.
+> - As a result, both the original and copied objects share the same referenced data.
+> - Any modification to shared objects is reflected in both copies.
+
+**Deep Copy**
+> A Deep Copy creates a completely independent copy of an object, including all referenced objects.
+> - The copied object has its own memory allocation, so changes made to it do not affect the original object.
+
+
 </details>
 <!------------------------------------>
 
@@ -6346,6 +6356,39 @@ with MyContext()
 
 <br/>
 
+`yield` is used inside a function to create a generator. <br/>
+Instead of returning all values at once, it produces one value at a time and pauses the function's execution.
+
+```py
+def numbers():
+    yield 1
+    yield 2
+    yield 3
+
+for num in numbers():
+    print(num)
+```
+
+### `return` vs `yield`  
+
+| `return`                  | `yield`                       |
+| ------------------------- | ----------------------------- |
+| Ends the function         | Pauses the function           |
+| Returns a value once      | Produces values one at a time |
+| Usually stores the result | Memory efficient              |
+| Normal function           | Generator function            |
+
+
+> **`yield` turns a normal function into a generator. It returns a value one at a time while preserving the function's state, making it useful for lazy evaluation and memory-efficient processing of large datasets.**
+
+```py
+def numbers():
+    for i in range(1000000):
+        yield i
+
+# It doesn't create a list of 1 million numbers in memory at once
+```
+
 </details>
 <!------------------------------------>
 
@@ -6355,6 +6398,227 @@ with MyContext()
   <summary> 41. Closures </summary>
 
 <br/>
+
+> **A closure is a function that remembers and can access variables from its enclosing (outer) function even after the enclosing(outer) function has finished executing.**
+
+It is typically created when an inner function references a variable from the outer function and the inner function is returned. <br/>
+Closures are commonly used for maintaining state, implementing decorators, and creating encapsulated behavior.
+
+```py
+def outer():
+    message = "Hello"
+    def inner():
+        print(message)
+
+    return inner
+
+func = outer()
+
+func()          # Hello
+#---------------------------------
+"""
+When we execute: func = outer(), outer() finishes execution.
+Normally, we might expect message to disappear because outer() has finished.
+But inner() remembers message.
+So, func() can still access message
+That's a closure.
+"""
+```
+The three important ingredients are:
+1. There is an outer function.
+2. There is an inner function.
+3. The inner function uses a variable from the outer function and is returned/exposed outside.
+```
+Outer Function
+      ↓
+Inner Function
+      ↓
+Inner function uses outer variable
+      ↓
+Return inner function
+      ↓
+Closure
+```
+
+### Closures and `__closure__`
+```py
+def outer():
+    x = 10
+
+    def inner():
+        return x
+
+    return inner
+
+func = outer()
+
+print(func())                            # 10
+print(func.__closure__)                  # <int obj>
+print(func.__closure__[0].cell_contents) # 10
+```
+
+### Closure with `nonlocal`
+
+```py
+def counter():
+
+    count = 0
+
+    def increment():
+        nonlocal count
+        count += 1
+        return count
+
+    return increment
+
+
+counter1 = counter()
+
+print(counter1())
+print(counter1())
+print(counter1())
+
+"""
+Why do we need nonlocal count is
+Because without it: count += 1
+would make Python treat count as a local variable inside increment().
+nonlocal tells Python:"I want to modify the variable from the enclosing function.
+"""
+```
+
+### Multiple Independent Closures
+```py
+def counter():
+
+    count = 0
+
+    def increment():
+        nonlocal count
+        count += 1
+        return count
+
+    return increment
+
+
+counter1 = counter()
+counter2 = counter()
+
+print(counter1())
+print(counter1())
+
+print(counter2())
+print(counter2())
+#-------------------------------
+"""
+counter1 and counter2 have separate count values.
+They don't interfere with each other.
+"""
+```
+
+### Closures vs Global Variables
+```py
+# without closure
+count = 0
+def increment():
+    global count
+    count += 1
+
+increment()
+print(count)   # 1
+# Now count is global.
+#-----------------------
+
+# with closure
+def counter():
+    count = 0
+    def increment():
+        nonlocal count
+        count += 1
+        return count
+
+    return increment
+
+func = counter()
+print(func())  # 1
+# The state is kept inside the closure rather than exposed globally.
+```
+
+### Closures and Decorators
+```py
+def decorator(func):
+    def wrapper():
+        print("Before function")
+        func()
+        print("After function")
+
+    return wrapper
+#---------------------------------
+"""
+Here wrapper() remembers: func from the outer function.
+That's a closure.
+"""
+#---------------------------------
+@decorator
+def greet():
+    print("Hello")
+
+greet()       # Before function
+              # Hello
+              # After function
+```
+
+### Closure vs Nested Function
+
+```py
+def outer():
+
+    def inner():
+        print("Hello")
+
+    inner()
+# This is a nested function. But it isn't necessarily a closure.
+#----------------------------------------
+def outer():
+    message = "Hello"
+
+    def inner():
+        print(message)
+
+    return inner
+# Here inner() is a closure because it remembers message
+```
+
+> Every closure involves a nested function, but not every nested function is a closure
+
+
+### Closure vs Class
+
+We can sometimes use either a closure or a class to maintain state.
+
+```py
+# Closure
+def counter():
+    count = 0
+    def increment():
+        nonlocal count
+        count += 1
+        return count
+
+    return increment
+#----------------------------
+# class
+class Counter:
+    def __init__(self):
+        self.count = 0
+
+    def increment(self):
+        self.count += 1
+        return self.count
+
+# Both closure and class can maintain state.
+```
+
+`nested function` + `enclosing variable` + remember after outer function ends + `nonlocal` + `decorators`.
 
 </details>
 <!------------------------------------>
@@ -6366,6 +6630,60 @@ with MyContext()
 
 <br/>
 
+This distinction is very important bcuz two different objects can store same value but still not be same object.
+
+### `==` Operator (Equality Operator)
+
+- It is used when we want to check whether two objects contain same data (value), regardless of whether they are stored in same memory location. 
+- Internally, it calls `__eq__()` method of class.
+- For built-in types like lists, strings and numbers, this means checking if the contents are same.
+
+```py
+x = [1, 2, 3]
+y = [1, 2, 3]
+z = x
+if x == y:
+    print("x and y have the same values")
+else:
+    print("x and y do not have the same values")
+#---------------------------------------------------
+# x and y have the same values
+# bcuz == only looks at value not memory address
+```
+
+### `is` Operator (Identity Operator)
+
+- The `is` operator is used when you want to check whether two variables refer to exact same object in memory. 
+- It does not care about values. Even if two objects look identical, is will return False unless both variables literally point to the same memory location.
+
+```py
+x = [1, 2, 3]
+y = [1, 2, 3]
+z = x
+
+# Case 1: x and y
+if x is y:
+    print("x and y are the same object")
+else:
+    print("x and y are not the same object")
+
+# Case 2: x and z
+if x is z:
+    print("x and z are the same object")
+else:
+    print("x and z are not the same object")
+#-----------------------------------------------
+# x and y are not the same object | bcuz both stored in different memory locations, so x is y -> False.
+# x and z are the same object | bcuz both point to the same list in memory, so x is z -> True.
+ 
+```
+
+| `is` Operator (Identity)	| `==` Operator (Equality) |
+|---------------------------|--------------------------|         
+| Checks whether both variables point to the same object in memory | Checks whether two objects have the same values |
+| Returns	`True` if same object, otherwise `False` | Return `True` if values are equal, otherwise `False` |
+| `x is y -> False` (different objects)	| `x == y -> True` (values match) |
+
 </details>
 <!------------------------------------>
 
@@ -6376,15 +6694,197 @@ with MyContext()
 
 <br/>
 
+| Feature	                  |        Class Method	            | Static Method                                |
+|---------------------------|---------------------------------|----------------------------------------------|
+| Decorator Used	| Defined using the `@classmethod` decorator. |	Defined using the `@staticmethod` decorator. |
+| First Parameter	| Receives the class as the first parameter, conventionally named `cls`.	| Does not receive any automatic first parameter like `self` or `cls`. |
+| Access to Class Data    |	Can access and modify class-level variables because it has access to `cls`.	| Cannot access or modify class-level variables unless explicitly passed.|
+| Access to Instance Data |	Cannot directly access instance variables unless an object is passed manually.| Cannot access instance variables unless they are explicitly passed as arguments.|
+| Purpose                 |	Commonly used to create factory methods or alternative constructors that return class objects.	| Typically used to define utility functions that logically belong to the class but do not depend on class or instance data.|
+| Object Creation	        | Can create or modify class instances using `cls`.	| Does not create or modify class instances automatically.|
+
 </details>
 <!------------------------------------>
 
 
 
 <details>
-  <summary> 44. Memory management </summary>
+  <summary> 44. <b> Memory Management in Python </b> </summary>
 
 <br/>
+
+Memory management in Python is **the process of allocating, using, and releasing memory for objects automatically**.
+
+Unlike C/C++, Python developers usually don't manually allocate and free memory using things like `malloc()` and `free()`.
+
+Python manages memory automatically using:
+- **Private heap**
+- **Python Memory Manager**
+- **Reference counting**
+- **Garbage Collector**
+- **Memory allocators**
+
+```py
+x = 10
+name = "Ram"
+
+"""
+Python creates objects in a memory area called the Python private heap.
+We don't directly manage this memory.
+Python's memory manager handles it.
+
+ Python Code
+      ↓
+Python Memory Manager
+      ↓
+Private Heap
+      ↓
+    Objects
+ ┌──────────────┐
+ │ Integer  10  │
+ ├──────────────┤
+ │ String       │
+ │ "Ram"        │
+ └──────────────┘
+"""
+```
+
+```py
+x = [10, 20, 30]
+
+x ───────→ [10, 20, 30]
+             ↑
+          Object
+# There is one reference to the list.
+
+y = x
+
+x ───────┐
+         ↓
+      [10, 20, 30]
+         ↑
+y ───────┘
+
+# Now the object has two references.
+
+del x
+# Now One reference remains
+
+del y
+# Now the object has no references.
+```
+
+**`del` Does NOT Always Delete the Object**
+```py
+x = [1, 2, 3]
+y = x
+
+del x
+
+print(y)  # [1, 2, 3]
+```
+
+### Python's Memory Allocator
+
+Python has its own memory management system.
+
+For commonly used Python objects, CPython uses specialized allocation mechanisms.
+
+We don't normally need to know the internal implementation.
+
+
+### Stack vs Heap
+
+**Stack** is used for things such as function call frames and execution state.
+
+**Heap**, Python objects themselves are generally allocated in the Python-managed heap.
+```
+   Python Process
+               │
+       ┌───────┴───────┐
+       ↓               ↓
+   Call Stack      Managed Heap
+       │               │
+   function          objects
+    frames       [1,2,3], "Hello"
+```
+
+### Mutable Objects and Memory
+
+```py
+a = [1, 2, 3]
+b = a
+b.append(4)
+print(a)    #  [1, 2, 3, 4]
+print(b)    #  [1, 2, 3, 4]
+
+# why?
+# bcuz both variables reference the same list object.
+"""
+a ───────┐
+         ↓
+      [1,2,3,4]
+         ↑
+b ───────┘
+"""
+```
+Here comes the concept of **Shallow Copy and Deep Copy**.
+
+**Shallow Copy**
+> A Shallow Copy creates a new object but copies the references of nested objects instead of creating new copies of them.
+> - As a result, both the original and copied objects share the same referenced data.
+> - Any modification to shared objects is reflected in both copies.
+
+**Deep Copy**
+> A Deep Copy creates a completely independent copy of an object, including all referenced objects.
+> - The copied object has its own memory allocation, so changes made to it do not affect the original object.
+
+### Memory Leak in Python
+
+> **"Python doesn't have memory leaks because it has garbage collection.**
+
+That's true but not completely.
+
+Python can still have memory-related problems. <br/>
+For example: <br/>
+- Objects are unintentionally kept referenced.
+- Large global collections keep growing.
+- C/C++ extensions can leak memory.
+- Caches aren't bounded.
+- Resources aren't released properly.
+- Long-lived objects retain references to unnecessary objects.
+
+
+### Summary
+
+```
+             Python Program
+                    │
+                    ↓
+          Python Memory Manager
+                    │
+                    ↓
+             Private Heap
+                    │
+          ┌─────────┴─────────┐
+          ↓                   ↓
+   Reference Counting    Garbage Collector
+          │                   │
+          ↓                   ↓
+   Reclaim when          Handle unreachable
+   ref count = 0         cyclic objects
+```
+
+```
+1. Python manages memory automatically.
+2. Objects live in a managed heap.
+3. Reference counting tracks references.
+4. Garbage collector handles cyclic references.
+5. del removes a reference, not necessarily the object.
+6. Python can still have memory leaks.
+7. Generators can reduce memory usage.
+8. Context managers manage external resources.
+```
 
 </details>
 <!------------------------------------>
@@ -6395,6 +6895,39 @@ with MyContext()
   <summary> 45. Garbage collection </summary>
 
 <br/>
+
+> **Garbage collection is a form of automatic memory management used in programming languages like Java, Python, and JavaScript to reclaim memory occupied by objects that are no longer in use**.
+
+This process relieves developers from manual memory allocation and deallocation, significantly reducing the risk of bugs such as memory leaks and dangling references.
+
+**Python mainly uses reference counting, along with a cyclic garbage collector to handle reference cycles.**
+
+```py
+import gc
+
+print(gc.isenabled())
+
+#--------------------------------------
+# We can manually request a collection:
+import gc
+
+collected = gc.collect()
+print("Objects collected:", collected)
+#---------------------------------------
+# However, We generally don't need to manually call gc.collect()
+# in normal python programs.
+```
+
+### `del` vs Garbage Collection 
+
+| 	       `del`                     |  Garbage Collection             |
+|------------------------------------|---------------------------------|
+| Removes a name/reference	         | Finds reclaimable objects       | 
+| Explicit operation	               | Mostly automatic                |
+| Doesn't necessarily destroy object |	Reclaims eligible objects      |
+| `del x`	                           | `gc` handles unreachable cycles |
+
+
 
 </details>
 <!------------------------------------>
@@ -6736,6 +7269,22 @@ os.rmdir("myfolder")
 <details>
   <summary> 56. Why is Python dynamically typed?  </summary>
 
+Bcuz we **don't need to declare a variable's data type explicitly, and the type is determined at runtime**.
+
+```py
+x = 10
+print(type(x))     # int
+
+x = "Hello"
+print(type(x))     # str
+
+# same variable x can refer to objects of different types during execution
+# object has the type not the variable name.
+```
+
+> **Python is dynamically typed because variable types are determined at runtime rather than being explicitly declared. A variable is simply a reference to an object, and the object determines its type. Therefore, the same variable can reference objects of different types during execution.**
+
+**Dynamically typed** does not mean Python has no types. Python is actually strongly and dynamically typed.
 
 </details>
 <!------------------------------------>
@@ -6744,6 +7293,7 @@ os.rmdir("myfolder")
 <details>
   <summary> 57. How does Python manage memory? </summary>
 
+Python manages memory automatically using a private heap managed by the Python Memory Manager. In CPython, it primarily uses reference counting to track objects and a Garbage Collector to handle cyclic references. When objects are no longer reachable, their memory can be reclaimed.
 
 </details>
 <!------------------------------------>
@@ -6752,6 +7302,13 @@ os.rmdir("myfolder")
 <details>
   <summary> 58. What is the GIL? </summary>
 
+> **GIL (Global Interpreter Lock)** is a lock in CPython that allows only one thread at a time to execute Python bytecode within a process. <br/>
+> Because of this, Python threads don't provide true parallel execution for CPU-bound tasks.
+
+- Applies mainly to CPython.
+- Limits CPU-bound multithreading.
+- I/O-bound tasks can still benefit from threads.
+- For CPU-bound work, multiprocessing can provide true parallelism.
 
 </details>
 <!------------------------------------>
@@ -6760,6 +7317,19 @@ os.rmdir("myfolder")
 <details>
   <summary> 59. Why are lists mutable but tuples immutable? </summary>
 
+> **List → Mutable → Can change**
+
+> **Tuple → Immutable → Cannot change**
+
+```py
+lst = [1, 2]
+lst[0] = 10      # Allowed
+
+tup = (1, 2)
+tup[0] = 10      # TypeError
+```
+
+**Lists are designed to allow modification of their elements**, while **_tuples are designed to be fixed after creation_**. This makes tuples safer for constant data and allows them to be hashable (if all their elements are hashable), so they can be used as dictionary keys or set elements.
 
 </details>
 <!------------------------------------>
@@ -6768,14 +7338,38 @@ os.rmdir("myfolder")
 <details>
   <summary> 60. How does dictionary lookup work? </summary>
 
+Python dictionaries use a hash table. When we access `dict[key]`, Python calculates the key's hash using `hash()`, uses it to locate the appropriate position, and then compares keys to find the matching entry.
+
+```py
+student = {"name": "Ram", "age": 20}
+
+print(student["name"])   # O(1) average
+print(student["age"])    # O(1) average
+```
+
+Time complexity:
+- Average: O(1)
+- Worst case: O(n) due to hash collisions.
+
 
 </details>
 <!------------------------------------>
 
 
 <details>
-  <summary> 61. What happens when you write `a = b`? </summary>
+  <summary> 61. What happens when you write <code> a = b </code> ? </summary>
 
+```py
+b = [1, 2, 3]
+a = b
+
+a.append(4)
+print(b)   # [1, 2, 3, 4]
+print(a)   # [1, 2, 3, 4]
+#----------------------------
+# Bascially a and b are pointing to same object,
+# that means one object, two references
+```
 
 </details>
 <!------------------------------------>
@@ -6784,6 +7378,28 @@ os.rmdir("myfolder")
 <details>
   <summary> 62. Difference between iterator and iterable </summary>
 
+> Iterable is an object that can be looped over and provides an iterator using `iter()`.
+
+> Iterator is an object that produces values one at a time using `next()`.
+
+```py
+numbers = [1, 2, 3]      # Iterable
+
+itr = iter(numbers)      # Iterator
+
+print(next(itr))         # 1
+print(next(itr))         # 2
+
+#----------------------------------------------
+# Examples of iterables: list, tuple, string, dict, set.
+# Iterable → iter() → Iterator → next() → values
+
+#-----------------------------------------------
+number2 = [5, 6, 7]
+it = number2.__iter__()
+print(it.__next__())
+print(it.__next__())
+```
 
 </details>
 <!------------------------------------>
@@ -6791,6 +7407,65 @@ os.rmdir("myfolder")
 
 <details>
   <summary> 63. Generator vs list </summary>
+
+> **A list stores all elements in memory at once**, while **_a generator produces elements one at a time using `yield`_**. Generators are therefore more memory-efficient for large datasets.
+
+
+| List                | Generator                  |
+| ------------------- | -------------------------- |
+| Stores all values   | Produces values one by one |
+| Higher memory usage | Lower memory usage         |
+| Can access by index | No direct indexing         |
+| Reusable            | Usually single-use         |
+| Eager evaluation    | Lazy evaluation            |
+
+List:
+```py
+def get_numbers():
+    return [1, 2, 3, 4, 5]
+
+numbers = get_numbers()
+
+for num in numbers:
+    print(num)
+#-----------------------------------------------------
+# The entire list is created in memory before the loop starts.
+```
+Generator:
+```py
+def get_numbers():
+    for i in range(1, 6):
+        yield i
+
+numbers = get_numbers()
+
+for num in numbers:
+    print(num)
+#---------------------------------------------------------
+# Here, numbers are generated one at a time as the loop requests them
+```
+
+```py
+# List
+numbers = [x for x in range(1000000)]
+
+#-----------Means-----------------------
+numbers = []
+for x in range(5):
+    numbers.append(x)
+#----------------------------------------
+
+# Generator
+numbers = (x for x in range(1000000))
+
+#-----------Means-----------------------
+def generate():
+    for x in range(1, 10):
+        yield x
+
+numbers = generate()
+print(next(numbers))
+```
 
 
 </details>
