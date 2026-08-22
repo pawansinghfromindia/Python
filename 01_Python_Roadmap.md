@@ -7160,13 +7160,529 @@ os.rmdir("myfolder")
 </details>
 <!------------------------------------->
 
-## Level 6 - Real Interview
+## Level 6 - DSA
 
+<details>
+  <summary> <b> Data Structures and Algorithms </b> </summary>
+
+<br/>
+
+> **Data Structures** is about **_how data can be stored in different structures_**.
+
+> **Algorithms** is about **_how to solve different problems, often by searching through and manipulating data structures_**.
+
+Understanding **DSA** helps us **to find the best combination of Data Structures and Algorithms to create more efficient code**.
+
+
+### Data Structures
+
+Data Structures are a way of storing and organizing data in a computer.
+
+Python has built-in support for several data structures, such as `lists`, `dictionaries`, and `sets`.
+
+Other data structures can be implemented using Python classes and objects, such as `linked lists`, `stacks`, `queues`, `trees`, and `graphs`.
+
+**Data Structures** :
+- [x] Lists and Arrays
+- [x] Stacks
+- [x] Queues
+- [x] Linked Lists
+- [x] Hash Tables
+- [x] Trees
+  - [x] Binary Trees
+  - [x] Binary Search Trees
+  - [x] AVL Trees
+- [x] Graphs
+
+
+### Algorithms
+
+Algorithms are a way of working with data in a computer and solving problems like sorting, searching, etc.
+
+
+**Searching and Sorting Algorithms** :
+- [x] Linear Search
+- [x] Binary Search
+- [x] Bubble Sort
+- [x] Selection Sort
+- [x] Insertion Sort
+- [x] Quick Sort
+- [x] Counting Sort
+- [x] Radix Sort
+- [x] Merge Sort
+
+
+### Why DSA with Python?
+- Python has a clean readable syntax
+- DSA allows you to improve problem-solving skills
+- DSA and Python helps you write more efficient code
+- DSA gives you a better understanding of memory storage
+- DSA helps you handle complex programming challenges
+- Python is widely used in Data Science and Machine Learning
+
+
+</details>
+<!------------------------------------->
+
+<details>
+  <summary> <b> Lists and Arrays </b> </summary>
+
+### Arrays
+
+**Python does not have built-in support for Arrays, but Python Lists can be used instead**.
+
+We use LISTS as ARRAYS, however, to work with arrays in Python you will have to import a library, like the NumPy library.
+
+```py
+import numpy as np
+
+arr = np.array([1, 2, 3, 4, 5])
+
+print(arr)          # [1 2 3 4 5]
+print(type(arr))    # <class 'numpy.ndarray'>
+
+#################################################
+import array as arr
+
+numbers = arr.array('i', [1, 2, 3, 4])
+
+print(type(numbers))    # <class 'array.array'>
+print(numbers)          # array('i', [1, 2, 3, 4])
+
+for x in numbers:
+	print(x)
+
+#-----------------------------
+
+alphabets = arr.array('u', ['a', 'b', 'c', 'd'])
+print(alphabets)        # array('u', 'abcd')
+for y in alphabets: 
+	print(y)
+```
+
+
+- An array is a special variable, which can hold more than one value at a time.
+
+```py
+name1 = "Ram"
+name2 = "Bharat"
+name3 = "Lakshman"
+name4 = "Shatrudhan"
+
+# What if we have not 4 names, but 100?
+# The solution is array!
+# An array can hold many values under a single name,
+# and you can access the values by referring to an index number.
+#--------------------------------------------------------------
+
+names = ["Ram", "Bharat", "Lakshman", "Shatrudhan"]
+
+# Access the Elements of an Array
+print(names[0])       # 'Ram'
+print(names[1])       # 'Bharat'
+print(names[2])       # 'Lakshman'
+print(names[3])       # 'Shatrudhan'
+
+# Modify the value
+names[0] = "Krishna"
+print(names[0])       # 'Krishna'
+
+# Length of an Array
+length = len(names)
+print(length)         # 4
+
+#  > Note: Array's Index starts with 0
+
+# Looping Array Elements
+
+#--------Looping through indexes---------
+for i in range(len(names)):
+  print(names[i])
+
+#--------Looping through iterator---------
+for x in names:
+  print(x)
+```
+
+Python has a set of built-in methods that we can use on lists/arrays.
+
+| Method	    | Description                                                                 |
+|-------------|-----------------------------------------------------------------------------|
+| `append()`	| Adds an element at the end of the list                                      |
+| `clear()`	  | Removes all the elements from the list                                      |
+| `copy()`	  | Returns a copy of the list                                                  |
+| `count()`	  | Returns the number of elements with the specified value                     |
+| `extend()`	| Add the elements of a list (or any iterable), to the end of the current list|
+| `index()`	  | Returns the index of the first element with the specified value             |
+| `insert()`	| Adds an element at the specified position                                   |
+| `pop()`	    | Removes the element at the specified position                               |
+| `remove()`	| Removes the first item with the specified value                             |
+| `reverse()`	| Reverses the order of the list                                              |
+| `sort()`	  | Sorts the list                                                              |
+
+
+### Lists
+
+A list is a built-in data structure in Python, used to store multiple elements.
+
+A list is an ordered, mutable collection that can store different data types.
+
+**Creating a list**
+```py
+# Empty list
+x = []
+print(x)                   # []
+
+# List of size n=10
+l = [0]*10
+print(l)                   # [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+
+# List with initial values
+y = [1, 2, 3, 4, 5]
+print(y)                  # [1, 2, 3, 4, 5]
+
+# List with mixed types
+z = [1, "Hello", 3.14, True]
+print(z)                  # [1, 'Hello', 3.14, True]
+
+a = [i*i for i in range(1,6)]
+print(a)                  # [1, 4, 9, 16, 25]
+```
+
+### List methods and operations
+
+```py
+numbers = [10, 20, 30]
+
+numbers.append(40)       # Add at end
+print(numbers)           # [10, 20, 30, 40]
+
+numbers.insert(1, 15)    # Add at index
+print(numbers)           # [10, 15, 20, 30, 40]
+
+numbers.remove(20)       # Remove value
+print(numbers)           # [10, 15, 30, 40]
+
+numbers.pop()            # Remove last element
+print(numbers)           # [10, 15, 30]
+
+numbers.pop(1)           # Remove element at index
+print(numbers)           # [10, 30]
+
+num = [10, 20, 30]
+print(num[0])            # 10
+print(num[-1])           # 30
+print(num[1:3])          # [20, 30]
+```
+
+| Feature           | List         | Array                         |
+| ----------------- | ------------ | ----------------------------- |
+| Built-in          | Yes          | `array` module                |
+| Data types        | Can be mixed | Usually same type             |
+| Mutable           | Yes          | Yes                           |
+| Dynamic size      | Yes          | Yes                           |
+| Memory efficiency | Lower        | Better for typed data         |
+| General-purpose   | Excellent    | Useful for typed numeric data |
+
+
+### Summary
+
+**List** is :
+- [x] Ordered
+- [x] Mutable
+- [x] Dynamic
+- [x] Can contain different types
+- [x] Index access: O(1)
+- [x] Append: O(1) amortized(avg)
+- [x] Search: O(n)
+- [x] Insert/delete at beginning: O(n)
+
+</details>
+<!------------------------------------->
+<details>
+  <summary> <b> Stacks </b> </summary>
+
+<br/>
+
+> **A stack is a linear data structure that follows the Last-In-First-Out (LIFO) principle**.
+
+We can think of it like a stack of breads - we can only add or remove breads from the top.
+
+**A stack is a data structure that can hold many elements, and the last element added is the first one to be removed**.
+
+### Basic operations we can do on a stack are:
+
+**Push** : Adds a new element on the stack. <br/>
+**Pop** : Removes and returns the top element from the stack. <br/>
+**Peek** : Returns the top (last) element on the stack. <br/>
+**isEmpty** : Checks if the stack is empty. <br/>
+**Size** : Finds the number of elements in the stack. <br/>
+
+**Stacks can be implemented by using _arrays_ or _linked lists_**.
+
+Stacks can be used **to implement undo mechanisms**, **to revert to previous states**, **to create algorithms for depth-first search in graphs**, or **for backtracking**.
+
+**Stacks are often mentioned together with Queues, which is a similar data structure like stack but different.**
+
+<details>
+  <summary> <b> Stack Implementation using Array(List) </b> </summary>
+
+<br/>
+
+**Creating stack using list**
+```py
+stack = []
+
+# Push
+stack.append('A')
+stack.append('B')
+stack.append('C')
+
+print("Stack : ", stack)    	    # ['A', 'B', 'C']
+
+# Peek
+print("Peek : ", stack[-1])     	# C
+
+# Pop
+print("Pop : ", stack.pop())	    # C
+
+# Stack after Pop
+print("Stack after Pop : ", stack)  # ['A', 'B']
+
+# isEmpty
+isEmpty = not bool(stack)      
+print("isEmpty : ", isEmpty)        # False
+print("isEmpty : ", len(stack)==0)  # False
+
+# Size
+print("Size : ",len(stack))         # 2
+```
+**Creating Stack using class**
+```py
+class Stack:
+  def __init__(self):
+    self.stack = []
+
+  def push(self, element):
+    self.stack.append(element)
+
+  def pop(self):
+    if self.isEmpty():
+      return "Stack is empty"
+    return self.stack.pop()
+
+  def peek(self):
+    if self.isEmpty():
+      return "Stack is empty"
+    return self.stack[-1]
+
+  def isEmpty(self):
+    return len(self.stack) == 0
+
+  def size(self):
+    return len(self.stack)
+
+# Create a stack
+myStack = Stack()
+
+myStack.push('A')
+myStack.push('B')
+myStack.push('C')
+
+print("Stack: ", myStack.stack)           # ['A', 'B', 'C']
+print("Pop: ", myStack.pop())             # C
+print("Stack after Pop: ", myStack.stack) # ['A', 'B']
+print("Peek: ", myStack.peek())           # B
+print("isEmpty: ", myStack.isEmpty())     # False
+print("Size: ", myStack.size())           # 2
+```
+
+**Reasons to implement stacks using lists/arrays** :
+- **Memory Efficient** : Array elements do not hold the next elements address like linked list nodes do.
+- **Easier to implement and understand** : Using arrays to implement stacks require less code than using linked lists, and for this reason it is typically easier to understand as well.
+
+**A reason for not using arrays to implement stacks** :
+- **Fixed size**: An array occupies a fixed part of the memory. <br/>
+  This means that it could take up more memory than needed, or if the array fills up, it cannot hold more elements.
+
+</details>
+
+<details>
+  <summary> <b> Stack Implementation using Linkedlist </b> </summary>
+
+<br/>
+
+A linked list consists of nodes with some sort of data, and a pointer to the next node.
+
+```
+| data, next |------->| data, next |------->| data, next |-------> Null
+```
+
+**Benefit with using linked lists**
+- A big benefit with using linked lists is that nodes are stored wherever there is free space in memory, the nodes do not have to be stored contiguously right after each other like elements are stored in arrays.
+- Another nice thing with linked lists is that when adding or removing nodes, the rest of the nodes in the list do not have to be shifted.
+
+**Creating a Stack using a Linked List**
+```py
+class Node:
+  def __init__(self, value):
+    self.value = value
+    self.next = None
+#-----------------------------
+class Stack:
+  def __init__(self):
+    self.head = None
+    self.size = 0
+
+  def push(self, value):
+    new_node = Node(value)
+    if self.head:
+      new_node.next = self.head
+    self.head = new_node
+    self.size += 1
+
+  def pop(self):
+    if self.isEmpty():
+      return "Stack is empty"
+    popped_node = self.head
+    self.head = self.head.next
+    self.size -= 1
+    return popped_node.value
+
+  def peek(self):
+    if self.isEmpty():
+      return "Stack is empty"
+    return self.head.value
+
+  def isEmpty(self):
+    return self.size == 0
+
+  def stackSize(self):
+    return self.size
+
+  def traverseAndPrint(self):
+    currentNode = self.head
+    while currentNode:
+      print(currentNode.value, end=" -> ")
+      currentNode = currentNode.next
+    print()
+
+myStack = Stack()
+myStack.push('A')
+myStack.push('B')
+myStack.push('C')
+
+print("LinkedList: ", end="")    		 # LinkedList: 
+myStack.traverseAndPrint()       		 # C -> B -> A -> 
+print("Peek: ", myStack.peek()) 		 # C
+print("Pop: ", myStack.pop())    		 # C
+print("LinkedList after Pop: ", end="")  # LinkedList after Pop: 
+myStack.traverseAndPrint()               # B -> A ->
+print("isEmpty: ", myStack.isEmpty())    # isEmpty: False
+print("Size: ", myStack.stackSize())     # Size: 2
+```
+
+A reason for using linked lists to implement stacks:
+- **Dynamic size** : The stack can grow and shrink dynamically, unlike with arrays.
+
+Reasons for not using linked lists to implement stacks:
+- **Extra memory** : Each stack element must contain the address to the next element (the next linked list node).
+- **Readability** : The code might be harder to read and write for some because it is longer and more complex.
+
+</details>
+
+**Stack Applications** <br/>
+Stacks are used in many real-world scenarios:
+1. Undo/Redo operations in text editors
+2. Browser history (back/forward)
+3. Function call stack in programming
+4. Expression evaluation
+
+</details>
+<!------------------------------------->
+
+<details>
+  <summary> <b> Queues </b> </summary>
+
+<br/>
+
+> **A queue is a linear data structure that follows the First-In-First-Out (FIFO) principle**.
+
+
+
+</details>
+<!------------------------------------->
 
 <details>
   <summary> 46. Time & space complexity </summary>
 
 <br/>
+
+> Time Complexity and Space Complexity are **_measures used to analyze the efficiency of an algorithm_**.
+
+### Time Complexity
+
+> Time complexity describes **how the running time of an algorithm grows as the input size (n) increases**.
+
+| Complexity | Name         | Example                     |
+| ---------- | ------------ | --------------------------- |
+| O(1)       | Constant     | Accessing an array element  |
+| O(log n)   | Logarithmic  | Binary Search               |
+| O(n)       | Linear       | Traversing an array         |
+| O(n log n) | Linearithmic | Merge Sort, Heap Sort       |
+| O(n²)      | Quadratic    | Nested loops                |
+| O(2ⁿ)      | Exponential  | Recursive Fibonacci (naive) |
+| O(n!)      | Factorial    | Generating all permutations |
+
+### Space Complexity
+
+> Space complexity describes **how much extra memory an algorithm uses as the input size grows**.
+
+Creates an array of size n.
+```py
+arr = [0] * n        # Space Complexity = O(n)
+
+#----------------------------------------------
+# Uses only a few variables regardless of input size.
+
+sum = 0
+for i in range(n):
+    sum += i         # Space Complexity = O(1)
+```
+
+Nested Loop traversing
+```py
+for i in range(n):
+    for j in range(n):
+        print(i, j)
+
+#------------------------------------------
+"""
+- Outer loop runs n times.
+- Inner loop runs n times for each outer iteration.
+- Total operations = n × n = n²
+
+ Time Complexity: O(n²)
+ Space Complexity: O(1)
+"""
+```
+Finding max element in an array
+```py
+def find_max(arr):
+    max_val = arr[0]
+    for num in arr:
+        if num > max_val:
+            max_val = num
+    return max_val
+#------------------------------
+"""
+Traverses the array once → Time Complexity = O(n)
+Uses one extra variable → Space Complexity = O(1)
+"""
+```
+
+
+[BigOCheatsheet](https://www.bigocheatsheet.com/)
 
 </details>
 <!------------------------------------>
@@ -7475,14 +7991,65 @@ print(next(numbers))
 <details>
   <summary> 64. Decorator internals </summary>
 
+> A decorator is a function that takes another function, adds/modifies behavior, and returns a new function.
+
+```py
+def decorator(func):
+    def wrapper():
+        print("Before")
+        func()
+        print("After")
+    return wrapper
+
+@decorator
+def greet():
+    print("Hello")
+#-------------------------------------
+# Python internally convert above like below
+def greet():
+    print("Hello")
+
+greet = decorator(greet)
+#--------------------------------------------
+# Because wrapper() forms a closure - it remembers func from the outer decorator() function.
+```
+
 
 </details>
 <!------------------------------------>
 
 
 <details>
-  <summary> 65. MRO and multiple inheritance </summary>
+  <summary> 65. <b> MRO(Method Resolution Order) and multiple inheritance </b> </summary>
 
+**Multiple inheritance** means a class inherits from more than one parent class.
+
+**MRO (Method Resolution Order)** defines the order in which Python searches parent classes for methods and attributes.
+
+Python uses the **C3 linearization algorithm** to determine MRO.
+```py
+class A:
+    def show(self):
+        print("A")
+
+class B(A):
+    def show(self):
+        print("B")
+
+class C(A):
+    def show(self):
+        print("C")
+
+class D(B, C):
+    pass
+
+print(D.mro())  # [<class '__main__.D'>, <class '__main__.B'>, <class '__main__.C'>, <class '__main__.A'>, <class 'object'>]
+
+d = D()   
+d.show()  # B
+a = A() 
+a.show()  # A
+```
 
 </details>
 <!------------------------------------>
@@ -7490,6 +8057,32 @@ print(next(numbers))
 
 <details>
   <summary> 66. <code> __new__ </code> vs <code> __init__ </code>  </summary>
+
+> **`__new__` creates and returns a new object, while `__init__` initializes that already-created object.**
+
+```py
+class Person:
+
+    def __new__(cls):
+        print("__new__")
+        return super().__new__(cls)
+
+    def __init__(self):
+        print("__init__")
+
+p = Person()     # __new__
+                 # __init__
+#----------------------------------
+# When we create an object, __new__()
+# and __init__() called automatically
+```
+
+Summary :
+- **`__new__` > Creates object**
+- **`__init__` > Initializes object**
+- **`__new__` is a static method-like special method that receives `cls`.**
+- **`__init__` receives `self`.**
+- **`__new__` is commonly relevant when implementing immutable types or singleton patterns.**
 
 
 </details>
@@ -7499,6 +8092,19 @@ print(next(numbers))
 <details>
   <summary> 67. Python garbage collection </summary>
 
+<br/>
+
+> **Python automatically manages memory using reference counting and a cyclic garbage collector.** 
+
+> Reference counting removes objects whose reference count reaches zero, while the garbage collector detects and cleans up unreachable reference cycles.
+
+```
+Reference Counting → Primary mechanism in CPython.
+Cyclic GC → Handles circular references.
+gc module → Allows inspecting/managing garbage collection.
+gc.collect() → Manually triggers garbage collection.
+```
+In short : `Unused object → Reference count/GC detects it → Memory is reclaimed`
 
 </details>
 <!------------------------------------>
@@ -7506,6 +8112,23 @@ print(next(numbers))
 
 <details>
   <summary> 68. Threading vs multiprocessing </summary>
+
+<br/>
+
+> **Threading uses multiple threads within the same process**, while **_multiprocessing uses separate processes with separate memory spaces_**.
+
+**I/O-bound → Threading** <br/>
+**CPU-bound → Multiprocessing**
+
+| Threading                    | Multiprocessing                         |
+| ---------------------------- | --------------------------------------- |
+| Same process                 | Separate processes                      |
+| Shared memory                | Separate memory                         |
+| Lightweight                  | More resource-intensive                 |
+| Good for **I/O-bound** tasks | Good for **CPU-bound** tasks            |
+| Limited by GIL in CPython    | Can bypass GIL using multiple processes |
+
+**GIL - Global Interpreter Lock**
 
 
 </details>
@@ -7516,12 +8139,49 @@ print(next(numbers))
 <details>
   <summary> 69. Async programming </summary>
 
+> **Async programming allows a program to perform other tasks while waiting for an I/O operation to complete, instead of blocking execution.** 
+
+Python mainly uses `async`, `await`, and the `asyncio` library.
+
+```py
+import asyncio
+
+async def task():
+    await asyncio.sleep(2)
+    print("Done")
+
+asyncio.run(task())
+```
+
+`async` → defines asynchronous function
+`await` → waits without blocking the event loop
+`asyncio` → provides the async framework
+
+Async programming is best for I/O-bound tasks such as API calls, network requests, and database operations.
 
 </details>
 <!------------------------------------>
 
 <details>
   <summary> 70. Writing clean, production-quality Python </summary>
+
+
+**Production-quality Python should be readable, maintainable, testable, efficient, and reliable**.
+
+Key practices:
+- Follow PEP 8 and use meaningful names.
+- Write small, reusable functions.
+- Handle exceptions properly; don't use bare `except`.
+- Use type hints where useful.
+- Add logging instead of relying on `print()`.
+- Write unit/integration tests.
+- Avoid duplicated code (DRY).
+- Use context managers for resource management.
+- Manage dependencies using virtual environments and pinned/controlled versions.
+- Use tools like Ruff/Black, mypy, pytest where appropriate.
+- Keep configuration and secrets outside the code.
+
+**Clean code focuses on readability and maintainability; production-quality code additionally focuses on reliability, testing, logging, security, performance, and deployment readiness.**
 
 </details>
 
