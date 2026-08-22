@@ -7160,7 +7160,7 @@ os.rmdir("myfolder")
 </details>
 <!------------------------------------->
 
-## Level 6 - DSA
+## DSA
 
 <details>
   <summary> <b> Data Structures and Algorithms </b> </summary>
@@ -7591,8 +7591,8 @@ Reasons for not using linked lists to implement stacks:
 
 </details>
 
-**Stack Applications** <br/>
-Stacks are used in many real-world scenarios:
+### Stack Applications
+Stacks are used in many real-world scenarios :
 1. Undo/Redo operations in text editors
 2. Browser history (back/forward)
 3. Function call stack in programming
@@ -7608,10 +7608,872 @@ Stacks are used in many real-world scenarios:
 
 > **A queue is a linear data structure that follows the First-In-First-Out (FIFO) principle**.
 
+We can think of a queue as people standing in line in a supermarket.
+
+The first person to stand in line is also the first who can pay and leave the supermarket.
+
+**Basic operations we can do on a queue are** :
+**Enqueue** : Adds a new element to the queue.
+**Dequeue** : Removes and returns the first (front) element from the queue.
+**Peek** : Returns the first element in the queue.
+**isEmpty** : Checks if the queue is empty.
+**Size** : Finds the number of elements in the queue.
+
+**Queues** can be implemented by using **arrays or linked lists**.
+
+Queues can be used **to implement job scheduling for an office printer**, **order processing for e-tickets**, or **to create algorithms for breadth-first search in graphs**.
+
+<details>
+	<summary> Queue Implementation using Lists(Arrays) </summary>
+
+Queue using list
+```py
+queue = []
+
+# Enqueue
+queue.append('A')
+queue.append('B')
+queue.append('C')
+
+print("Queue: ", queue)
+
+# Peek i.e. frontElement
+print("Peek: ", queue[0])              # Queue:  ['A', 'B', 'C']
+
+# Dequeue
+print("Dequeue: ", queue.pop(0))       # Peek:  A
+
+print("Queue after Dequeue: ", queue)  # Dequeue:  A
+
+# isEmpty
+isEmpty = not bool(queue)
+print("isEmpty: ", isEmpty)            # isEmpty:  False
+
+print("isEmpty: ", len(queue)==0)      # isEmpty:  False
+
+# Size
+print("Size: ", len(queue))            # Size: 2
+```
+Note: While using a list is simple, removing elements from the beginning (dequeue operation) requires shifting all remaining elements, making it less efficient for large queues.
+
+**Stack using class**
+```py
+class Queue:
+  def __init__(self):
+    self.queue = []
+    
+  def enqueue(self, element):
+    self.queue.append(element)
+
+  def dequeue(self):
+    if self.isEmpty():
+      return "Queue is empty"
+    return self.queue.pop(0)
+
+  def peek(self):
+    if self.isEmpty():
+      return "Queue is empty"
+    return self.queue[0]
+
+  def isEmpty(self):
+    return len(self.queue) == 0
+
+  def size(self):
+    return len(self.queue)
+
+# Create a queue
+myQueue = Queue()
+
+myQueue.enqueue('A')
+myQueue.enqueue('B')
+myQueue.enqueue('C')
+ 
+print("Queue: ", myQueue.queue)               # Queue:  ['A', 'B', 'C']
+print("Peek: ", myQueue.peek())               # Peek:  A
+print("Dequeue: ", myQueue.dequeue())         # Dequeue:  A
+print("Queue after Dequeue: ", myQueue.queue) # Queue after Dequeue:  ['B', 'C']
+print("isEmpty: ", myQueue.isEmpty())         # isEmpty:  False
+print("Size: ", myQueue.size())               # Size:  2
+```
+
+</details>
+
+<details>
+	<summary> Queue Implementation using Linked Lists </summary>
+
+A linked list consists of nodes with some sort of data, and a pointer to the next node.
+
+```
+| data, next |------->| data, next |------->| data, next |-------> Null
+```
+
+**Benefit with using linked lists**
+- A big benefit with using linked lists is that nodes are stored wherever there is free space in memory, the nodes do not have to be stored contiguously right after each other like elements are stored in arrays. 
+
+- Another nice thing with linked lists is that when adding or removing nodes, the rest of the nodes in the list do not have to be shifted.
+
+```py
+class Node:
+  def __init__(self, data):
+    self.data = data
+    self.next = None
+
+class Queue:
+  def __init__(self):
+    self.front = None
+    self.rear = None
+    self.length = 0
+
+  def enqueue(self, element):
+    new_node = Node(element)
+    if self.rear is None:
+      self.front = self.rear = new_node
+      self.length += 1
+      return
+    self.rear.next = new_node
+    self.rear = new_node
+    self.length += 1
+
+  def dequeue(self):
+    if self.isEmpty():
+      return "Queue is empty"
+    temp = self.front
+    self.front = temp.next
+    self.length -= 1
+    if self.front is None:
+      self.rear = None
+    return temp.data
+
+  def peek(self):
+    if self.isEmpty():
+      return "Queue is empty"
+    return self.front.data
+
+  def isEmpty(self):
+    return self.length == 0
+
+  def size(self):
+    return self.length
+
+  def printQueue(self):
+    temp = self.front
+    while temp:
+      print(temp.data, end=" -> ")
+      temp = temp.next
+    print()
+
+# Create a queue
+myQueue = Queue()
+
+myQueue.enqueue('A')
+myQueue.enqueue('B')
+myQueue.enqueue('C')
+
+print("Queue: ", end="")
+myQueue.printQueue()
+print("Peek: ", myQueue.peek())
+print("Dequeue: ", myQueue.dequeue())
+print("Queue after Dequeue: ", end="")
+myQueue.printQueue()
+print("isEmpty: ", myQueue.isEmpty())
+print("Size: ", myQueue.size())
+```
+
+**Reasons for using linked lists to implement queues** :
+- **Dynamic size** : The queue can grow and shrink dynamically, unlike with arrays.
+- **No shifting** : The front element of the queue can be removed (enqueue) without having to shift other elements in the memory.
+
+**Reasons for not using linked lists to implement queues** :
+- **Extra memory** : Each queue element must contain the address to the next element (the next linked list node).
+- **Readability** : The code might be harder to read and write for some because it is longer and more complex.
+
+</details>
+
+### Queue Applications
+
+Queues are used in many real-world scenarios :
+1. Task scheduling in operating systems
+2. Breadth-first search in graphs
+3. Message queues in distributed systems
 
 
 </details>
 <!------------------------------------->
+
+<details>
+	<summary> <b> Linked Lists </b> </summary>
+
+<br/>
+
+> A **Linked List** is, as the word implies, a list where the nodes are linked together. 
+
+> **Each node contains data and a pointer**.
+ 
+> The way they are linked together is that each node points to where in the memory the next node is placed.
+
+A linked list consists of **nodes(with some sort of data)**, and a **pointer(link)** to the next node.
+
+```
+| data, next |------->| data, next |------->| data, next |-------> Null
+```
+
+### Linked Lists vs Arrays
+
+The easiest way to understand linked lists is perhaps by comparing linked lists with arrays.
+
+Linked lists consist of nodes, and is a linear data structure we make ourselves, unlike arrays which is an existing data structure in the programming language that we can use.
+
+Nodes in a linked list store links to other nodes, but array elements do not need to store links to other elements.
+
+
+### Linked list properties, compared to arrays:
+
+- Linked lists are not allocated to a fixed size in memory like arrays are, so linked lists do not require to move the whole list into a larger memory space when the fixed memory space fills up, like arrays must.
+
+- Linked list nodes are not laid out one right after the other in memory (contiguously), so linked list nodes do not have to be shifted up or down in memory when nodes are inserted or deleted.
+
+- Linked list nodes require more memory to store one or more links to other nodes. Array elements do not require that much memory, because array elements do not contain links to other elements.
+
+- Linked list operations are usually harder to program and require more lines than similar array operations, because programming languages have better built in support for arrays.
+
+- We must traverse a linked list to find a node at a specific position, but with arrays we can access an element directly by writing `arr[4]`.
+
+<details>
+	<summary> Types of Linked Lists </summary>
+
+There are three basic forms of linked lists:
+1. **Singly linked lists**
+
+A singly linked list is the simplest kind of linked lists. It takes up less space in memory because each node has only one address to the next node, like in the image below.
+
+<img width="625" height="102" alt="image" src="https://github.com/user-attachments/assets/d74049dd-a34c-4420-b9e0-7ca441323a3a" />
+
+
+2. **Doubly linked lists**
+A doubly linked list has nodes with addresses to both the previous and the next node, like in the image below, and therefore takes up more memory. But doubly linked lists are good if you want to be able to move both up and down in the list.
+
+<img width="625" height="102" alt="image" src="https://github.com/user-attachments/assets/e6c20931-b57e-429a-94dc-dfff942be1d7" />
+
+
+3. **Circular linked lists**
+
+A circular linked list is like a singly or doubly linked list with the first node, the "head", and the last node, the "tail", connected.
+
+In singly or doubly linked lists, we can find the start and end of a list by just checking if the links are null. But for circular linked lists, more complex code is needed to explicitly check for start and end nodes in certain applications.
+
+Circular linked lists are good for lists we need to cycle through continuously.
+
+Singly Circular Linked list
+
+<img width="625" height="102" alt="image" src="https://github.com/user-attachments/assets/51a5ea9b-c193-4515-83e4-3a092aab224e" />
+
+Doubly Circular Linked List
+
+<img width="625" height="167" alt="image" src="https://github.com/user-attachments/assets/a6bdc203-3544-4d74-83aa-5a25da8a1fe5" />
+
+</details>
+
+<details>
+	<summary> Operations on Linked List </summary>
+
+Basic things we can do with linked lists are:
+
+1. **Traversal**
+2. **Remove a node**
+3. **Insert a node**
+4. **Sort**
+
+
+### Traversal of a Linked List
+
+Traversal of linked lists is typically done to search for a specific node, and read or modify the node's content, remove the node, or insert a node right before or after that node.
+
+Traversal of a singly linked list
+```py
+class Node:
+  def __init__(self, data):
+    self.data = data
+    self.next = None
+
+def traverseAndPrint(head):
+  currentNode = head
+  while currentNode:
+    print(currentNode.data, end=" -> ")
+    currentNode = currentNode.next
+  print("null")
+
+node1 = Node(7)
+node2 = Node(11)
+node3 = Node(3)
+node4 = Node(2)
+node5 = Node(9)
+
+node1.next = node2
+node2.next = node3
+node3.next = node4
+node4.next = node5
+
+traverseAndPrint(node1)
+```
+
+Finding the lowest value in a singly linked list
+```py
+class Node:
+  def __init__(self, data):
+    self.data = data
+    self.next = None
+
+def findLowestValue(head):
+  minValue = head.data
+  currentNode = head.next
+  while currentNode:
+    if currentNode.data < minValue:
+      minValue = currentNode.data
+    currentNode = currentNode.next
+  return minValue
+
+node1 = Node(7)
+node2 = Node(11)
+node3 = Node(3)
+node4 = Node(2)
+node5 = Node(9)
+
+node1.next = node2
+node2.next = node3
+node3.next = node4
+node4.next = node5
+
+print("The lowest value in the linked list is:", findLowestValue(node1))
+```
+
+### Delete(Remove) a Node in a Linked List
+
+If We want to delete a node in a linked list, it is important to connect the nodes on each side of the node before deleting it, so that the linked list is not broken.
+
+So before deleting the node, we need to get the next pointer from the previous node, and connect the previous node to the new next node before deleting the node in between.
+
+Also, it is a good idea to first connect next pointer to the node after the node we want to delete, before we delete it. This is to avoid a **'dangling' pointer**, a pointer that points to nothing, even if it is just for a brief moment.
+
+Deleting a specific node in a singly linked list
+```py
+class Node:
+  def __init__(self, data):
+    self.data = data
+    self.next = None
+
+def traverseAndPrint(head):
+  currentNode = head
+  while currentNode:
+    print(currentNode.data, end=" -> ")
+    currentNode = currentNode.next
+  print("null")
+
+def deleteSpecificNode(head, nodeToDelete):
+  if head == nodeToDelete:
+    return head.next
+
+  currentNode = head
+  while currentNode.next and currentNode.next != nodeToDelete:
+    currentNode = currentNode.next
+
+  if currentNode.next is None:
+    return head
+
+  currentNode.next = currentNode.next.next
+
+  return head
+
+node1 = Node(7)
+node2 = Node(11)
+node3 = Node(3)
+node4 = Node(2)
+node5 = Node(9)
+
+node1.next = node2
+node2.next = node3
+node3.next = node4
+node4.next = node5
+
+print("Before deletion:")
+traverseAndPrint(node1)
+
+# Delete node4
+node1 = deleteSpecificNode(node1, node4)
+
+print("\nAfter deletion:")
+traverseAndPrint(node1)
+```
+
+### Insert a Node in a Linked List
+
+Inserting a node into a linked list is very similar to deleting a node, because in both cases we need to take care of the next pointers to make sure we do not break the linked list.
+
+To insert a node in a linked list we first need to create the node, and then at the position where we insert it, we need to adjust the pointers so that the previous node points to the new node, and the new node points to the correct next node.
+1. New node is created
+2. Node 1 is linked to new node
+3. New node is linked to next node
+
+Inserting a node in a singly linked list 
+```py
+class Node:
+  def __init__(self, data):
+    self.data = data
+    self.next = None
+
+def traverseAndPrint(head):
+  currentNode = head
+  while currentNode:
+    print(currentNode.data, end=" -> ")
+    currentNode = currentNode.next
+  print("null")
+
+def insertNodeAtPosition(head, newNode, position):
+  if position == 1:
+    newNode.next = head
+    return newNode
+
+  currentNode = head
+  for _ in range(position - 2):
+    if currentNode.next is None:
+      break
+    currentNode = currentNode.next
+
+  newNode.next = currentNode.next
+  currentNode.next = newNode
+  return head
+
+node1 = Node(7)
+node2 = Node(3)
+node3 = Node(2)
+node4 = Node(9)
+
+node1.next = node2
+node2.next = node3
+node3.next = node4
+
+print("Original list:")
+traverseAndPrint(node1)
+
+# Insert a new node with value 97 at position 2
+newNode = Node(97)
+node1 = insertNodeAtPosition(node1, newNode, 2)
+
+print("\nAfter insertion:")
+traverseAndPrint(node1)
+```
+
+</details>
+
+</details>
+<!------------------------------------->
+
+<details>
+	<summary> <b> Hash Tables </b> </summary>
+
+<br/>
+
+A Hash Table is a data structure designed to be fast to work with.
+
+The reason Hash Tables are sometimes preferred instead of arrays or linked lists is because searching for, adding, and deleting data can be done really quickly, even for large amounts of data.
+
+- In a Linked List, finding a person "Ram" takes time because we would have to go from one node to the next, checking each node, until the node with "Ram" is found.
+
+- And finding "Ram" in an list/array could be fast if we knew the index, but when we only know the name "Ram", we need to compare each element and that takes time.
+
+**With a Hash Table** however, finding "Ram" is done really fast because there is a way to go directly to where "Ram" is stored, **using something called a hash function.**
+
+
+### Hash Tables
+
+> **a data structure that represent a dynamic set of data**
+
+Hash tables support `insert`, `delete` and `Search` operation. 
+
+Hash table is best for searching as It takes Avg O(1) and Worst case O(N)
+
+Hash tables sometimes use exhangeably with dictionary.
+
+> **Dictionary** = generic way to map **keys to values**
+
+> **Hash table** = implementation of a dictionary using hashing function
+
+```py
+dictionary = {
+  'a': 1,
+  'b': 9,
+  'c': "Ram",
+  'd': True,
+}
+
+# insert
+dictionary['e'] = False
+
+# delete
+dictionary['a']
+
+# search
+print(dictionary['c'])
+```
+Let's see Keys values mapping implementation, to do this we have a concept similar to Hash tables i.e. **direct-access tables**. <br/>
+With direct access tables we have a universe of keys. Some of keys are in use and they point to data. <br/>
+With direct access tables insert, delete and search all are done in constant time. <br/>
+In other words, **direct-access table is an array and if we need to represent every key in the universe, u is unbounded and impracticle to store in memory.**
+
+With hash tables, space requirement is O(K) where k is the number of keys.  <br/>
+To achieve this we introduce a hash function that maps keys to a location in table that holds data(value). <br/>
+bcuz our universe of keys is no longer unbounded.
+It is possible that hashing two different keys may result in the same value called **Collision**.
+
+One method to accomodate collision is called **Chaining**.
+
+To support chaining, we have to introduce linked list. And our table location become a bucket of values.
+
+**hash function** 
+
+**Goals** <br/>
+To keep search as close as possible to O(1) we need a hash function that **maximizes randomness** and **produce the least amount of collisions**.
+
+Some examples of hash functions:
+- division
+- multiplication
+- universal hashing
+- dynamic perfect hashing
+- static perfect hashing
+
+**Hashing by division**
+```
+h(k) = k % m
+where m = size of the table
+
+Let's say we have a hash table of size 13
+then h(k) = k % 13
+if k = 50
+then h(50) = 50 % 13
+           = 11
+```
+
+### Building A Hash Table from Scratch
+
+To get the idea of what a Hash Table is, let's try to build one from scratch, to store unique first names inside it.
+
+We will build the Hash Table in 5 steps:
+1. Create an empty list (it can also be a dictionary or a set).
+2. Create a hash function.
+3. Inserting an element using a hash function.
+4. Looking up an element using a hash function.
+5. Handling collisions.
+
+**Step 1: Create an Empty List**
+```py
+my_list = [None, None, None, None, None, None, None, None, None, None]
+```
+Each of these elements is called a **bucket** in a Hash Table.
+
+**Step 2: Create a Hash Function**
+```py
+# Create a Hash Function that sums the Unicode numbers
+# of each character and return a number between 0 and 9
+
+def hash_function(value):
+  sum_of_chars = 0
+  for char in value:
+    sum_of_chars += ord(char)
+
+  return sum_of_chars % 10
+
+print("'Ram' has hash code:", hash_function('Ram'))
+# R -> 82 a -> 97 m -> 109
+# 82+97+109 == 288 % 10 ==> 8
+```
+The number returned by the hash function is called the **hash code**.
+
+According to our hash function, "Ram" should be stored at index 8.
+
+**Step 3: Inserting an Element**
+```py
+# Create a function that add items to our hash table.
+
+def add(name):
+  index = hash_function(name)
+  my_list[index] = name
+
+add('Ram')
+print(my_list)
+
+# Now, my_list = [None, None, None, None, None, None, None, None, 'Ram', None]
+
+add('Shyam')
+add('Mohan')
+add('Rohan')
+add('Sohan')
+print(my_list)
+```
+
+**Step 4: Looking up a name**
+```py
+def contains(name):
+  index = hash_function(name)
+  return my_list[index] == name
+
+print("'Ram' is in the Hash Table:", contains('Ram'))
+```
+
+**Step 5: Handling collisions**
+```py
+my_list = [
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  []
+]
+
+def hash_function(value):
+  sum_of_chars = 0
+  for char in value:
+    sum_of_chars += ord(char)
+
+  return sum_of_chars % 10
+
+def add(name):
+  index = hash_function(name)
+  my_list[index].append(name)
+
+def contains(name):
+  index = hash_function(name)
+  print(my_list[index])
+  return name in my_list[index]
+
+add('Ram')
+add('Shyam')
+add('Mohan')
+add('Rohan')
+add('Sohan')
+
+print(my_list)
+
+print(contains("Shyam"))
+print(contains("Rohan"))
+print(contains("Ram"))
+```
+Searching for "Shyam" now takes a little bit longer time, because we also find "Sohan" in the same bucket, but still much faster than searching the entire Hash Table.
+
+### Uses of Hash Tables
+
+Hash Tables are great for:
+- Checking if something is in a collection (like finding a book in a library).
+- Storing unique items and quickly finding them (like storing phone numbers).
+- Connecting values to keys (like linking names to phone numbers).
+
+The most important reason why Hash Tables are great for these things is that Hash Tables are very fast compared Arrays and Linked Lists, especially for large sets. <br/>
+Arrays and Linked Lists have time complexity O(n) for search and delete, while Hash Tables have just O(1) on average.
+
+
+### Hash Tables Summarized
+
+- Hash Table elements are stored in storage containers called buckets.
+
+- A hash function takes the key of an element to generate a hash code.
+
+- The hash code says what bucket the element belongs to, so now we can go directly to that Hash Table element: to modify it, or to delete it, or just to check if it exists.
+
+- A collision happens when two Hash Table elements have the same hash code, because that means they belong to the same bucket.
+
+- Collision can be solved by Chaining by using lists to allow more than one element in the same bucket.
+
+
+</details>
+<!------------------------------------->
+
+<details>
+	<summary> <b> Trees </b> </summary>
+
+<br/>
+
+> **A tree is a hierarchical data structure consisting of nodes connected by edges.**
+
+> **Each node contains a value and references to its child nodes.**
+
+The Tree data structure is similar to Linked Lists in that each node contains data and can be linked to other nodes.
+
+We know data structures like **Arrays, Linked Lists, Stacks, and Queues**. These are all linear structures, which means that each element follows directly after another in a sequence. 
+
+Trees however, are different. In a Tree, a single element can have multiple 'next' elements, allowing the data structure to branch out in various directions.
+
+<img width="400" height="200" alt="image" src="https://github.com/user-attachments/assets/1027c053-e117-4bcd-83c3-8a7239206ac4" />
+
+
+### Tree data structure can be useful in many cases:
+
+**Hierarchical Data** : File systems, organizational models, etc. <br/>
+**Databases** : Used for quick data retrieval. <br/>
+**Routing Tables** : Used for routing data in network algorithms. <br/>
+**Sorting/Searching** : Used for sorting data and searching for data. <br/>
+**Priority Queues** : Priority queue data structures are commonly implemented using trees, such as binary heaps. 
+
+### Types of Trees
+
+1. **Binary Trees**   
+- Each node has up to two children, the left child node and the right child node.
+- This structure is the foundation for more complex tree types like Binay Search Trees and AVL Trees.
+
+2. **Binary Search Trees (BSTs)** 
+- A type of Binary Tree where for each node, the left child node has a lower value, and the right child node has a higher value.
+
+3. **AVL Trees**  
+- A type of Binary Search Tree that **self-balances** so that for every node, the difference in height between the left and right subtrees is at most one. This balance is maintained through rotations when nodes are inserted or deleted.
+
+### Trees vs Arrays and Linked Lists
+
+**Benefits of Trees over Arrays and Linked Lists**
+
+**Arrays** are fast when you want to access an element directly, like element number 700 in an array of 1000 elements for example. But inserting and deleting elements require other elements to shift in memory to make place for the new element, or to take the deleted elements place, and that is time consuming.
+
+**Linked Lists** are **fast when inserting or deleting nodes**, no memory shifting needed, but to access an element inside the list, the list must be traversed, and that takes time.
+
+**Trees**, such as Binary Trees, Binary Search Trees and AVL Trees, are great compared to Arrays and Linked Lists because they are BOTH **fast at accessing a node, AND fast when it comes to deleting or inserting a node**, with no shifts in memory needed.
+
+</details>
+<!------------------------------------->
+
+<details>
+	<summary> <b> Binary Trees </b> </summary>
+
+<br/>
+
+> **A Binary Tree is a type of tree data structure where each node can have a maximum of two child nodes, a left child node and a right child node.**
+
+This restriction, that a node can have a maximum of two child nodes, gives us many benefits:
+
+- Algorithms like traversing, searching, insertion and deletion become easier to understand, to implement, and run faster.
+  
+- Keeping data sorted in a Binary Search Tree (BST) makes searching very efficient.
+
+- Balancing trees is easier to do with a limited number of child nodes, using an AVL Binary Tree for example.
+Binary Trees can be represented as arrays, making the tree more memory efficient.
+
+<img width="400" height="250" alt="image" src="https://github.com/user-attachments/assets/d4b565dc-9085-47ec-88e5-d2fea06213e5" />
+
+
+### Binary Tree Implementation
+
+```py
+# Create a Binary Tree
+
+class TreeNode:
+  def __init__(self, data):
+    self.data = data
+    self.left = None
+    self.right = None
+
+root = TreeNode('R')
+nodeA = TreeNode('A')
+nodeB = TreeNode('B')
+nodeC = TreeNode('C')
+nodeD = TreeNode('D')
+nodeE = TreeNode('E')
+nodeF = TreeNode('F')
+nodeG = TreeNode('G')
+
+root.left = nodeA
+root.right = nodeB
+
+nodeA.left = nodeC
+nodeA.right = nodeD
+
+nodeB.left = nodeE
+nodeB.right = nodeF
+
+nodeF.left = nodeG
+
+# Test
+print("root.right.left.data:", root.right.left.data)
+```
+
+### Types of Binary Trees
+
+1. **Balanced Binary Tree**
+- A **balanced Binary Tree** has at most 1 in difference between its left and right subtree heights, for each node in the tree.
+
+<img width="297" height="285" alt="image" src="https://github.com/user-attachments/assets/75e223bf-5400-4095-b25e-7c58d3a6cfac" />
+
+<br/>
+
+2. **Complete Binary Tree**
+- A **complete Binary Tree** has all levels full of nodes, except the last level, which is can also be full, or filled from left to right. 
+- The properties of a complete Binary Tree means it is also balanced.
+
+<img width="327" height="292" alt="image" src="https://github.com/user-attachments/assets/9618c658-a9e8-4ffe-953f-7aabd09617ca" />
+
+<br/>
+
+3. **Full Binary Tree**
+- A **full Binary Tree** is a kind of tree where each node has either 0 or 2 child nodes.
+
+<img width="288" height="283" alt="image" src="https://github.com/user-attachments/assets/85efa85c-5663-4975-a04d-21732349d7b5" />
+
+<br/>
+
+4. **Perfect Binary Tree**
+- A **perfect Binary Tree** has all leaf nodes on the same level, which means that all levels are full of nodes, and all internal nodes have two child nodes.
+- The properties of a perfect Binary Tree means it is also full, balanced, and complete.
+
+<img width="290" height="221" alt="image" src="https://github.com/user-attachments/assets/c2207e29-af0c-446b-b462-1eebf9e20c77" />
+
+
+### Binary Tree Traversal
+
+Going through a Tree by visiting every node, one node at a time, is called traversal.
+
+There are two main categories of Tree traversal methods:
+
+**1. Breadth First Search (BFS)** is when the nodes on the same level are visited before going to the next level in the tree. This means that the tree is explored in a more sideways direction.
+
+**2. Depth First Search (DFS)** is when the traversal moves down the tree all the way to the leaf nodes, exploring the tree branch by branch in a downwards direction.
+
+
+There are three different types of DFS traversals:
+1. **pre-order**
+2. **in-order**
+3. **post-order**
+
+**Pre-order Traversal** is done by visiting the root node first, then recursively do a pre-order traversal of the left subtree, followed by a recursive pre-order traversal of the right subtree.
+
+**In-order Traversal** does a recursive In-order Traversal of the left subtree, visits the root node, and finally, does a recursive In-order Traversal of the right subtree. 
+
+**Post-order Traversal** works by recursively doing a Post-order Traversal of the left subtree and the right subtree, followed by a visit to the root node. 
+
+
+</details>
+<!------------------------------------->
+
+<details>
+	<summary> <b> Binary Search Trees </b> </summary>
+
+
+</details>
+<!------------------------------------->
+
+<details>
+	<summary> <b> AVL Trees </b> </summary>
+
+
+</details>
+<!------------------------------------->
+
+<details>
+	<summary> <b> Graph </b> </summary>
+
+
+</details>
+<!------------------------------------->
+
+### Level 6 - Interview Questions
 
 <details>
   <summary> 46. Time & space complexity </summary>
