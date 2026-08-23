@@ -7224,6 +7224,8 @@ Algorithms are a way of working with data in a computer and solving problems lik
 </details>
 <!------------------------------------->
 
+### Data Structures
+
 <details>
   <summary> <b> Lists and Arrays </b> </summary>
 
@@ -8444,9 +8446,36 @@ There are three different types of DFS traversals:
 
 **Pre-order Traversal** is done by visiting the root node first, then recursively do a pre-order traversal of the left subtree, followed by a recursive pre-order traversal of the right subtree.
 
+```py
+def preOrderTraversal(node):
+  if node is None:
+    return
+  print(node.data, end=", ")
+  preOrderTraversal(node.left)
+  preOrderTraversal(node.right)
+```
+
 **In-order Traversal** does a recursive In-order Traversal of the left subtree, visits the root node, and finally, does a recursive In-order Traversal of the right subtree. 
 
+```py
+def inOrderTraversal(node):
+  if node is None:
+    return
+  inOrderTraversal(node.left)
+  print(node.data, end=", ")
+  inOrderTraversal(node.right)
+```
+
 **Post-order Traversal** works by recursively doing a Post-order Traversal of the left subtree and the right subtree, followed by a visit to the root node. 
+
+```py
+def postOrderTraversal(node):
+  if node is None:
+    return
+  postOrderTraversal(node.left)
+  postOrderTraversal(node.right)
+  print(node.data, end=", ")
+```
 
 
 </details>
@@ -8455,6 +8484,169 @@ There are three different types of DFS traversals:
 <details>
 	<summary> <b> Binary Search Trees </b> </summary>
 
+<br/>
+
+> **A Binary Search Tree is a Binary Tree where every node's left child has a lower value, and every node's right child has a higher value.**
+
+The advantage with Binary Search Trees is that operations like **search, delete, and insert are fast** and done without having to shift values in memory.
+
+
+A Binary Search Tree (BST) is a type of Binary Tree data structure, where the following properties must be true for any node "X" in the tree:
+- The X node's left child and all of its descendants (children, children's children, and so on) have lower values than X's value.
+- The right child, and all its descendants have higher values than X's value.
+- Left and right subtrees must also be Binary Search Trees.
+
+<img width="290" height="195" alt="image" src="https://github.com/user-attachments/assets/5f6cccb8-f1e4-41dd-985f-32e554d06f1d" />
+
+The **_size of a tree_** is the number of nodes in it **(n)**.
+
+A **_subtree_** starts with one of the nodes in the tree as a local root, and consists of that node and all its descendants.
+
+The **_descendants_** of a node are all the child nodes of that node, and all their child nodes, and so on. Just start with a node, and the descendants will be all nodes that are connected below that node.
+
+The **_node's height_** is the maximum number of edges between that node and a leaf node.
+
+**Traversal of a Binary Search Tree**
+```py
+class TreeNode:
+  def __init__(self, data):
+    self.data = data
+    self.left = None
+    self.right = None
+
+def inOrderTraversal(node):
+  if node is None:
+    return
+  inOrderTraversal(node.left)
+  print(node.data, end=", ")
+  inOrderTraversal(node.right)
+
+root = TreeNode(13)
+node7 = TreeNode(7)
+node15 = TreeNode(15)
+node3 = TreeNode(3)
+node8 = TreeNode(8)
+node14 = TreeNode(14)
+node19 = TreeNode(19)
+node18 = TreeNode(18)
+
+root.left = node7
+root.right = node15
+
+node7.left = node3
+node7.right = node8
+
+node15.left = node14
+node15.right = node19
+
+node19.left = node18
+
+# Traverse
+inOrderTraversal(root)
+
+#-----------------------------------
+# The in-order traversal produces a list of numbers in an increasing (ascending) order,
+# which means that this Binary Tree is a Binary Search Tree.
+```
+
+**Search for a Value in a BST**
+```
+How it works:
+
+1. Start at the root node.
+2. If this is the value we are looking for, return.
+3. If the value we are looking for is higher, continue searching in the right subtree.
+4. If the value we are looking for is lower, continue searching in the left subtree.
+5. If the subtree we want to search does not exist, depending on the programming language, return None, or NULL, or something similar, to indicate that the value is not inside the BST.
+```
+```py
+def search(node, target):
+  if node is None:
+    return None
+  elif node.data == target:
+    return node
+  elif target < node.data:
+    return search(node.left, target)
+  else:
+    return search(node.right, target)
+
+# Search for a value
+result = search(root, 13)
+if result:
+  print(f"Found the node with value: {result.data}")
+else:
+  print("Value not found in the BST.")
+```
+**The time complexity for searching a BST for a value is O(h), where h is the height of the tree.**
+
+**Insert a Node in a BST**
+```
+How it works:
+
+1. Start at the root node.
+2. Compare each node:
+   - Is the value lower? Go left.
+   - Is the value higher? Go right.
+3. Continue to compare nodes with the new value until there is no right or left to compare with.
+That is where the new node is inserted.
+```
+```py
+def insert(node, data):
+  if node is None:
+    return TreeNode(data)
+  else:
+    if data < node.data:
+      node.left = insert(node.left, data)
+    elif data > node.data:
+      node.right = insert(node.right, data)
+  return node
+
+# Inserting new value into the BST
+insert(root, 10)
+```
+
+**Delete a Node in a BST**
+```
+How it works:
+
+1. If the node is a leaf node, remove it by removing the link to it.
+2. If the node only has one child node, connect the parent node of the node you want to remove to that child node.
+3. If the node has both right and left child nodes: Find the node's in-order successor, change values with that node, then delete it.
+```
+
+```py
+def delete(node, data):
+  if not node:
+    return None
+
+  if data < node.data:
+    node.left = delete(node.left, data)
+  elif data > node.data:
+    node.right = delete(node.right, data)
+  else:
+    # Node with only one child or no child
+    if not node.left:
+      temp = node.right
+      node = None
+      return temp
+    elif not node.right:
+      temp = node.left
+      node = None
+      return temp
+
+    # Node with two children, get the in-order successor
+    node.data = minValueNode(node.right).data
+    node.right = delete(node.right, node.data)
+
+  return node
+
+# Delete node 15
+delete(root,15)
+```
+
+Searching a BST is just as fast as Binary Search on an array, with the same time complexity `O(log n)`.
+
+And deleting and inserting new values can be done without shifting elements in memory, just like with Linked Lists.
 
 </details>
 <!------------------------------------->
@@ -8462,18 +8654,597 @@ There are three different types of DFS traversals:
 <details>
 	<summary> <b> AVL Trees </b> </summary>
 
+<br/>
+
+The AVL Tree is a type of Binary Search Tree named after two Soviet inventors Georgy **Adelson-Velsky** and **Evgenii Landis** who invented the AVL Tree in 1962.
+
+
+> **AVL trees are self-balancing**, which means that the **tree height is kept to a minimum** so that a very fast runtime is guaranteed for searching, inserting and deleting nodes, with **time complexity O(logn)**.
+
+The only difference between a regular Binary Search Tree and an AVL Tree is that **AVL Trees do rotation operations in addition, to keep the tree balance**.
+
+A Binary Search Tree is in balance when the difference in height between left and right subtrees is less than 2.
+
+By keeping balance, the AVL Tree ensures a minimum tree height, which means that search, insert, and delete operations can be done really fast.
+
+<img width="600" height="526" alt="image" src="https://github.com/user-attachments/assets/cc17b30b-0586-4314-a6e5-f15f33ab5938" />
+
+The two trees above are both Binary Search Trees, they have the same nodes, and the same in-order traversal (alphabetical), but the height is very different because the AVL Tree has balanced itself.
 
 </details>
 <!------------------------------------->
 
 <details>
 	<summary> <b> Graph </b> </summary>
+<br/>
+	
+> **A Graph is a non-linear data structure that consists of _vertices(nodes)_ and _edges_**.
+
+- **A vertex, also called a node, is a point or an object in the Graph**.
+- **An edge is used to connect two vertices with each other**.
+
+<img width="400" height="240" alt="image" src="https://github.com/user-attachments/assets/cdd13592-12c0-4179-83cb-deb0ad6576db" />
+
+Graphs are non-linear because the data structure allows us to have different paths to get from one vertex to another, unlike with linear data structures like Arrays or Linked Lists.
+
+Graphs are used to represent and solve problems where the data consists of objects and relationships between them, such as:
+- **Social Networks** : Each person is a vertex, and relationships (like friendships) are the edges. Algorithms can suggest potential friends.
+- **Maps and Navigation** : Locations, like a town or bus stops, are stored as vertices, and roads are stored as edges. Algorithms can find the shortest route between two locations when stored as a Graph.
+- **Internet** : Can be represented as a Graph, with web pages as vertices and hyperlinks as edges.
+- **Biology**: Graphs can model systems like neural networks or the spread of diseases.
+
+### Graph Representations
+
+A Graph representation tells us how a Graph is stored in memory.
+
+Different Graph representations can:
+- take up more or less space.
+- be faster or slower to search or manipulate.
+- be better suited depending on what type of Graph we have (weighted, directed, etc.), and what we want to do with the Graph.
+- be easier to understand and implement than others.
+
+</details>
+<!------------------------------------->
+
+### Searching 
+
+<details>
+	<summary> <b> Linear Search </b> </summary>
+
+<br/>
+
+> **Linear search(sequential search) is the simplest search algorithm. It _checks each element one by one_**.
+
+```
+How it works:
+
+1. Go through the array value by value from the start.
+2. Compare each value to check if it is equal to the value we are looking for.
+3. If the value is found, return the index of that value.
+4. If the end of the array is reached and the value is not found, return -1 to indicate that the value was not found.
+```
+
+### Implementation of Linear Search
+
+```py
+def linearSearch(arr, targetVal):
+  for i in range(len(arr)):
+    if arr[i] == targetVal:
+      return i
+  return -1
+
+mylist = [3, 7, 2, 9, 5, 1, 8, 4, 6]
+x = 4
+
+result = linearSearch(mylist, x)
+
+if result != -1:
+  print(x, "Found at index", result)
+else:
+  print(x, "Not found")
+
+#----------------------------------------
+mylist = [3, 7, 2, 9, 5, 1, 8, 4, 6]
+
+x = 4
+if x in mylist:
+  print(x, "Found!")
+else:
+  print(x, "Not found!")
+```
+
+**Linear Search Time Complexity** is **_O(n)_**
+
+<img width="433" height="302" alt="image" src="https://github.com/user-attachments/assets/ea037d10-18ab-4bfd-b324-b3071ad779a4" />
+
+
+Note : **If the array is already sorted, it is better to use the much faster Binary Search algorithm.**
 
 
 </details>
 <!------------------------------------->
 
-### Level 6 - Interview Questions
+<details>
+	<summary> <b> Binary Search </b> </summary>
+
+<br/>
+
+> **The Binary Search algorithm searches through a _sorted array_ and returns the index of the value it searches for.**
+
+Binary Search is much faster than Linear Search, but requires a sorted array to work.
+
+```
+How it works:
+
+1. Check the value in the center of the array.
+
+2. If the target value is lower, search the left half of the array.
+If the target value is higher, search the right half.
+
+3. Continue step 1 and 2 for the new reduced part of the array
+until the target value is found or until the search area is empty.
+
+4. If the value is found, return the target value index.
+If the target value is not found, return -1.
+
+---------------------------------------------------------------
+
+Step 1: We start with an array.
+[ 2, 3, 7, 7, 11, 15, 25]
+
+Step 2: The value in the middle of the array at index 3, is it equal to 11?
+[ 2, 3, 7, 7, 11, 15, 25]
+
+Step 3: 7 is less than 11, so we must search for 11 to the right of index 3.
+The values to the right of index 3 are [ 11, 15, 25].
+The next value to check is the middle value 15, at index 5.
+[ 2, 3, 7, 7, 11, 15, 25]
+
+Step 4: 15 is higher than 11, so we must search to the left of index 5.
+We have already checked index 0-3,
+so index 4 is only value left to check.
+[ 2, 3, 7, 7, 11, 15, 25]
+```
+
+**Implementation of Binary Search**
+```py
+def binarySearch(arr, targetVal):
+  left = 0
+  right = len(arr) - 1
+
+  while left <= right:
+    mid = (left + right) // 2
+
+    if arr[mid] == targetVal:
+      return mid
+
+    if arr[mid] < targetVal:
+      left = mid + 1
+    else:
+      right = mid - 1
+
+  return -1
+
+mylist = [1, 3, 5, 7, 9, 11, 13, 15, 17, 19]
+x = 11
+
+result = binarySearch(mylist, x)
+
+if result != -1:
+  print(x, "Found at index", result)
+else:
+  print(x, "Not found")
+```
+
+**Binary Search Time Complexity** is **_O(logN)_**
+
+<img width="451" height="381" alt="image" src="https://github.com/user-attachments/assets/07e23744-8601-4f16-8d3d-a29e13e25a55" />
+
+When writing time complexity using Big O notation we could also just have written O(logN), but O(log2 N) reminds us that the array search area is halved for every new comparison, which is the basic concept of Binary Search, so we will just keep the base 2 indication in this case.
+
+</details>
+<!------------------------------------->
+
+### Sorting
+
+<details>
+	<summary> <b> Bubble Sort </b> </summary>
+
+<br/>
+
+> Bubble Sort is an algorithm that sorts an array from the lowest value to the highest value.
+
+```
+How it works:
+
+1. Go through the array, one value at a time.
+2. For each value, compare the value with the next value.
+3. If the value is higher than the next one, swap the values so that the highest value comes last.
+4. Go through the array as many times as there are values in the array.
+Repeat until no more swaps are needed and you will get a sorted array
+-----------------------------------------------------------------------
+Step 1: We start with an unsorted array.
+[7, 12, 9, 11, 3]
+
+Step 2: We look at the two first values. Does the lowest value come first? Yes, so we don't need to swap them.
+[7, 12, 9, 11, 3]
+
+Step 3: Take one step forward and look at values 12 and 9. Does the lowest value come first? No.
+[7, 12, 9, 11, 3]
+
+Step 4: So we need to swap them so that 9 comes first.
+[7, 9, 12, 11, 3]
+
+Step 5: Taking one step forward, looking at 12 and 11.
+[7, 9, 12, 11, 3]
+
+Step 6: We must swap so that 11 comes before 12.
+[7, 9, 11, 12, 3]
+
+Step 7: Looking at 12 and 3, do we need to swap them? Yes.
+[7, 9, 11, 12, 3]
+
+Step 8: Swapping 12 and 3 so that 3 comes first.
+[7, 9, 11, 3, 12]
+```
+
+**Implementation of Bubble Sort**
+```py
+mylist = [64, 34, 25, 12, 22, 11, 90, 5]
+
+n = len(mylist)
+for i in range(n-1):
+  for j in range(n-i-1):
+    if mylist[j] > mylist[j+1]:
+      mylist[j], mylist[j+1] = mylist[j+1], mylist[j]
+
+print(mylist)
+```
+
+The Bubble Sort algorithm can be improved a little bit more. <br/>
+If array is almost sorted already, with the lowest numbers at the start.
+```py
+mylist = [7, 3, 9, 12, 11]
+
+n = len(mylist)
+for i in range(n-1):
+  swapped = False
+  for j in range(n-i-1):
+    if mylist[j] > mylist[j+1]:
+      mylist[j], mylist[j+1] = mylist[j+1], mylist[j]
+      swapped = True
+  if not swapped:
+    break
+
+print(mylist)
+```
+
+**The time complexity for Bubble Sort is: O(n2)**
+
+There are sorting algorithms that are faster than this, like Quicksort.
+
+<img width="440" height="358" alt="image" src="https://github.com/user-attachments/assets/e4065b7f-6d1f-4a32-b41d-445483c61c7a" />
+
+
+</details>
+<!------------------------------------->
+<details>
+	<summary> <b> Selection Sort </b> </summary>
+
+<br/>
+
+> **The Selection Sort algorithm finds the lowest value in an array and moves it to the front of the array.**
+
+looks through the array again and again, moving the next lowest values to the front, until the array is sorted.
+
+```
+How it works:
+
+1. Go through the array to find the lowest value.
+2. Move the lowest value to the front of the unsorted part of the array.
+3. Go through the array again as many times as there are values in the array.
+---------------------------------------------------------------------------
+Step 1: We start with an unsorted array.
+[ 7, 12, 9, 11, 3]
+
+Step 2: Go through the array, one value at a time.
+Which value is the lowest? 3, right?
+[ 7, 12, 9, 11, 3]
+
+Step 3: Move the lowest value 3 to the front of the array.
+[ 3, 7, 12, 9, 11]
+
+Step 4: Look through the rest of the values, starting with 7. 7 is the lowest value,
+and already at the front of the array, so we don't need to move it.
+[ 3, 7, 12, 9, 11]
+
+Step 5: Look through the rest of the array: 12, 9 and 11. 9 is the lowest value.
+[ 3, 7, 12, 9, 11]
+
+Step 6: Move 9 to the front.
+[ 3, 7, 9, 12, 11]
+
+Step 7: Looking at 12 and 11, 11 is the lowest.
+[ 3, 7, 9, 12, 11]
+
+Step 8: Move it to the front.
+[ 3, 7, 9, 11, 12]
+```
+
+**Implementation of Selection Sort**
+```py
+mylist = [64, 34, 25, 5, 22, 11, 90, 12]
+
+n = len(mylist)
+for i in range(n-1):
+  min_index = i
+  for j in range(i+1, n):
+     if mylist[j] < mylist[min_index]:
+       min_index = j
+  min_value = mylist.pop(min_index)
+  mylist.insert(i, min_value)
+
+print(mylist)
+```
+
+Improved Selection Sort
+```py
+mylist = [64, 34, 25, 12, 22, 11, 90, 5]
+
+n = len(mylist)
+for i in range(n):
+  min_index = i
+  for j in range(i+1, n):
+     if mylist[j] < mylist[min_index]:
+       min_index = j
+  mylist[i], mylist[min_index] = mylist[min_index], mylist[i]
+
+print(mylist)
+```
+
+The time complexity for the Selection Sort is O(N^2).
+
+```
+On average, about n/2 elements are compared to find the lowest value in each loop.
+
+And Selection Sort must run the loop to find the lowest value approximately n times.
+
+We get time complexity:  O(N/2*N) = N^2/2 = N^2
+```
+
+<img width="451" height="372" alt="image" src="https://github.com/user-attachments/assets/3400ac39-a827-4907-920b-3ce3f0a64312" />
+
+
+</details>
+<!------------------------------------->
+
+<details>
+	<summary> <b> Insertion Sort </b> </summary>
+
+
+<br/>
+
+> The Insertion Sort uses one part of the array to hold the sorted values, and the other part of the array to hold values that are not sorted yet.
+
+Takes one value at a time from the unsorted part of the array and puts it into the right place in the sorted part of the array, until the array is sorted.
+
+```
+How it works:
+
+1. Take the first value from the unsorted part of the array.
+2. Move the value into the correct place in the sorted part of the array.
+3. Go through the unsorted part of the array again as many times as there are values.
+---------------------------------------------------------------------------
+Step 1: We start with an unsorted array.
+[ 7, 12, 9, 11, 3]
+
+Step 2: We can consider the first value as the initial sorted part of the array.
+If it is just one value, it must be sorted, right?
+[ 7, 12, 9, 11, 3]
+
+Step 3: The next value 12 should now be moved into the correct position
+in the sorted part of the array.
+But 12 is higher than 7, so it is already in the correct position.
+[ 7, 12, 9, 11, 3]
+
+Step 4: Consider the next value 9.
+[ 7, 12, 9, 11, 3]
+
+Step 5: The value 9 must now be moved into the correct position
+inside the sorted part of the array, so we move 9 in between 7 and 12.
+[ 7, 9, 12, 11, 3]
+
+Step 6: The next value is 11.
+[ 7, 9, 12, > 11, 3]
+
+Step 7: We move it in between 9 and 12 in the sorted part of the array.
+[ 7, 9, 11, 12, 3]
+
+Step 8: The last value to insert into the correct position is 3.
+[ 7, 9, 11, 12, 3]
+
+Step 9: We insert 3 in front of all other values because it is the lowest value.
+[ 3,7, 9, 11, 12]
+```
+
+**Implementation of Insertion Sort**
+```py
+mylist = [64, 34, 25, 12, 22, 11, 90, 5]
+
+n = len(mylist)
+for i in range(1,n):
+  insert_index = i
+  current_value = mylist.pop(i)
+  for j in range(i-1, -1, -1):
+    if mylist[j] > current_value:
+      insert_index = j
+  mylist.insert(insert_index, current_value)
+
+print(mylist)
+```
+
+Improvised version of insertion sort
+```py
+mylist = [64, 34, 25, 12, 22, 11, 90, 5]
+
+n = len(mylist)
+for i in range(1,n):
+  insert_index = i
+  current_value = mylist[i]
+  for j in range(i-1, -1, -1):
+     if mylist[j] > current_value:
+       mylist[j+1] = mylist[j]
+       insert_index = j
+     else:
+       break
+  mylist[insert_index] = current_value
+
+print(mylist)
+```
+
+**The time complexity for Insertion Sort is O(N^2)**
+```
+On average, each value must be compared to about N/2 other values
+ to find the correct place to insert it.
+
+Insertion Sort must run the loop to insert a value in its correct place approximately N times.
+
+We get time complexity for Insertion Sort O(N/2*N) = O(N^2)
+```
+
+<img width="450" height="372" alt="image" src="https://github.com/user-attachments/assets/2f30cd96-b97c-419d-9ce0-59732cb8fb3b" />
+
+For Insertion Sort, there is a big difference between best, average and worst case scenarios.
+
+</details>
+<!------------------------------------->
+
+<details>
+	<summary> <b> Quick Sort </b> </summary>
+
+<br/>
+
+> As the name suggests, **Quicksort is one of the fastest sorting algorithms.**
+
+Quicksort algorithm takes an array of values, chooses one of the values as the 'pivot' element, and moves the other values so that lower values are on the left of the pivot element, and higher values are on the right of it.
+
+Here, the last element of the array is chosen to be the pivot element, but we could also have chosen the first element of the array, or any element in the array really.
+
+Then, the Quicksort algorithm does the same operation recursively on the sub-arrays to the left and right side of the pivot element. This continues until the array is sorted.
+
+```
+Recursion is when a function calls itself.
+
+After the Quicksort algorithm has put the pivot element in between a sub-array with lower values on the left side, and a sub-array with higher values on the right side, the algorithm calls itself twice, so that Quicksort runs again for the sub-array on the left side, and for the sub-array on the right side. The Quicksort algorithm continues to call itself until the sub-arrays are too small to be sorted.
+```
+
+```
+How it works:
+
+1. Choose a value in the array to be the pivot element.
+2. Order the rest of the array so that lower values than the pivot element are on the left,
+ and higher values are on the right.
+3. Swap the pivot element with the first element of the higher values so that the
+ pivot element lands in between the lower and higher values.
+4. Do the same operations (recursively) for the sub-arrays on the left and right side
+of the pivot element.
+
+-----------------------------------------------------------------------------------------
+
+Step 1: We start with an unsorted array.
+[ 11, 9, 12, 7, 3]
+
+Step 2: We choose the last value 3 as the pivot element.
+[ 11, 9, 12, 7, 3]
+
+Step 3: The rest of the values in the array are all greater than 3,
+and must be on the right side of 3. Swap 3 with 11.
+[ 3, 9, 12, 7, 11]
+
+Step 4: Value 3 is now in the correct position. We need to sort the
+values to the right of 3. We choose the last value 11 as the new pivot element.
+[ 3, 9, 12, 7, 11]
+
+Step 5: The value 7 must be to the left of pivot value 11, and
+ 12 must be to the right of it. Move 7 and 12.
+[ 3, 9, 7, 12, 11]
+
+Step 6: Swap 11 with 12 so that lower values 9 and 7 are
+on the left side of 11, and 12 is on the right side.
+[ 3, 9, 7, 11, 12]
+
+Step 7: 11 and 12 are in the correct positions.
+We choose 7 as the pivot element in sub-array [ 9, 7], to the left of 11.
+[ 3, 9, 7, 11, 12]
+
+Step 8: We must swap 9 with 7.
+[ 3, 7, 9, 11, 12]
+```
+
+**Implementation of Quicksort**
+```py
+def partition(array, low, high):
+  pivot = array[high]
+  i = low - 1
+
+  for j in range(low, high):
+     if array[j] <= pivot:
+       i += 1
+       array[i], array[j] = array[j], array[i]
+
+  array[i+1], array[high] = array[high], array[i+1]
+  return i+1
+
+def quicksort(array, low=0, high=None):
+  if high is None:
+    high = len(array) - 1
+
+  if low < high:
+    pivot_index = partition(array, low, high)
+    quicksort(array, low, pivot_index-1)
+    quicksort(array, pivot_index+1, high)
+
+mylist = [64, 34, 25, 5, 22, 11, 90, 12]
+quicksort(mylist)
+print(mylist)
+```
+
+**Time Complexity of Quick Sort**
+
+The worst case scenario for Quicksort is O(N^2).
+
+But on average, the time complexity for Quicksort is actually just O(N log N) which is a lot better than for the previous sorting algorithms.
+
+
+<img width="452" height="368" alt="image" src="https://github.com/user-attachments/assets/d4e4446e-8608-449c-b6b9-95b6ad5da6ba" />
+
+The recursion part of the Quicksort algorithm is actually a reason why the average sorting scenario is so fast, because for good picks of the pivot element, the array will be split in half somewhat evenly each time the algorithm calls itself. So the number of recursive calls do not double, even if the number of values n double.
+
+</details>
+<!------------------------------------->
+
+<details>
+	<summary> <b> Merge Sort </b> </summary>
+
+</details>
+<!------------------------------------->
+
+<details>
+	<summary> <b> Counting Sort </b> </summary>
+
+</details>
+<!------------------------------------->
+
+<details>
+	<summary> <b> Redix Sort </b> </summary>
+
+</details>
+<!------------------------------------->
+
+
+
+
+## Level 6 - Interview Questions
 
 <details>
   <summary> 46. Time & space complexity </summary>
