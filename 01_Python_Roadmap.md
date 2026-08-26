@@ -9226,17 +9226,354 @@ The recursion part of the Quicksort algorithm is actually a reason why the avera
 <details>
 	<summary> <b> Merge Sort </b> </summary>
 
+<br/>
+
+> Merge Sort algorithm is a **divide-and-conquer algorithm that sorts an array by first breaking it down into smaller arrays, and then building the array back together the correct way so that it is sorted.**
+
+**Divide** : The algorithm starts with breaking up the array into smaller and smaller pieces until one such sub-array only consists of one element.
+
+**Conquer** : The algorithm merges the small pieces of the array back together by putting the lowest values first, resulting in a sorted array.
+
+The breaking down and building up of the array to sort the array is done recursively.
+
+<img width="496" height="565" alt="image" src="https://github.com/user-attachments/assets/25678c44-d1a0-4ef6-85e6-a9c2be1e0904" />
+
+
+```
+How it works:
+
+1. Divide the unsorted array into two sub-arrays, half the size of the original.
+2. Continue to divide the sub-arrays as long as the current piece of the array has
+ more than one element.
+3. Merge two sub-arrays together by always putting the lowest value first.
+4. Keep merging until there are no sub-arrays left.
+
+#-----------------------------------------------------
+
+Step 1: We start with an unsorted array, and we know that it splits in half until the sub-arrays
+only consist of one element. 
+he Merge Sort function calls itself two times, once for each half of the array.
+That means that the first sub-array will split into the smallest pieces first.
+[ 12, 8, 9, 3, 11, 5, 4]
+[ 12, 8, 9] [ 3, 11, 5, 4]
+[ 12] [ 8, 9] [ 3, 11, 5, 4]
+[ 12] [ 8] [ 9] [ 3, 11, 5, 4]
+
+Step 2: The splitting of the first sub-array is finished, and now it is time to merge.
+8 and 9 are the first two elements to be merged.
+8 is the lowest value, so that comes before 9 in the first merged sub-array.
+[ 12] [ 8, 9] [ 3, 11, 5, 4]
+
+Step 4: Now the second big sub-array is split recursively.
+[ 8, 9, 12] [ 3, 11, 5, 4]
+[ 8, 9, 12] [ 3, 11] [ 5, 4]
+[ 8, 9, 12] [ 3] [ 11] [ 5, 4]
+
+Step 5: 3 and 11 are merged back together in the same order
+ as they are shown because 3 is lower than 11.
+[ 8, 9, 12] [ 3, 11] [ 5, 4]
+
+Step 6: Sub-array with values 5 and 4 is split, then merged so that 4 comes before 5.
+[ 8, 9, 12] [ 3, 11] [ 5] [ 4]
+[ 8, 9, 12] [ 3, 11] [ 4, 5]
+
+Step 7: The two sub-arrays on the right are merged. Comparisons are done to create elements
+in the new merged array:
+3 is lower than 4
+4 is lower than 11
+5 is lower than 11
+11 is the last remaining value
+[ 8, 9, 12] [ 3, 4, 5, 11]
+
+Step 8: The two last remaining sub-arrays are merged.
+Let's look at how the comparisons are done in more detail to create the
+ new merged and finished sorted array:
+
+3 is lower than 8:
+Before [ 8, 9, 12] [ 3, 4, 5, 11]
+After: [ 3, 8, 9, 12] [ 4, 5, 11]
+
+Step 9: 4 is lower than 8:
+Before [ 3, 8, 9, 12] [ 4, 5, 11]
+After: [ 3, 4, 8, 9, 12] [ 5, 11]
+
+Step 10: 5 is lower than 8:
+Before [ 3, 4, 8, 9, 12] [ 5, 11]
+After: [ 3, 4, 5, 8, 9, 12] [ 11]
+
+Step 11: 8 and 9 are lower than 11:
+Before [ 3, 4, 5, 8, 9, 12] [ 11]
+After: [ 3, 4, 5, 8, 9, 12] [ 11]
+
+Step 12: 11 is lower than 12:
+Before [ 3, 4, 5, 8, 9, 12] [ 11]
+After: [ 3, 4, 5, 8, 9, 11, 12]
+```
+
+**Implementation of Merge Sort**
+```py
+def mergeSort(arr):
+  if len(arr) <= 1:
+    return arr
+
+  mid = len(arr) // 2
+  leftHalf = arr[:mid]
+  rightHalf = arr[mid:]
+
+  sortedLeft = mergeSort(leftHalf)
+  sortedRight = mergeSort(rightHalf)
+
+  return merge(sortedLeft, sortedRight)
+
+def merge(left, right):
+  result = []
+  i = j = 0
+
+  while i < len(left) and j < len(right):
+    if left[i] < right[j]:
+      result.append(left[i])
+      i += 1
+    else:
+      result.append(right[j])
+      j += 1
+
+  result.extend(left[i:])
+  result.extend(right[j:])
+
+  return result
+
+mylist = [3, 7, 6, -10, 15, 23.5, 55, -13]
+mysortedlist = mergeSort(mylist)
+print("Sorted array:", mysortedlist)
+```
+
+**Merge Sort without Recursion**
+```py
+def merge(left, right):
+  result = []
+  i = j = 0
+
+  while i < len(left) and j < len(right):
+    if left[i] < right[j]:
+      result.append(left[i])
+      i += 1
+    else:
+      result.append(right[j])
+      j += 1
+
+  result.extend(left[i:])
+  result.extend(right[j:])
+
+  return result
+
+def mergeSort(arr):
+  step = 1 # Starting with sub-arrays of length 1
+  length = len(arr)
+
+  while step < length:
+    for i in range(0, length, 2 * step):
+      left = arr[i:i + step]
+      right = arr[i + step:i + 2 * step]
+
+      merged = merge(left, right)
+
+      # Place the merged array back into the original array
+      for j, val in enumerate(merged):
+        arr[i + j] = val
+
+    step *= 2 # Double the sub-array length for the next iteration
+
+  return arr
+
+mylist = [3, 7, 6, -10, 15, 23.5, 55, -13]
+mysortedlist = mergeSort(mylist)
+print(mysortedlist)
+```
+
+**The time complexity for Merge Sort is : O(N logN)**
+
+<img width="442" height="367" alt="image" src="https://github.com/user-attachments/assets/7465c0da-672a-4224-b013-18ae5af9b421" />
+
+
 </details>
 <!------------------------------------->
 
 <details>
 	<summary> <b> Counting Sort </b> </summary>
 
+<br/>
+
+> The Counting Sort algorithm **sorts an array by counting the number of times each value occurs**.
+
+Counting Sort does not compare values like the previous sorting algorithms we have looked at, and only works on non negative integers.
+
+Furthermore, Counting Sort is fast when the range of possible values k is smaller than the number of values n.
+
+```
+How it works:
+
+1. Create a new array for counting how many there are of the different values.
+2. Go through the array that needs to be sorted.
+3. For each value, count it by increasing the counting array at the corresponding index.
+4. After counting the values, go through the counting array to create the sorted array.
+5. For each count in the counting array, create the correct number of elements, with values that correspond to the counting array index.
+```
+
+**Conditions for Counting Sort** <br/>
+The reasons why Counting Sort is said to only work for a limited range of non-negative integer values
+1. **Integer values** : Counting Sort relies on counting occurrences of distinct values, so they must be integers
+2. **Non negative values**
+3. **Limited range of values**
+
+```
+Step 1: We start with an unsorted array.
+myArray = [ 2, 3, 0, 2, 3, 2]
+
+Step 2: We create another array for counting how many there are of each value.
+The array has 4 elements, to hold values 0 through 3.
+myArray = [ 2, 3, 0, 2, 3, 2]
+countArray = [ 0, 0, 0, 0]
+
+Step 3: Now let's start counting.
+The first element is 2, so we must increment the counting array element at index 2.
+myArray = [ 2, 3, 0, 2, 3, 2]
+countArray = [ 0, 0, 1, 0]
+
+Step 4: After counting a value, we can remove it, and count the next value, which is 3.
+myArray = [ 3, 0, 2, 3, 2]
+countArray = [ 0, 0, 1, 1]
+
+Step 5: The next value we count is 0, so we increment index 0 in the counting array.
+myArray = [ 0, 2, 3, 2]
+countArray = [ 1, 0, 1, 1]
+
+Step 6: We continue like this until all values are counted.
+myArray = [ ]
+countArray = [ 1, 0, 3, 2]
+
+Step 7: Now we will recreate the elements from the initial array, and
+we will do it so that the elements are ordered lowest to highest.
+The first element in the counting array tells us that we have 1 element with value 0.
+So we push 1 element with value 0 into the array, and we decrease the element at index 0
+ in the counting array with 1.
+myArray = [ 0]
+countArray = [ 0, 0, 3, 2]
+
+Step 8: From the counting array we see that we do not need to create any elements with value 1.
+myArray = [ 0]
+countArray = [ 0, 0, 3, 2]
+
+Step 9: We push 3 elements with value 2 into the end of the array.
+ And as we create these elements we also decrease the counting array at index 2.
+myArray = [ 0, 2, 2, 2]
+countArray = [ 0, 0, 0, 2]
+
+Step 10: At last we must add 2 elements with value 3 at the end of the array.
+myArray = [0, 2, 2, 2, 3, 3]
+countArray = [ 0, 0, 0, 0]
+```
+
+**Implementation of Count Sort**
+```py
+def countingSort(arr):
+  max_val = max(arr)
+  count = [0] * (max_val + 1)
+
+  while len(arr) > 0:
+    num = arr.pop(0)
+    count[num] += 1
+
+  for i in range(len(count)):
+    while count[i] > 0:
+      arr.append(i)
+      count[i] -= 1
+
+  return arr
+
+mylist = [4, 2, 2, 6, 3, 3, 1, 6, 5, 2, 3]
+mysortedlist = countingSort(mylist)
+print(mysortedlist)
+```
+
+**The time complexity for Counting Sort is O(N+K)**
+
 </details>
 <!------------------------------------->
 
 <details>
 	<summary> <b> Redix Sort </b> </summary>
+
+<br/>
+
+> Radix Sort is a linear sorting algorithm (for fixed length digit counts) that **sorts elements by processing them digit by digit.**
+
+
+The radix (or base) is the number of unique digits in a number system. In the decimal system we normally use, there are 10 different digits from 0 till 9.
+
+Radix Sort uses the radix so that decimal values are put into 10 different buckets (or containers) corresponding to the digit that is in focus, then put back into the array before moving on to the next digit.
+
+Radix Sort is a non comparative algorithm that only works with non negative integers.
+
+```
+How it works:
+
+1. Start with the least significant digit (rightmost digit).
+2. Sort the values based on the digit in focus by first putting the values in the correct bucket
+    based on the digit in focus, and then put them back into array in the correct order.
+3. Move to the next digit, and sort again, like in the step above, until there are no digits left.
+```
+
+To perform radix sort on the array `[170, 45, 75, 90, 802, 24, 2, 66]`, we follow these steps:
+
+Step 1: Find the largest element, which is 802. It has three digits, so we will iterate three times.
+
+Step 2: Sort the elements based on the unit place digits (X=0).
+
+<img width="807" height="262" alt="image" src="https://github.com/user-attachments/assets/e5f47c03-f2b2-4a2d-b67c-ffafbde0bd55" />
+
+Step 3: Sort the elements based on the tens place digits.
+
+<img width="792" height="271" alt="image" src="https://github.com/user-attachments/assets/b4c8c770-2de9-4c9e-88e5-10ac15758e38" />
+
+Step 4: Sort the elements based on the hundreds place digits
+
+<img width="797" height="276" alt="image" src="https://github.com/user-attachments/assets/9c4c4030-824b-48a7-af23-e58d0a9a25c4" />
+
+Step 5: The array is now sorted in ascending order.
+
+<img width="787" height="190" alt="image" src="https://github.com/user-attachments/assets/fb00e6fa-1100-4fa4-87d0-0a5050b8c0a6" />
+
+
+**Implementation of Radix Sort**
+```py
+mylist = [170, 45, 75, 90, 802, 24, 2, 66]
+print("Original array:", mylist)
+radixArray = [[], [], [], [], [], [], [], [], [], []]
+maxVal = max(mylist)
+exp = 1
+
+while maxVal // exp > 0:
+
+  while len(mylist) > 0:
+    val = mylist.pop()
+    radixIndex = (val // exp) % 10
+    radixArray[radixIndex].append(val)
+
+  for bucket in radixArray:
+    while len(bucket) > 0:
+      val = bucket.pop()
+      mylist.append(val)
+
+  exp *= 10
+
+print(mylist)
+```
+
+**The time complexity for Radix Sort is O(n.k)** <br/>
+This means that Radix Sort depends both on the values that need to be sorted n, and the number of digits in the highest value k
+
+<img width="487" height="377" alt="image" src="https://github.com/user-attachments/assets/53eb9402-86a5-4a54-bdb6-4e71ebad3042" />
+
 
 </details>
 <!------------------------------------->
