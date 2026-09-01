@@ -1207,9 +1207,9 @@ We all are Indian,
 All Indians are my brothers and sisters."""
 print(b)    # Line breaks included as mentioned in the text.
 
-c = 'India is my country,
+c = '''India is my country,
 We all are Indian,
-All Indians are my brothers and sisters.'
+All Indians are my brothers and sisters.'''
 print(c)  #  line breaks are inserted at the same position.
 ```
 </details>
@@ -1290,8 +1290,9 @@ print(a.lower())            # hello world!
 # Remove Whitespace : removes any whitespace from the beginning or the end:
 
 a = " Hello World! "
-print(a.upper())            # Hello World
-
+print(a.strip())            # "Hello World"
+print(a.lstrip())           # "Hello World "
+print(a.rstrip())           # "  Hello World"
 ----------------------------------------------------------
 
 # Replace String :  replaces a string with another string:
@@ -1388,6 +1389,9 @@ print(str3)       # Hello
 
 str4 = "Hello\rWorld!"
 print(str4)       # World!
+
+str4 = "HelloXYZ\rWorld!"
+print(str4)       # World!YZ
 
 str5 = "Hello\tWorld!"
 print(str5)       # Hello  World! 
@@ -1504,6 +1508,13 @@ print(str10.isalnum())       # False
 
 ```
 
+**Identifiers**
+
+> ***Identifiers are user-defined names used to identify and reference program elements such as variables, functions, classes, modules, and objects.***
+
+**Identifier vs Variable**
+> An identifier is a general name used for variables, functions, classes, and other objects in Python, whereas a variable is a specific type of identifier used to store data. Therefore, every variable is an identifier, but not every identifier is a variable.
+
 </details>
 
 </details>
@@ -1588,7 +1599,7 @@ list1[1:2] = [23, 24]
 print(list1)              # [10, [23,24], 32, 40, 50]
 
 list1[1:3] = [2]
-print(list1)              # [10, 2, 32, 40, 50]
+print(list1)              # [10, 2, 40, 50]
 ```
 
 </details>
@@ -1787,7 +1798,7 @@ print(mylist)   # [banana, apple, cherry, mango, orange]
 
 We can't copy a list simply by typing `list2 = list1`. <br/>
 bcuz `list2` will only be a reference to `list1`, and <br/>
-changes made in `list1 will` automatically also be made in `list2`.
+changes made in `list1` will automatically also be made in `list2`.
 
 ```py
 list1 = [1, 2, 3, 4, 5]
@@ -2000,6 +2011,25 @@ print(tuple1)        # ('apple', 'banana', 'mango', 'orange')
 
 Similar way we can remove items from tuple by converting it into list delete items and convert it back to tuple.
 
+> **Tuple is immutable, so its elements cannot be changed. However, += with tuples creates a new tuple and reassigns the variable to it. It does not modify the original tuple.**
+
+Let's prove it:
+```py
+tuple1 = ("apple", "banana", "mango")
+print(tuple1)
+print(id(tuple1))    # Different Id
+
+tuple2 = ("orange",)
+print(tuple2)
+print(id(tuple2))
+
+tuple1 += tuple2
+
+print(tuple1)     
+print(id(tuple1))   # Different Id Since it is newly created!
+
+```
+
 </details>
 
 <details>
@@ -2183,7 +2213,7 @@ set1 = {"apple", "banana", "mango"}
 set1.add("orange")
 print(set1)          # {'apple', 'banana', 'mango', 'orange'}
 
----------------------------------------------------------------
+#---------------------------------------------------------------
 
 set1 = {"apple", "banana", "mango"}
 set2 = {1, 2, 3}
@@ -2192,9 +2222,9 @@ set1.update(set2)
 
 print(set1)         # {'apple', 'banana', 'mango', 1, 2, 3}
 
---------------------------------------------------------------
-object in the update() method does not have to be a set, it can be
-any iterable object (tuples, lists, dictionaries etc.)
+#--------------------------------------------------------------
+# object in the update() method does not have to be a set, it can be
+# any iterable object (tuples, lists, dictionaries etc.)
 
 set1 = {1, 2, 3}
 list1 = ["a", "b"]
@@ -2413,6 +2443,16 @@ print(type(x))       #  <class 'frozenset'>
 
 Being immutable means you cannot add or remove elements. However, frozensets support all non-mutating operations of sets.
 
+```py
+x = frozenset({"a", "b", "c"})
+print(x)     # frozenset({'c', 'b', 'a'})
+
+set1 = {"a", "b", "c"}
+set2 = {1, 2, 3}
+
+set3 = x.union(set2)
+print(set3)  # frozenset({'a', 'c', 1, 2, 3, 'b'})
+```
 
 </details>
 
@@ -2992,11 +3032,13 @@ def petStatus(animal, name):
   print("My", animal + "'s name is", name)
 
 petStatus(animal = "dog", name = "Leo")
+#------------------------------------------
 petStatus(name = "Leo", animal = "dog")
+# Both print the same
 # I have a dog
 # My dog's name is Leo
 ```
-**The phrase Keyword Arguments is often shortened to kwargs in pythin doc.**
+The phrase **Keyword Arguments** is often shortened to ***`kwargs`*** in python doc.
 
 When you call a function with arguments without using keywords, they are called **positional arguments**.
 <br/> Positional arguments must be in the correct order.
@@ -3006,19 +3048,29 @@ def petStatus(animal, name):
   print("My", animal + "'s name is", name)
 
 petStatus("dog", "Leo")
+#------------------------------
+petStatus("Leo", "dog")
+# Both have different output as positional arguments are used!
 # I have a dog
 # My dog's name is Leo
+#------------------------------
+# I have a Leo
+# My dog's name is dog
 ```
 
-### Mixing Positional and Keyword Arguments
+### Mixing Positional Arguments and Keyword Arguments
 
-We can mix positional and keyword arguments in a function call. <br/>
+We can mix positional arguments and keyword arguments in a function call. <br/>
 However, positional arguments must come before keyword arguments.
 ```py
 def person(name, age, gender):
   print("My name is", name, "I'm", age, "and", gender)
 
 person("Ram", age = 21, gender = "Male")
+person("Ram", gender = "Male",  age = 21)
+person(name = "Ram", gender = "Male",  age = 21)
+# person(name = "Ram", "Male",  age = 21) # Not Allowed!
+# Same output
 # My name is Ram I'm 21 and Male
 ```
 
@@ -3147,6 +3199,16 @@ result2 = sumOfNum(a=5, b=10, 15, 20)  # ValueError
 # bcuz of 1st two args are keywords args which must be positional
 # and alst two args are positional args which must be keywords
 
+```
+
+> **`/` must be ahead of `*` bcuz we can't have keywords arguments then positional arguments.**
+
+```py
+def sumOfNum(*, a, b, /, c, d):  # SyntaxError: / must be ahead of *
+  return a + b + c + d
+
+result = sumOfNum(a=5, b=10, 15, 20)
+print(result)      
 ```
 
 </details>
@@ -3326,7 +3388,7 @@ my_function("User Info", "Mohan", "Rohan", age = 25, city = "Mumbai")
 The `*` and `**` operators can also be used when calling functions to unpack (expand) a list or dictionary into separate arguments.
 
 **Unpacking Lists with `*`** <br/>
-If we have values stored in a list, you can use `*` to unpack them into individual arguments.
+If we have values stored in a list, we can use `*` to unpack them into individual arguments.
 
 ```py
 # Using * to unpack a list into arguments
@@ -3725,7 +3787,7 @@ print(myfunction.__name__)   # myfunction
 ```
 
 But, when a function is decorated, the metadata of the original function is lost.
-```
+```py
 def decorator(func):
   def wrap():
     return func().upper()
