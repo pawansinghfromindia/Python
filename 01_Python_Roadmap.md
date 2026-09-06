@@ -4252,12 +4252,15 @@ def simple_gen():
   yield "Sohan"
 
 gen = simple_gen()
-print(next(gen))         # Rohan
-print(gen.__next__())    # Rohan
-print(next(gen))         # Mohan
-print(gen.__next__())    # Mohan
-print(next(gen))         # Sohan
-print(gen.__next__())    # Sohan
+print(next(gen))           # Rohan
+# OR 
+# print(gen.__next__())    # Rohan
+print(next(gen))           # Mohan
+# OR 
+# print(gen.__next__())    # Mohan
+print(next(gen))           # Sohan
+# OR 
+# print(gen.__next__())    # Sohan
 
 #---------------------------------------------------
 
@@ -4343,21 +4346,21 @@ Iterator will not give you all the value at a time. It gives us one value at a t
 ```py
 nums = [1, 3, 5, 7, 9]
 
-print(nums[0])         # 1
-print(nums[4])         # 9
-print(nums[4])         # IndexOut of Bound error
+print(nums[0])           # 1
+print(nums[4])           # 9
+# print(nums[5])         # IndexOut of Bound error
 
 for x in nums:
-  print(x)             # 1 3 5 7 9
+  print(x)               # 1 3 5 7 9
 
 #----- Iterator-----------------------
 itr = iter(nums)
-print(itr)             # <iterator object>
-print(itr._next_())    # 1
-print(itr._next_())    # 3
+print(itr)               # <iterator object>
+print(itr.__next__())    # 1
+print(itr.__next__())    # 3
 # bcuz when we call it knows the last value means it preserve the state of last value.
 
-print(next(itr))       # 7 
+print(next(itr))         # 5 
 ```
 
 ```py
@@ -4379,11 +4382,10 @@ values = Top10()
 
 print(next(values))  # 1
 for i in values:
-  print i;           # 2 3 4 5 6 7 8 9 10
+  print(i, end=" "); # 2 3 4 5 6 7 8 9 10
 
 #---------------------
-print(next(values))
-
+print(next(values))  # StopIteration Error as values now doesn't exist
 
 
 print(next(value))
@@ -4830,6 +4832,28 @@ p1 = Person("Arjun")
 p1.greet()
 ```
 
+```py
+global name
+name = "Chomu"
+class Person:
+  name = name
+  def __init__(self, name):
+    self.name = name
+
+  # Create a method in a class
+  def greet(self):
+    print("Hello, " + Person.name)
+    print("Hello, " + self.name)
+
+  # Note: All methods must have self as the first parameter.
+
+p1 = Person("Arjun")    
+p1.greet()              # Hello, Chomu
+                        # Hello, Arjun
+print(Person.name)      # Chomu
+print(name)             # Chomu
+```
+
 >  All methods must have self as the first parameter.
 
 **Methods with Parameters**
@@ -4843,7 +4867,7 @@ class Calculator:
 
 calc = Calculator()
 print(calc.add(5, 3))        #  8
-print(calc.multiply(4, 7))   #  11 
+print(calc.multiply(4, 7))   #  28 
 ```
 
 **Methods Modifying Properties** <br/>
